@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Перелік (Enum) для типів прийомів їжі
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+}
+
+model User {
+  id           String  @id @default(uuid())
+  email        String  @unique
+  passwordHash String
+  
+  // Щоденні цілі (можуть бути порожніми при реєстрації, тому ставимо знак питання '?', що означає необов'язкове поле)
+  goalCalories Int?
+  goalProtein  Int?
+  goalFat      Int?
+  goalCarbs    Int?
+
+  // Зв'язки: один користувач може мати багато збережених страв та багато записів у щоденнику
+  meals        Meal[]
+  dailyLogs    DailyLog[]
+}
+
+model Meal {
+  id              String @id @default(uuid())
+  name            String
+  caloriesPer100g Float
+  proteinPer100g  Float
+  fatPer100g      Float
+  carbsPer100g    Float
+
+  // Зв'язок з таблицею User
+  userId          String
+  user            User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Зв'язок з таблицею DailyLog
+  dailyLogs       DailyLog[]
+}
+
+model DailyLog {
+  id               String   @id @default(uuid())
+  date             DateTime @db.Date // Зберігаємо лише дату, без часу
+  mealType         MealType
+  consumedGrams    Int
+
+  // "Зліпок" макросів на момент додавання (Float, бо можуть бути десяткові значення)
+  snapshotCalories Float
+  snapshotProtein  Float
+  snapshotFat      Float
+  snapshotCarbs    Float
+
+  // Зв'язок з таблицею User
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Зв'язок з таблицею Meal
+  mealId           String
+  meal             Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
+}

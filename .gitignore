@@ -1,0 +1,30 @@
+# Залежності Node.js (для обох папок)
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# Секретні ключі та змінні середовища
+.env
+.env.*
+server/.env
+
+# Збірка фронтенду (Vite)
+dist/
+dist-ssr/
+build/
+
+# Логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Системні файли
+.DS_Store
+Thumbs.db
+
+# AI Editor folders & Prisma 7 leftovers
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
+prisma7.config.ts
