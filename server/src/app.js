@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const mealRoutes = require("./routes/mealRoutes");
+const dailyLogRoutes = require("./routes/dailyLogRoutes");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get("/api/health", (req, res) => {
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/meals", mealRoutes);
+app.use("/api/logs", dailyLogRoutes);
 
 // Catch-all 404 handler
 app.use((req, res) => {

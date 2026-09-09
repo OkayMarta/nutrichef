@@ -57,13 +57,16 @@ model DailyLog {
   id               String   @id @default(uuid())
   date             DateTime @db.Date // Зберігаємо лише дату, без часу
   mealType         MealType
-  consumedGrams    Int
+  consumedGrams    Float
 
   // "Зліпок" макросів на момент додавання (Float, бо можуть бути десяткові значення)
   snapshotCalories Float
   snapshotProtein  Float
   snapshotFat      Float
   snapshotCarbs    Float
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   // Зв'язок з таблицею User
   userId           String
