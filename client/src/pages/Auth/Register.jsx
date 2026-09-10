@@ -1,108 +1,146 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axiosInstance from "../../api/axiosInstance";
+import { useAuth } from "../../context/AuthContext";
+import GoogleAuthButton from "../../components/common/GoogleAuthButton";
+import "./Auth.scss";
 
 const Register = () => {
-    return (
-        <div
-            className="container"
-            style={{ padding: "60px 20px", maxWidth: "440px" }}
-        >
-            <div className="card">
-                <h1
-                    style={{
-                        fontSize: "1.8rem",
-                        marginBottom: "8px",
-                        textAlign: "center",
-                    }}
-                >
-                    Create an account
-                </h1>
-                <p style={{ textAlign: "center", marginBottom: "28px" }}>
-                    Start tracking cooked meals accurately
-                </p>
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
-                <form
-                    onSubmit={(e) => e.preventDefault()}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "16px",
-                    }}
-                >
-                    <div>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!email.trim() || !password) {
+            toast.error("Please fill in all fields.");
+            return;
+        }
+
+        if (password.length < 6) {
+            toast.error("Password must be at least 6 characters long.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match.");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const { data } = await axiosInstance.post("/api/auth/register", {
+                email: email.trim(),
+                password,
+            });
+
+            login(data.token, data.user);
+            toast.success(
+                "Account created successfully! Welcome to NutriChef.",
+            );
+            navigate("/dashboard");
+        } catch (error) {
+            const message =
+                error.response?.data?.message || "Registration failed.";
+            toast.error(message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="auth-page">
+            <div className="auth-page__card">
+                <div className="auth-page__header">
+                    <h1 className="auth-page__title">Create an account</h1>
+                    <p className="auth-page__subtitle">
+                        Start tracking cooked meals accurately
+                    </p>
+                </div>
+
+                <form className="auth-page__form" onSubmit={handleSubmit}>
+                    <div className="auth-page__group">
                         <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.9rem",
-                                fontWeight: "500",
-                                marginBottom: "6px",
-                            }}
+                            className="auth-page__label"
+                            htmlFor="register-email"
                         >
-                            Email
+                            Email address
                         </label>
                         <input
+                            id="register-email"
                             type="email"
+                            className="auth-page__input"
                             placeholder="you@example.com"
-                            style={{
-                                width: "100%",
-                                padding: "10px 14px",
-                                borderRadius: "8px",
-                                border: "1px solid var(--color-border)",
-                                outline: "none",
-                            }}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            autoComplete="email"
+                            required
                         />
                     </div>
 
-                    <div>
+                    <div className="auth-page__group">
                         <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.9rem",
-                                fontWeight: "500",
-                                marginBottom: "6px",
-                            }}
+                            className="auth-page__label"
+                            htmlFor="register-password"
                         >
                             Password
                         </label>
                         <input
+                            id="register-password"
                             type="password"
-                            placeholder="••••••••"
-                            style={{
-                                width: "100%",
-                                padding: "10px 14px",
-                                borderRadius: "8px",
-                                border: "1px solid var(--color-border)",
-                                outline: "none",
-                            }}
+                            className="auth-page__input"
+                            placeholder="At least 6 characters"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="new-password"
+                            required
+                        />
+                    </div>
+
+                    <div className="auth-page__group">
+                        <label
+                            className="auth-page__label"
+                            htmlFor="register-confirm-password"
+                        >
+                            Confirm Password
+                        </label>
+                        <input
+                            id="register-confirm-password"
+                            type="password"
+                            className="auth-page__input"
+                            placeholder="Repeat password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            autoComplete="new-password"
+                            required
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="btn btn--primary"
-                        style={{ width: "100%", marginTop: "8px" }}
+                        className="btn btn--primary auth-page__submit-btn"
+                        disabled={loading}
                     >
-                        Get started
+                        {loading ? "Creating account..." : "Get started"}
                     </button>
                 </form>
 
-                <p
-                    style={{
-                        textAlign: "center",
-                        marginTop: "24px",
-                        fontSize: "0.9rem",
-                    }}
-                >
-                    Already have an account?{" "}
-                    <Link
-                        to="/login"
-                        style={{
-                            color: "var(--color-brand-dark)",
-                            fontWeight: "600",
-                        }}
-                    >
-                        Log in
-                    </Link>
-                </p>
+                <div className="auth-page__divider">
+                    <span>or continue with</span>
+                </div>
+
+                {/* Google Sign In */}
+                <GoogleAuthButton isRegister={true} />
+
+                <div className="auth-page__footer">
+                    Already have an account?
+                    <Link to="/login">Log in</Link>
+                </div>
             </div>
         </div>
     );

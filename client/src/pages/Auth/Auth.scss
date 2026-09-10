@@ -1,0 +1,131 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.auth-page {
+    min-height: calc(100vh - 72px);
+    @include flex-center;
+    padding: 40px 20px;
+    background-color: $color-bg-light;
+
+    &__card {
+        @include card-base;
+        width: 100%;
+        max-width: 440px;
+        padding: 36px 32px;
+        background-color: $color-bg-card;
+        border: 1px solid $color-border;
+        border-radius: $radius-lg;
+        box-shadow: $shadow-card;
+
+        @media (max-width: 480px) {
+            padding: 28px 20px;
+        }
+    }
+
+    &__header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
+
+    &__title {
+        font-size: 1.75rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin-bottom: 8px;
+        letter-spacing: -0.02em;
+    }
+
+    &__subtitle {
+        font-size: 0.92rem;
+        color: $color-text-muted;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__label {
+        font-size: 0.88rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+    }
+
+    &__input {
+        width: 100%;
+        padding: 11px 14px;
+        font-size: 0.95rem;
+        border-radius: $radius-sm;
+        border: 1px solid $color-border;
+        background-color: #ffffff;
+        color: $color-text-dark;
+        outline: none;
+        transition:
+            border-color $transition-fast,
+            box-shadow $transition-fast;
+
+        &:focus {
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba(116, 189, 87, 0.2);
+        }
+
+        &::placeholder {
+            color: rgba(94, 109, 85, 0.6);
+        }
+    }
+
+    &__submit-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 0.98rem;
+        font-weight: $font-weight-semibold;
+        margin-top: 6px;
+    }
+
+    &__divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 22px 0 18px 0;
+        color: $color-text-muted;
+        font-size: 0.82rem;
+
+        &::before,
+        &::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid $color-border;
+        }
+
+        span {
+            padding: 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+    }
+
+    &__footer {
+        text-align: center;
+        margin-top: 24px;
+        font-size: 0.9rem;
+        color: $color-text-muted;
+
+        a {
+            color: $color-brand-dark;
+            font-weight: $font-weight-semibold;
+            text-decoration: none;
+            margin-left: 4px;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}

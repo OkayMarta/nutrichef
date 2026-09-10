@@ -1,108 +1,114 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axiosInstance from "../../api/axiosInstance";
+import { useAuth } from "../../context/AuthContext";
+import GoogleAuthButton from "../../components/common/GoogleAuthButton";
+import "./Auth.scss";
 
 const Login = () => {
-    return (
-        <div
-            className="container"
-            style={{ padding: "60px 20px", maxWidth: "440px" }}
-        >
-            <div className="card">
-                <h1
-                    style={{
-                        fontSize: "1.8rem",
-                        marginBottom: "8px",
-                        textAlign: "center",
-                    }}
-                >
-                    Welcome back
-                </h1>
-                <p style={{ textAlign: "center", marginBottom: "28px" }}>
-                    Log in to access your nutrition dashboard
-                </p>
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
-                <form
-                    onSubmit={(e) => e.preventDefault()}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "16px",
-                    }}
-                >
-                    <div>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!email.trim() || !password) {
+            toast.error("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const { data } = await axiosInstance.post("/api/auth/login", {
+                email: email.trim(),
+                password,
+            });
+
+            login(data.token, data.user);
+            toast.success("Welcome back!");
+            navigate("/dashboard");
+        } catch (error) {
+            const message =
+                error.response?.data?.message || "Invalid email or password.";
+            toast.error(message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="auth-page">
+            <div className="auth-page__card">
+                <div className="auth-page__header">
+                    <h1 className="auth-page__title">Welcome back</h1>
+                    <p className="auth-page__subtitle">
+                        Log in to track your meals and nutrition
+                    </p>
+                </div>
+
+                <form className="auth-page__form" onSubmit={handleSubmit}>
+                    <div className="auth-page__group">
                         <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.9rem",
-                                fontWeight: "500",
-                                marginBottom: "6px",
-                            }}
+                            className="auth-page__label"
+                            htmlFor="login-email"
                         >
-                            Email
+                            Email address
                         </label>
                         <input
+                            id="login-email"
                             type="email"
+                            className="auth-page__input"
                             placeholder="you@example.com"
-                            style={{
-                                width: "100%",
-                                padding: "10px 14px",
-                                borderRadius: "8px",
-                                border: "1px solid var(--color-border)",
-                                outline: "none",
-                            }}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            autoComplete="email"
+                            required
                         />
                     </div>
 
-                    <div>
+                    <div className="auth-page__group">
                         <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.9rem",
-                                fontWeight: "500",
-                                marginBottom: "6px",
-                            }}
+                            className="auth-page__label"
+                            htmlFor="login-password"
                         >
                             Password
                         </label>
                         <input
+                            id="login-password"
                             type="password"
+                            className="auth-page__input"
                             placeholder="••••••••"
-                            style={{
-                                width: "100%",
-                                padding: "10px 14px",
-                                borderRadius: "8px",
-                                border: "1px solid var(--color-border)",
-                                outline: "none",
-                            }}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="current-password"
+                            required
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="btn btn--primary"
-                        style={{ width: "100%", marginTop: "8px" }}
+                        className="btn btn--primary auth-page__submit-btn"
+                        disabled={loading}
                     >
-                        Log in
+                        {loading ? "Logging in..." : "Log in"}
                     </button>
                 </form>
 
-                <p
-                    style={{
-                        textAlign: "center",
-                        marginTop: "24px",
-                        fontSize: "0.9rem",
-                    }}
-                >
-                    Don't have an account?{" "}
-                    <Link
-                        to="/register"
-                        style={{
-                            color: "var(--color-brand-dark)",
-                            fontWeight: "600",
-                        }}
-                    >
-                        Sign up
-                    </Link>
-                </p>
+                <div className="auth-page__divider">
+                    <span>or continue with</span>
+                </div>
+
+                {/* Google Sign In */}
+                <GoogleAuthButton isRegister={false} />
+
+                <div className="auth-page__footer">
+                    Don't have an account?
+                    <Link to="/register">Sign up</Link>
+                </div>
             </div>
         </div>
     );

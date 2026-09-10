@@ -113,7 +113,8 @@
             color: $color-text-dark;
         }
 
-        &--active {
+        // App nav link active style (pill in segmented group)
+        .navbar__nav--app &--active {
             color: $color-text-dark;
             font-weight: $font-weight-semibold;
             background-color: $color-bg-card;
@@ -125,16 +126,30 @@
             position: relative;
             border-radius: 0;
             padding: 8px 14px;
+            background-color: transparent;
+            cursor: pointer;
 
-            &.navbar__link--active::after {
-                content: "";
-                position: absolute;
-                bottom: -18px;
-                left: 0;
-                right: 0;
-                height: 3px;
-                background-color: $color-brand-medium;
-                border-radius: 3px 3px 0 0;
+            &:hover {
+                color: $color-text-dark;
+                background-color: transparent;
+            }
+
+            &.navbar__link--active {
+                background-color: transparent;
+                box-shadow: none;
+                color: $color-text-dark;
+                font-weight: $font-weight-bold;
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    bottom: -20px;
+                    left: 10px;
+                    right: 10px;
+                    height: 3px;
+                    background-color: $color-brand-medium;
+                    border-radius: 3px 3px 0 0;
+                }
             }
         }
 

@@ -1,4 +1,5 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../../../context/AuthContext";
 import "./Navbar.scss";
@@ -6,6 +7,105 @@ import "./Navbar.scss";
 const Navbar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+    const [activeSection, setActiveSection] = useState("home");
+    const isManualScrollingRef = useRef(false);
+    const scrollTimeoutRef = useRef(null);
+
+    // Scroll spy for landing page sections
+    useEffect(() => {
+        if (location.pathname !== "/") {
+            return;
+        }
+
+        const handleScroll = () => {
+            // Ignore scroll events during programmatic click scrolling
+            if (isManualScrollingRef.current) {
+                return;
+            }
+
+            const scrollY = window.scrollY;
+            const howItWorksEl = document.getElementById("how-it-works");
+            const featuresEl = document.getElementById("features");
+
+            if (scrollY < 200) {
+                setActiveSection("home");
+                return;
+            }
+
+            // Near page bottom
+            if (
+                window.innerHeight + scrollY >=
+                document.documentElement.scrollHeight - 150
+            ) {
+                setActiveSection("features");
+                return;
+            }
+
+            const viewportCenter = scrollY + window.innerHeight / 2;
+
+            if (featuresEl) {
+                const top = featuresEl.offsetTop;
+                const bottom = top + featuresEl.offsetHeight;
+                if (viewportCenter >= top && viewportCenter <= bottom) {
+                    setActiveSection("features");
+                    return;
+                }
+            }
+
+            if (howItWorksEl) {
+                const top = howItWorksEl.offsetTop;
+                const bottom = top + howItWorksEl.offsetHeight;
+                if (viewportCenter >= top && viewportCenter <= bottom) {
+                    setActiveSection("how-it-works");
+                    return;
+                }
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        handleScroll();
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            if (scrollTimeoutRef.current) {
+                clearTimeout(scrollTimeoutRef.current);
+            }
+        };
+    }, [location.pathname]);
+
+    const scrollToSection = (e, sectionId) => {
+        e.preventDefault();
+        setActiveSection(sectionId);
+
+        if (location.pathname !== "/") {
+            navigate(`/#${sectionId === "home" ? "" : sectionId}`);
+            return;
+        }
+
+        // Lock scroll spy to prevent back-and-forth blinking during smooth scroll
+        isManualScrollingRef.current = true;
+        if (scrollTimeoutRef.current) {
+            clearTimeout(scrollTimeoutRef.current);
+        }
+
+        const unlockScroll = () => {
+            isManualScrollingRef.current = false;
+            window.removeEventListener("scrollend", unlockScroll);
+        };
+
+        window.addEventListener("scrollend", unlockScroll, { once: true });
+        scrollTimeoutRef.current = setTimeout(unlockScroll, 850);
+
+        if (sectionId === "home") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        }
+    };
 
     const handleLogout = () => {
         logout();
@@ -89,23 +189,36 @@ const Navbar = () => {
                 ) : (
                     // Public Landing Navigation
                     <nav className="navbar__nav">
-                        <NavLink
-                            to="/"
-                            className={({ isActive }) =>
-                                `navbar__link navbar__link--landing ${isActive ? "navbar__link--active" : ""}`
-                            }
+                        <a
+                            href="/#home"
+                            onClick={(e) => scrollToSection(e, "home")}
+                            className={`navbar__link navbar__link--landing ${
+                                activeSection === "home"
+                                    ? "navbar__link--active"
+                                    : ""
+                            }`}
                         >
                             Home
-                        </NavLink>
+                        </a>
                         <a
                             href="/#how-it-works"
-                            className="navbar__link navbar__link--landing"
+                            onClick={(e) => scrollToSection(e, "how-it-works")}
+                            className={`navbar__link navbar__link--landing ${
+                                activeSection === "how-it-works"
+                                    ? "navbar__link--active"
+                                    : ""
+                            }`}
                         >
                             How it works
                         </a>
                         <a
                             href="/#features"
-                            className="navbar__link navbar__link--landing"
+                            onClick={(e) => scrollToSection(e, "features")}
+                            className={`navbar__link navbar__link--landing ${
+                                activeSection === "features"
+                                    ? "navbar__link--active"
+                                    : ""
+                            }`}
                         >
                             Features
                         </a>

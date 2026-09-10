@@ -4,7 +4,7 @@ import "./HeroSection.scss";
 
 const HeroSection = () => {
     return (
-        <section className="hero-section container">
+        <section id="home" className="hero-section container">
             <div className="hero-section__grid">
                 <div className="hero-section__content">
                     <span className="badge badge--green hero-section__badge">
@@ -32,6 +32,15 @@ const HeroSection = () => {
                         </Link>
                         <a
                             href="#how-it-works"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                document
+                                    .getElementById("how-it-works")
+                                    ?.scrollIntoView({
+                                        behavior: "smooth",
+                                        block: "center",
+                                    });
+                            }}
                             className="btn btn--secondary hero-section__btn-learn"
                         >
                             Learn more
