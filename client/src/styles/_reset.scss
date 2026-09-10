@@ -1,0 +1,68 @@
+@use "variables" as *;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: $font-family-base;
+    color: $color-text-dark;
+    background-color: $color-bg-light;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: $font-weight-bold;
+    line-height: 1.25;
+    color: $color-text-dark;
+}
+
+p {
+    color: $color-text-muted;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color $transition-fast;
+}
+
+button {
+    font-family: inherit;
+}
+
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 1rem;
+    color: inherit;
+}
+
+img,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+ul,
+ol {
+    list-style: none;
+}

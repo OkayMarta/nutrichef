@@ -1,0 +1,105 @@
+@use "variables" as *;
+
+// ==========================================
+// Layout & Flexbox Mixins
+// ==========================================
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin flex-align {
+    display: flex;
+    align-items: center;
+}
+
+@mixin flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+// ==========================================
+// Button & Interactive Resets
+// ==========================================
+
+@mixin button-reset {
+    appearance: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    outline: none;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+}
+
+@mixin focus-ring {
+    &:focus-visible {
+        outline: 2px solid $color-brand-medium;
+        outline-offset: 2px;
+    }
+}
+
+// ==========================================
+// Card & Container Presets
+// ==========================================
+
+@mixin card-base {
+    background-color: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-card;
+    padding: 24px;
+}
+
+@mixin badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: $radius-pill;
+    font-size: 0.85rem;
+    font-weight: $font-weight-medium;
+}
+
+// ==========================================
+// Responsive Breakpoints
+// ==========================================
+
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == "sm" {
+        @media (min-width: $breakpoint-sm) {
+            @content;
+        }
+    } @else if $breakpoint == "md" {
+        @media (min-width: $breakpoint-md) {
+            @content;
+        }
+    } @else if $breakpoint == "lg" {
+        @media (min-width: $breakpoint-lg) {
+            @content;
+        }
+    } @else if $breakpoint == "xl" {
+        @media (min-width: $breakpoint-xl) {
+            @content;
+        }
+    } @else {
+        @media (min-width: $breakpoint) {
+            @content;
+        }
+    }
+}

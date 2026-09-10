@@ -1,0 +1,105 @@
+// ==========================================
+// NutriChef Design Tokens & Variables
+// Based on Landing Page & Dashboard Mockups
+// ==========================================
+
+// --- Background Colors ---
+$color-bg-light: #f8faf6;
+$color-bg-subtle: #f0f4ec;
+$color-bg-card: #ffffff;
+$color-bg-card-muted: #f4f8f1;
+$color-bg-active-tab: #ffffff;
+$color-bg-banner: #eaf3e3;
+
+// --- Brand Greens ---
+$color-brand-light: #cae4b4;
+$color-brand-medium: #74bd57;
+$color-brand-dark: #469c3c;
+$color-brand-darker: #367d2e;
+$color-brand-hover: #3e8d35;
+$color-brand-badge-bg: #e6f4df;
+$color-brand-badge-text: #2f6b28;
+
+// --- Neutrals & Text ---
+$color-white: #ffffff;
+$color-text-dark: #1b2614;
+$color-text-secondary: #3b4932;
+$color-text-muted: #5e6d55;
+$color-text-subtle: #8a9981;
+$color-border: #e2ebd9;
+$color-border-subtle: #edf3e7;
+$color-border-dashed: #d2dfca;
+
+// --- Functional & Macro Indicator Colors ---
+$color-macro-calories: #469c3c;
+$color-macro-protein: #2563eb;
+$color-macro-fat: #e08b1a;
+$color-macro-carbs: #8b5cf6;
+
+$color-meal-breakfast: #e67e22;
+$color-meal-lunch: #469c3c;
+$color-meal-dinner: #6c5ce7;
+$color-meal-snack: #d35400;
+
+$color-status-success: #2e7d32;
+$color-status-warning: #f59e0b;
+$color-status-danger: #dc2626;
+$color-status-info: #0284c7;
+
+// --- Radii ---
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 16px;
+$radius-lg: 24px;
+$radius-xl: 32px;
+$radius-pill: 999px;
+
+// --- Shadows ---
+$shadow-xs: 0 1px 2px rgba(27, 38, 20, 0.04);
+$shadow-sm: 0 2px 6px rgba(27, 38, 20, 0.05);
+$shadow-md: 0 6px 20px rgba(27, 38, 20, 0.06);
+$shadow-lg: 0 12px 36px rgba(27, 38, 20, 0.08);
+$shadow-card: 0 4px 20px rgba(27, 38, 20, 0.04);
+
+// --- Typography ---
+$font-family-base:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// --- Transitions ---
+$transition-fast: 0.15s ease;
+$transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+// --- Breakpoints ---
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// --- CSS Custom Properties (:root) ---
+:root {
+    --color-bg-light: #{$color-bg-light};
+    --color-bg-subtle: #{$color-bg-subtle};
+    --color-bg-card: #{$color-bg-card};
+    --color-brand-light: #{$color-brand-light};
+    --color-brand-medium: #{$color-brand-medium};
+    --color-brand-dark: #{$color-brand-dark};
+    --color-text-dark: #{$color-text-dark};
+    --color-text-muted: #{$color-text-muted};
+    --color-border: #{$color-border};
+    --radius-sm: #{$radius-sm};
+    --radius-md: #{$radius-md};
+    --radius-lg: #{$radius-lg};
+    --radius-pill: #{$radius-pill};
+    --shadow-sm: #{$shadow-sm};
+    --shadow-md: #{$shadow-md};
+    --font-family-base: #{$font-family-base};
+}

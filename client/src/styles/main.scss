@@ -1,0 +1,74 @@
+@use "sass:color";
+@forward "variables";
+@forward "mixins";
+@use "variables" as *;
+@use "mixins" as *;
+@use "reset";
+
+// ==========================================
+// Base Component Utility Classes (BEM)
+// ==========================================
+
+.btn {
+    @include button-reset;
+    @include flex-center;
+    gap: 8px;
+    padding: 10px 22px;
+    border-radius: $radius-pill;
+    font-weight: $font-weight-medium;
+    font-size: 0.95rem;
+    transition: all $transition-fast;
+    text-decoration: none;
+
+    &--primary {
+        background-color: $color-brand-dark;
+        color: $color-white;
+
+        &:hover {
+            background-color: $color-brand-hover;
+            box-shadow: 0 4px 14px rgba(70, 156, 60, 0.25);
+        }
+    }
+
+    &--secondary {
+        background-color: $color-white;
+        color: $color-text-dark;
+        border: 1px solid $color-border;
+
+        &:hover {
+            background-color: $color-bg-subtle;
+            border-color: color.adjust($color-border, $lightness: -5%);
+        }
+    }
+
+    &--soft {
+        background-color: $color-bg-subtle;
+        color: $color-brand-darker;
+        font-size: 0.88rem;
+        padding: 8px 16px;
+
+        &:hover {
+            background-color: $color-brand-light;
+        }
+    }
+}
+
+.card {
+    @include card-base;
+}
+
+.badge {
+    @include badge-pill;
+
+    &--green {
+        background-color: $color-brand-badge-bg;
+        color: $color-brand-badge-text;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
