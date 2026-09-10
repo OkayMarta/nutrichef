@@ -1,0 +1,220 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.why-nutrichef {
+    padding: 80px 0;
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+
+        @media (max-width: 960px) {
+            grid-template-columns: 1fr;
+            gap: 48px;
+        }
+    }
+
+    // --- Left Visual Container ---
+    &__visual-card {
+        position: relative;
+        background: radial-gradient(
+            circle at 40% 50%,
+            #edf7e8 0%,
+            #e2eedc 100%
+        );
+        border: 1px solid $color-border;
+        border-radius: $radius-xl;
+        padding: 48px 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 400px;
+        overflow: visible;
+
+        @media (max-width: 480px) {
+            padding: 32px 16px;
+            min-height: 340px;
+        }
+    }
+
+    // Center Bowl Illustration
+    &__bowl-wrap {
+        position: relative;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: #ffffff;
+        box-shadow: 0 16px 36px rgba(27, 38, 20, 0.1);
+        border: 6px solid #eef5ea;
+        @include flex-center;
+        z-index: 2;
+
+        @media (max-width: 480px) {
+            width: 190px;
+            height: 190px;
+        }
+    }
+
+    &__bowl-art {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    // Floating Macro Badges
+    &__tag {
+        position: absolute;
+        z-index: 3;
+        background-color: #ffffff;
+        border: 1px solid $color-border;
+        border-radius: $radius-md;
+        box-shadow: 0 6px 16px rgba(27, 38, 20, 0.08);
+        padding: 8px 14px;
+        @include flex-align;
+        gap: 8px;
+        font-size: 0.8rem;
+        transition: transform $transition-normal;
+
+        &:hover {
+            transform: translateY(-2px);
+        }
+
+        &--calories {
+            top: 24px;
+            left: 20px;
+        }
+
+        &--protein {
+            top: 24px;
+            right: 20px;
+        }
+
+        &--fats {
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+
+            &:hover {
+                transform: translateY(-52%);
+            }
+        }
+
+        &--carbs {
+            bottom: 24px;
+            right: 48px;
+        }
+
+        @media (max-width: 480px) {
+            padding: 6px 10px;
+            font-size: 0.72rem;
+
+            &--calories {
+                top: 12px;
+                left: 8px;
+            }
+            &--protein {
+                top: 12px;
+                right: 8px;
+            }
+            &--fats {
+                right: 6px;
+            }
+            &--carbs {
+                bottom: 12px;
+                right: 18px;
+            }
+        }
+    }
+
+    &__tag-icon {
+        font-size: 14px;
+    }
+
+    &__tag-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+
+        span {
+            font-size: 0.72rem;
+            color: $color-text-muted;
+        }
+
+        strong {
+            color: $color-text-dark;
+            font-size: 0.82rem;
+        }
+    }
+
+    // Background Leaf Embellishments
+    &__decor-leaf {
+        position: absolute;
+        color: #469c3c;
+        opacity: 0.65;
+        z-index: 1;
+
+        &--1 {
+            top: 60px;
+            left: 36px;
+        }
+
+        &--2 {
+            bottom: 40px;
+            left: 48px;
+        }
+    }
+
+    // --- Right Content Column ---
+    &__content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__tag-label {
+        display: inline-block;
+        font-size: 0.82rem;
+        font-weight: $font-weight-bold;
+        letter-spacing: 0.08em;
+        color: $color-brand-dark;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+
+    &__title {
+        font-size: clamp(2rem, 3.8vw, 2.6rem);
+        font-weight: $font-weight-bold;
+        line-height: 1.2;
+        color: $color-text-dark;
+        letter-spacing: -0.01em;
+        margin-bottom: 32px;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__item {
+        @include flex-align;
+        gap: 16px;
+        font-size: 1.05rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-dark;
+    }
+
+    &__check-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: #ddead7;
+        color: #367d2e;
+        @include flex-center;
+        flex-shrink: 0;
+        font-size: 14px;
+        font-weight: $font-weight-bold;
+    }
+}

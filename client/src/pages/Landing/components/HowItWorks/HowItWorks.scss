@@ -1,0 +1,111 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.how-it-works {
+    padding: 80px 0;
+
+    &__header {
+        margin-bottom: 56px;
+        max-width: 680px;
+    }
+
+    &__tag {
+        display: inline-block;
+        font-size: 0.82rem;
+        font-weight: $font-weight-bold;
+        letter-spacing: 0.08em;
+        color: $color-brand-dark;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+    }
+
+    &__title {
+        font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+        font-weight: $font-weight-bold;
+        line-height: 1.25;
+        color: $color-text-dark;
+        letter-spacing: -0.01em;
+        margin-bottom: 14px;
+    }
+
+    &__subtitle {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: $color-text-muted;
+    }
+
+    &__steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        position: relative;
+
+        @media (max-width: 960px) {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px 24px;
+        }
+
+        @media (max-width: 560px) {
+            grid-template-columns: 1fr;
+            gap: 32px;
+        }
+    }
+
+    &__step {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    &__step-top {
+        @include flex-align;
+        gap: 16px;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    &__badge {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background-color: #e5f1dc;
+        color: #367d2e;
+        font-weight: $font-weight-bold;
+        font-size: 0.9rem;
+        @include flex-center;
+        flex-shrink: 0;
+    }
+
+    &__icon-wrap {
+        width: 44px;
+        height: 44px;
+        @include flex-center;
+        color: $color-text-dark;
+    }
+
+    &__arrow {
+        position: absolute;
+        right: -14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #c4d8ba;
+        font-size: 18px;
+
+        @media (max-width: 960px) {
+            display: none;
+        }
+    }
+
+    &__step-title {
+        font-size: 1.12rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin-bottom: 8px;
+    }
+
+    &__step-desc {
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: $color-text-muted;
+    }
+}

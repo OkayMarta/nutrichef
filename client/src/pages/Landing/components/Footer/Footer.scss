@@ -1,0 +1,60 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.landing-footer {
+    border-top: 1px solid $color-border;
+    background-color: $color-bg-light;
+    padding: 32px 0;
+
+    &__container {
+        @include flex-between;
+        flex-wrap: wrap;
+        gap: 20px;
+
+        @media (max-width: 640px) {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    }
+
+    &__brand {
+        @include flex-align;
+        gap: 8px;
+        font-size: 1.15rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        text-decoration: none;
+    }
+
+    &__logo-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: $color-brand-light;
+        color: $color-brand-dark;
+        @include flex-center;
+        font-size: 16px;
+    }
+
+    &__nav {
+        @include flex-align;
+        gap: 24px;
+        font-size: 0.92rem;
+        color: $color-text-muted;
+
+        a {
+            text-decoration: none;
+            transition: color $transition-fast;
+
+            &:hover {
+                color: $color-text-dark;
+            }
+        }
+    }
+
+    &__leaf-icon {
+        color: $color-brand-medium;
+        margin-left: 4px;
+    }
+}

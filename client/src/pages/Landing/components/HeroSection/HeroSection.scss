@@ -1,0 +1,80 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.hero-section {
+    padding: 48px 0 80px;
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 48px;
+        align-items: center;
+
+        @media (max-width: 960px) {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            text-align: center;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        @media (max-width: 960px) {
+            align-items: center;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+    }
+
+    &__badge {
+        margin-bottom: 20px;
+    }
+
+    &__title {
+        font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+        font-weight: $font-weight-bold;
+        line-height: 1.16;
+        letter-spacing: -0.02em;
+        color: $color-text-dark;
+        margin-bottom: 20px;
+    }
+
+    &__subtitle {
+        font-size: 1.12rem;
+        line-height: 1.6;
+        color: $color-text-muted;
+        margin-bottom: 32px;
+        max-width: 520px;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+
+        @media (max-width: 960px) {
+            justify-content: center;
+        }
+    }
+
+    &__btn-cta {
+        padding: 12px 28px;
+        font-size: 1.05rem;
+    }
+
+    &__btn-learn {
+        padding: 12px 26px;
+        font-size: 1.05rem;
+    }
+
+    &__visual {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}
