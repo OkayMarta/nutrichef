@@ -79,6 +79,140 @@
         &::placeholder {
             color: rgba(94, 109, 85, 0.6);
         }
+
+        &--error {
+            border-color: $color-status-danger !important;
+
+            &:focus {
+                box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+            }
+        }
+    }
+
+    &__password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .auth-page__input {
+            padding-right: 44px;
+        }
+    }
+
+    &__toggle-btn {
+        @include button-reset;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $color-text-muted;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        border-radius: 4px;
+        transition: color $transition-fast;
+
+        &:hover {
+            color: $color-text-dark;
+        }
+    }
+
+    &__error-msg {
+        font-size: 0.8rem;
+        color: $color-status-danger;
+        margin-top: 2px;
+    }
+
+    // Password strength indicator
+    &__strength {
+        margin-top: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__strength-bars {
+        display: flex;
+        gap: 4px;
+        width: 100%;
+        height: 5px;
+    }
+
+    &__strength-segment {
+        flex: 1;
+        height: 100%;
+        background-color: $color-border;
+        border-radius: 3px;
+        transition: background-color $transition-fast;
+
+        &--weak {
+            background-color: #ef4444;
+        }
+
+        &--fair {
+            background-color: #f97316;
+        }
+
+        &--good {
+            background-color: #eab308;
+        }
+
+        &--strong {
+            background-color: $color-brand-dark;
+        }
+    }
+
+    &__strength-label {
+        @include flex-between;
+        font-size: 0.76rem;
+        color: $color-text-muted;
+
+        strong {
+            font-weight: $font-weight-semibold;
+            text-transform: capitalize;
+
+            &.strength--weak {
+                color: #ef4444;
+            }
+
+            &.strength--fair {
+                color: #f97316;
+            }
+
+            &.strength--good {
+                color: #ca8a04;
+            }
+
+            &.strength--strong {
+                color: $color-brand-dark;
+            }
+        }
+    }
+
+    &__checklist {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px 10px;
+        margin-top: 4px;
+        font-size: 0.74rem;
+        color: $color-text-muted;
+
+        @media (max-width: 420px) {
+            grid-template-columns: 1fr;
+        }
+
+        span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color $transition-fast;
+
+            &.checked {
+                color: $color-brand-dark;
+                font-weight: $font-weight-medium;
+            }
+        }
     }
 
     &__submit-btn {

@@ -1,0 +1,113 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+// ==========================================
+// Custom Styling for react-toastify
+// Aligned with NutriChef Design System
+// ==========================================
+
+.Toastify__toast-container {
+    width: 380px;
+    max-width: 90vw;
+    padding: 12px;
+    z-index: 99999;
+}
+
+.Toastify__toast {
+    font-family: $font-family-base;
+    font-size: 0.92rem;
+    font-weight: $font-weight-medium;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    box-shadow:
+        0 10px 25px rgba(27, 38, 20, 0.1),
+        0 2px 8px rgba(27, 38, 20, 0.04);
+    backdrop-filter: blur(8px);
+    cursor: default;
+
+    // Default icon alignment
+    .Toastify__toast-icon {
+        width: 22px;
+        margin-inline-end: 14px;
+    }
+
+    // Close button
+    .Toastify__close-button {
+        color: $color-text-muted;
+        opacity: 0.7;
+        align-self: center;
+        transition:
+            opacity $transition-fast,
+            color $transition-fast;
+
+        &:hover {
+            opacity: 1;
+            color: $color-text-dark;
+        }
+    }
+
+    // --- Success Toast ---
+    &--success {
+        background: #ffffff;
+        border: 1px solid #cae4b4;
+        color: $color-text-dark;
+
+        .Toastify__toast-icon svg {
+            fill: $color-brand-dark;
+        }
+
+        .Toastify__progress-bar {
+            background: linear-gradient(90deg, #cae4b4, $color-brand-medium);
+            height: 4px;
+        }
+    }
+
+    // --- Error Toast ---
+    &--error {
+        background: #ffffff;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+
+        .Toastify__toast-icon svg {
+            fill: #ef4444;
+        }
+
+        .Toastify__progress-bar {
+            background: linear-gradient(90deg, #f87171, #ef4444);
+            height: 4px;
+        }
+    }
+
+    // --- Info Toast ---
+    &--info {
+        background: #ffffff;
+        border: 1px solid $color-border;
+        color: $color-text-dark;
+
+        .Toastify__toast-icon svg {
+            fill: $color-brand-medium;
+        }
+
+        .Toastify__progress-bar {
+            background: $color-brand-medium;
+            height: 4px;
+        }
+    }
+
+    // --- Warning Toast ---
+    &--warning {
+        background: #ffffff;
+        border: 1px solid #fde68a;
+        color: #92400e;
+
+        .Toastify__toast-icon svg {
+            fill: #f59e0b;
+        }
+
+        .Toastify__progress-bar {
+            background: #f59e0b;
+            height: 4px;
+        }
+    }
+}
