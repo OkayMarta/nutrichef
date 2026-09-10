@@ -25,7 +25,27 @@ const Navbar = () => {
             <div className="navbar__container">
                 {/* Brand Logo */}
                 <Link to="/" className="navbar__brand">
-                    <div className="navbar__logo-icon">🍃</div>
+                    <div className="navbar__logo-icon">
+                        <img
+                            src="/logo.svg"
+                            alt="NutriChef Logo"
+                            className="navbar__logo-img"
+                            onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                                const fallback =
+                                    e.currentTarget.parentElement?.querySelector(
+                                        ".navbar__logo-fallback",
+                                    );
+                                if (fallback) fallback.style.display = "flex";
+                            }}
+                        />
+                        <span
+                            className="navbar__logo-fallback"
+                            style={{ display: "none" }}
+                        >
+                            🍃
+                        </span>
+                    </div>
                     <div className="navbar__brand-text">
                         <span className="navbar__title">NutriChef</span>
                         <span className="navbar__tagline">

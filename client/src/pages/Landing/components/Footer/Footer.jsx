@@ -6,7 +6,27 @@ const Footer = () => {
         <footer className="landing-footer">
             <div className="landing-footer__container container">
                 <Link to="/" className="landing-footer__brand">
-                    <div className="landing-footer__logo-icon">🍃</div>
+                    <div className="landing-footer__logo-icon">
+                        <img
+                            src="/logo.svg"
+                            alt="NutriChef Logo"
+                            className="landing-footer__logo-img"
+                            onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                                const fallback =
+                                    e.currentTarget.parentElement?.querySelector(
+                                        ".landing-footer__logo-fallback",
+                                    );
+                                if (fallback) fallback.style.display = "flex";
+                            }}
+                        />
+                        <span
+                            className="landing-footer__logo-fallback"
+                            style={{ display: "none" }}
+                        >
+                            🍃
+                        </span>
+                    </div>
                     <span>NutriChef</span>
                 </Link>
 

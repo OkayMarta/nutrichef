@@ -40,6 +40,21 @@
         @include flex-center;
         font-size: 20px;
         flex-shrink: 0;
+        overflow: hidden;
+        position: relative;
+    }
+
+    &__logo-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    &__logo-fallback {
+        @include flex-center;
+        width: 100%;
+        height: 100%;
     }
 
     &__brand-text {
