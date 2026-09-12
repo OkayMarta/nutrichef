@@ -29,10 +29,6 @@
         }
     }
 
-    &__badge {
-        margin-bottom: 20px;
-    }
-
     &__title {
         font-size: clamp(2.2rem, 4.5vw, 3.4rem);
         font-weight: $font-weight-bold;
@@ -47,7 +43,7 @@
         line-height: 1.6;
         color: $color-text-muted;
         margin-bottom: 32px;
-        max-width: 520px;
+        max-width: 560px;
     }
 
     &__actions {

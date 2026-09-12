@@ -1,0 +1,308 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.edit-log-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(27, 38, 20, 0.55);
+    backdrop-filter: blur(4px);
+    animation: edit-fade-in 0.2s ease;
+}
+
+.edit-log-modal {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: 26px;
+    box-shadow: $shadow-lg;
+    animation: edit-scale-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid $color-border-subtle;
+    }
+
+    &__title {
+        font-size: 1.25rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0;
+    }
+
+    &__close-btn {
+        @include button-reset;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: $color-bg-subtle;
+        color: $color-text-muted;
+        font-size: 1.3rem;
+        line-height: 1;
+        transition:
+            background-color $transition-fast,
+            color $transition-fast;
+
+        &:hover {
+            background-color: $color-border;
+            color: $color-text-dark;
+        }
+    }
+
+    &__dish-info {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        background-color: $color-bg-light;
+        border: 1px solid $color-border;
+        border-radius: $radius-md;
+        margin-bottom: 18px;
+    }
+
+    &__dish-name {
+        font-size: 1.05rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+    }
+
+    &__dish-density {
+        font-size: 0.8rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__label {
+        font-size: 0.86rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+    }
+
+    &__input-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    &__input {
+        width: 100%;
+        height: 44px;
+        padding: 0 42px 0 14px;
+        border: 1px solid $color-border;
+        border-radius: $radius-sm;
+        background-color: $color-bg-light;
+        font-size: 1rem;
+        color: $color-text-dark;
+        transition:
+            border-color $transition-fast,
+            box-shadow $transition-fast;
+
+        &:focus {
+            outline: none;
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba(116, 189, 87, 0.2);
+            background-color: $color-bg-card;
+        }
+
+        &--error {
+            border-color: $color-status-danger;
+
+            &:focus {
+                border-color: $color-status-danger;
+                box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+            }
+        }
+    }
+
+    &__unit {
+        position: absolute;
+        right: 14px;
+        font-size: 0.9rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-subtle;
+        pointer-events: none;
+    }
+
+    &__error-msg {
+        font-size: 0.8rem;
+        color: $color-status-danger;
+        margin-top: 2px;
+    }
+
+    /* Quick Portion Chips */
+    &__quick-chips {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    &__chip {
+        @include button-reset;
+        padding: 5px 12px;
+        font-size: 0.8rem;
+        font-weight: $font-weight-medium;
+        border-radius: $radius-pill;
+        border: 1px solid $color-border;
+        background-color: $color-bg-subtle;
+        color: $color-text-secondary;
+        transition: all $transition-fast;
+
+        &:hover {
+            border-color: $color-brand-light;
+            background-color: #eaf1e5;
+            color: $color-text-dark;
+        }
+
+        &--active {
+            border-color: $color-brand-medium;
+            background-color: $color-brand-badge-bg;
+            color: $color-brand-badge-text;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    /* Live Preview Section */
+    &__preview {
+        padding: 14px;
+        background-color: $color-bg-subtle;
+        border: 1px solid $color-border;
+        border-radius: $radius-md;
+    }
+
+    &__preview-title {
+        display: block;
+        font-size: 0.76rem;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $color-text-muted;
+        margin-bottom: 10px;
+    }
+
+    &__preview-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    &__preview-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px 4px;
+        background-color: $color-bg-card;
+        border: 1px solid $color-border-subtle;
+        border-radius: $radius-sm;
+
+        &--calories .preview-val {
+            color: $color-macro-calories;
+        }
+
+        .preview-val {
+            font-size: 1rem;
+            font-weight: $font-weight-bold;
+            color: $color-text-dark;
+            line-height: 1.2;
+        }
+
+        .preview-lbl {
+            font-size: 0.72rem;
+            color: $color-text-muted;
+            margin-top: 2px;
+        }
+    }
+
+    /* Actions Footer */
+    &__actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 4px;
+    }
+
+    &__btn {
+        @include button-reset;
+        height: 42px;
+        padding: 0 18px;
+        border-radius: $radius-sm;
+        font-size: 0.92rem;
+        font-weight: $font-weight-semibold;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all $transition-fast;
+
+        &--cancel {
+            border: 1px solid $color-border;
+            background-color: transparent;
+            color: $color-text-secondary;
+
+            &:hover:not(:disabled) {
+                background-color: $color-bg-subtle;
+                color: $color-text-dark;
+            }
+        }
+
+        &--submit {
+            background-color: $color-brand-dark;
+            color: $color-white;
+
+            &:hover:not(:disabled) {
+                background-color: $color-brand-hover;
+            }
+
+            &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+        }
+    }
+}
+
+@keyframes edit-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes edit-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

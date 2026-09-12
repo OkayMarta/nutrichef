@@ -7,20 +7,16 @@ const HeroSection = () => {
         <section id="home" className="hero-section container">
             <div className="hero-section__grid">
                 <div className="hero-section__content">
-                    <span className="badge badge--green hero-section__badge">
-                        Your personal nutrition helper
-                    </span>
-
                     <h1 className="hero-section__title">
-                        Know the nutrition <br />
-                        of your home-cooked <br />
-                        meals
+                        Stop guessing calories in home-cooked dishes
                     </h1>
 
                     <p className="hero-section__subtitle">
-                        Calculate calories, protein, fats and carbs for your
-                        finished dishes. Save your recipes, track your portions
-                        and make your nutrition easier.
+                        Calculate exact calories, protein, fats, and carbs
+                        accounting for boiled grains, stews, and
+                        multi-ingredient cooking. Log raw ingredients, weigh the
+                        cooked portion, and track precisely what is on your
+                        plate.
                     </p>
 
                     <div className="hero-section__actions">

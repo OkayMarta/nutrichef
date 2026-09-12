@@ -1,7 +1,6 @@
 import HeroSection from "./components/HeroSection/HeroSection";
 import HowItWorks from "./components/HowItWorks/HowItWorks";
 import WhyNutriChef from "./components/WhyNutriChef/WhyNutriChef";
-import CtaBanner from "./components/CtaBanner/CtaBanner";
 import Footer from "./components/Footer/Footer";
 import "./Landing.scss";
 
@@ -11,7 +10,6 @@ const Landing = () => {
             <HeroSection />
             <HowItWorks />
             <WhyNutriChef />
-            <CtaBanner />
             <Footer />
         </div>
     );

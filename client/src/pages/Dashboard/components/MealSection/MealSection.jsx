@@ -5,8 +5,8 @@ import {
     Candy,
     Utensils,
     Plus,
-    Trash2,
 } from "lucide-react";
+import DailyLogItem from "./DailyLogItem";
 import "./MealSection.scss";
 
 const CATEGORY_META = {
@@ -35,6 +35,7 @@ const MealSection = ({
     totalCalories = 0,
     loading = false,
     onAddMeal,
+    onEditLog,
     onDeleteLog,
 }) => {
     const meta = CATEGORY_META[mealType] || CATEGORY_META.BREAKFAST;
@@ -79,55 +80,12 @@ const MealSection = ({
             ) : logs.length > 0 ? (
                 <ul className="meal-section__log-list">
                     {logs.map((log) => (
-                        <li key={log.id} className="meal-section__log-item">
-                            <div className="meal-section__log-main">
-                                <span className="meal-section__log-name">
-                                    {log.meal?.name || "Dish"}
-                                </span>
-                                <span className="meal-section__log-weight">
-                                    {log.consumedGrams} g portion
-                                </span>
-                            </div>
-
-                            <div className="meal-section__log-meta">
-                                <div className="meal-section__log-macros">
-                                    <span className="macro-chip macro-chip--cal">
-                                        {Math.round(log.snapshotCalories || 0)}{" "}
-                                        kcal
-                                    </span>
-                                    <span className="macro-chip macro-chip--p">
-                                        {Number(
-                                            log.snapshotProtein || 0,
-                                        ).toFixed(1)}
-                                        g P
-                                    </span>
-                                    <span className="macro-chip macro-chip--f">
-                                        {Number(log.snapshotFat || 0).toFixed(
-                                            1,
-                                        )}
-                                        g F
-                                    </span>
-                                    <span className="macro-chip macro-chip--c">
-                                        {Number(log.snapshotCarbs || 0).toFixed(
-                                            1,
-                                        )}
-                                        g C
-                                    </span>
-                                </div>
-
-                                {onDeleteLog && (
-                                    <button
-                                        type="button"
-                                        className="meal-section__delete-btn"
-                                        onClick={() => onDeleteLog(log.id)}
-                                        aria-label={`Remove ${log.meal?.name || "meal"}`}
-                                        title="Remove meal entry"
-                                    >
-                                        <Trash2 size={15} strokeWidth={2} />
-                                    </button>
-                                )}
-                            </div>
-                        </li>
+                        <DailyLogItem
+                            key={log.id}
+                            log={log}
+                            onEdit={onEditLog}
+                            onDelete={onDeleteLog}
+                        />
                     ))}
                 </ul>
             ) : (

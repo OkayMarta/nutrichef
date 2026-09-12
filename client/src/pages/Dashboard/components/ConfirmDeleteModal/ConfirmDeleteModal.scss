@@ -1,0 +1,124 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.confirm-delete-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(27, 38, 20, 0.55);
+    backdrop-filter: blur(4px);
+    animation: confirm-fade-in 0.2s ease;
+}
+
+.confirm-delete-modal {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: 28px 24px;
+    box-shadow: $shadow-lg;
+    text-align: center;
+    animation: confirm-scale-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &__icon-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background-color: #fee2e2;
+        color: $color-status-danger;
+        margin-bottom: 16px;
+    }
+
+    &__title {
+        font-size: 1.22rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0 0 8px;
+    }
+
+    &__desc {
+        font-size: 0.92rem;
+        color: $color-text-muted;
+        line-height: 1.5;
+        margin: 0 0 24px;
+
+        strong {
+            color: $color-text-dark;
+            font-weight: $font-weight-semibold;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    &__btn {
+        @include button-reset;
+        flex: 1;
+        height: 42px;
+        padding: 0 16px;
+        border-radius: $radius-sm;
+        font-size: 0.92rem;
+        font-weight: $font-weight-semibold;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all $transition-fast;
+
+        &--cancel {
+            border: 1px solid $color-border;
+            background-color: transparent;
+            color: $color-text-secondary;
+
+            &:hover:not(:disabled) {
+                background-color: $color-bg-subtle;
+                color: $color-text-dark;
+            }
+        }
+
+        &--delete {
+            background-color: $color-status-danger;
+            color: $color-white;
+
+            &:hover:not(:disabled) {
+                background-color: #b91c1c;
+            }
+
+            &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+        }
+    }
+}
+
+@keyframes confirm-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes confirm-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

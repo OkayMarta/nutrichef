@@ -6,6 +6,8 @@ import { getLocalDateString } from "../../utils/dateUtils";
 import DateNavigator from "./components/DateNavigator/DateNavigator";
 import MealSection from "./components/MealSection/MealSection";
 import AddLogModal from "./components/AddLogModal/AddLogModal";
+import EditLogModal from "./components/EditLogModal/EditLogModal";
+import ConfirmDeleteModal from "./components/ConfirmDeleteModal/ConfirmDeleteModal";
 import DailyNutritionSummary from "./components/DailyNutritionSummary/DailyNutritionSummary";
 import DailyTip from "./components/DailyTip/DailyTip";
 import "./Dashboard.scss";
@@ -28,6 +30,9 @@ const Dashboard = () => {
     const [goals, setGoals] = useState(DEFAULT_GOALS);
     const [logs, setLogs] = useState([]);
     const [addLogMealType, setAddLogMealType] = useState(null);
+    const [editingLog, setEditingLog] = useState(null);
+    const [deletingLog, setDeletingLog] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const triggerRefetch = useCallback(() => {
         setRefreshIndex((prev) => prev + 1);
@@ -72,11 +77,24 @@ const Dashboard = () => {
         };
     }, [activeDate, refreshIndex]);
 
-    // Handle deleting a meal entry
-    const handleDeleteLog = async (logId) => {
+    // Open edit modal
+    const handleOpenEditLog = (log) => {
+        setEditingLog(log);
+    };
+
+    // Open delete confirmation modal
+    const handleOpenDeleteLog = (log) => {
+        setDeletingLog(log);
+    };
+
+    // Confirmed delete execution
+    const handleConfirmDelete = async () => {
+        if (!deletingLog) return;
+        setIsDeleting(true);
         try {
-            await deleteDailyLog(logId);
+            await deleteDailyLog(deletingLog.id);
             toast.success("Meal entry removed.");
+            setDeletingLog(null);
             triggerRefetch();
         } catch (error) {
             console.error("Failed to delete log entry:", error);
@@ -84,6 +102,8 @@ const Dashboard = () => {
                 error.response?.data?.message ||
                 "Failed to remove meal entry. Please try again.";
             toast.error(message);
+        } finally {
+            setIsDeleting(false);
         }
     };
 
@@ -127,7 +147,8 @@ const Dashboard = () => {
                                 totalCalories={caloriesByMealType[key] || 0}
                                 loading={initialLoading}
                                 onAddMeal={(type) => setAddLogMealType(type)}
-                                onDeleteLog={handleDeleteLog}
+                                onEditLog={handleOpenEditLog}
+                                onDeleteLog={handleOpenDeleteLog}
                             />
                         ))}
                     </div>
@@ -152,6 +173,25 @@ const Dashboard = () => {
                     activeDate={activeDate}
                     onClose={() => setAddLogMealType(null)}
                     onLogCreated={triggerRefetch}
+                />
+            )}
+
+            {/* Edit Meal Log Modal Dialog */}
+            {editingLog && (
+                <EditLogModal
+                    log={editingLog}
+                    onClose={() => setEditingLog(null)}
+                    onLogUpdated={triggerRefetch}
+                />
+            )}
+
+            {/* Delete Confirmation Modal Dialog */}
+            {deletingLog && (
+                <ConfirmDeleteModal
+                    log={deletingLog}
+                    deleting={isDeleting}
+                    onClose={() => setDeletingLog(null)}
+                    onConfirm={handleConfirmDelete}
                 />
             )}
         </main>

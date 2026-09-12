@@ -243,6 +243,13 @@
         flex-wrap: wrap;
     }
 
+    &__log-actions {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    &__action-btn,
     &__delete-btn {
         @include button-reset;
         display: flex;
@@ -252,9 +259,21 @@
         height: 30px;
         border-radius: 6px;
         color: $color-text-subtle;
-        transition: all $transition-fast;
+        transition:
+            background-color $transition-fast,
+            color $transition-fast;
 
         &:hover {
+            background-color: rgba(220, 38, 38, 0.1);
+            color: $color-status-danger;
+        }
+
+        &--edit:hover {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: $color-macro-protein;
+        }
+
+        &--delete:hover {
             background-color: rgba(220, 38, 38, 0.1);
             color: $color-status-danger;
         }
