@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import { House, BookMarked, CirclePlus } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import "./Navbar.scss";
 
@@ -164,7 +165,11 @@ const Navbar = () => {
                                 `navbar__link ${isActive ? "navbar__link--active" : ""}`
                             }
                         >
-                            <span>🏠</span>
+                            <House
+                                className="navbar__link-icon"
+                                size={18}
+                                strokeWidth={2}
+                            />
                             <span>Dashboard</span>
                         </NavLink>
                         <NavLink
@@ -173,7 +178,11 @@ const Navbar = () => {
                                 `navbar__link ${isActive ? "navbar__link--active" : ""}`
                             }
                         >
-                            <span>📖</span>
+                            <BookMarked
+                                className="navbar__link-icon"
+                                size={18}
+                                strokeWidth={2}
+                            />
                             <span>Saved Meals</span>
                         </NavLink>
                         <NavLink
@@ -182,7 +191,11 @@ const Navbar = () => {
                                 `navbar__link ${isActive ? "navbar__link--active" : ""}`
                             }
                         >
-                            <span>➕</span>
+                            <CirclePlus
+                                className="navbar__link-icon"
+                                size={18}
+                                strokeWidth={2}
+                            />
                             <span>Create Meal</span>
                         </NavLink>
                     </nav>

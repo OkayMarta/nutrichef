@@ -1,0 +1,150 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.date-navigator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+
+    @include respond-to("sm") {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+    }
+
+    &__controls {
+        display: inline-flex;
+        align-items: center;
+        background-color: $color-bg-card;
+        border: 1px solid $color-border;
+        border-radius: $radius-pill;
+        padding: 4px;
+        box-shadow: $shadow-sm;
+        transition: box-shadow $transition-fast;
+
+        &:hover {
+            box-shadow: $shadow-md;
+        }
+    }
+
+    &__arrow-btn {
+        @include button-reset;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        color: $color-text-secondary;
+        transition:
+            background-color $transition-fast,
+            color $transition-fast,
+            transform $transition-fast;
+
+        &:hover {
+            background-color: $color-bg-subtle;
+            color: $color-brand-dark;
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
+    &__center {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 16px;
+        cursor: pointer;
+        user-select: none;
+        height: 44px;
+        border-radius: $radius-pill;
+        transition: background-color $transition-fast;
+
+        &:hover {
+            background-color: $color-bg-subtle;
+
+            .date-navigator__calendar-btn {
+                color: $color-brand-dark;
+            }
+        }
+    }
+
+    &__calendar-btn {
+        @include button-reset;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $color-text-muted;
+        transition: color $transition-fast;
+    }
+
+    &__label {
+        font-size: 1.05rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    &__hidden-input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+    }
+
+    &__today-btn {
+        @include button-reset;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 38px;
+        padding: 0 16px;
+        background-color: $color-brand-badge-bg;
+        border: 1px solid rgba(116, 189, 87, 0.3);
+        border-radius: $radius-pill;
+        font-size: 0.85rem;
+        font-weight: $font-weight-semibold;
+        color: $color-brand-badge-text;
+        transition: all $transition-fast;
+        box-shadow: $shadow-xs;
+
+        &:hover {
+            background-color: $color-brand-light;
+            color: $color-text-dark;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    &__today-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: $color-brand-medium;
+        animation: today-pulse 1.8s infinite;
+    }
+}
+
+@keyframes today-pulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1.3);
+    }
+}

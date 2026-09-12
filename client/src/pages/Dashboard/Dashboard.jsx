@@ -1,265 +1,337 @@
+import { useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
+import { getDashboardData } from "../../api/dashboardApi";
+import { deleteDailyLog } from "../../api/dailyLogApi";
+import { getLocalDateString } from "../../utils/dateUtils";
+import DateNavigator from "./components/DateNavigator/DateNavigator";
+import MealSection from "./components/MealSection/MealSection";
+import AddLogModal from "./components/AddLogModal/AddLogModal";
+import "./Dashboard.scss";
+
+const MEAL_TYPES = [
+    { key: "BREAKFAST", label: "Breakfast" },
+    { key: "LUNCH", label: "Lunch" },
+    { key: "DINNER", label: "Dinner" },
+    { key: "SNACK", label: "Snacks" },
+];
+
+const DEFAULT_TOTALS = { calories: 0, protein: 0, fat: 0, carbs: 0 };
+const DEFAULT_GOALS = { calories: 2000, protein: 120, fat: 65, carbs: 250 };
 
 const Dashboard = () => {
     const { user } = useAuth();
-    const today = new Date().toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    });
+    const [activeDate, setActiveDate] = useState(() => getLocalDateString());
+    const [refreshIndex, setRefreshIndex] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [totals, setTotals] = useState(DEFAULT_TOTALS);
+    const [goals, setGoals] = useState(DEFAULT_GOALS);
+    const [logs, setLogs] = useState([]);
+    const [addLogMealType, setAddLogMealType] = useState(null);
+
+    const triggerRefetch = useCallback(() => {
+        setRefreshIndex((prev) => prev + 1);
+    }, []);
+
+    useEffect(() => {
+        let isCurrent = true;
+
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const response = await getDashboardData(activeDate);
+                if (isCurrent) {
+                    const data = response.data;
+                    setTotals(data.totals || DEFAULT_TOTALS);
+                    setGoals({
+                        calories:
+                            data.goals?.calories || DEFAULT_GOALS.calories,
+                        protein: data.goals?.protein || DEFAULT_GOALS.protein,
+                        fat: data.goals?.fat || DEFAULT_GOALS.fat,
+                        carbs: data.goals?.carbs || DEFAULT_GOALS.carbs,
+                    });
+                    setLogs(data.logs || []);
+                }
+            } catch (error) {
+                if (isCurrent) {
+                    console.error("Failed to load dashboard data:", error);
+                    toast.error("Could not load meal data for this date.");
+                    setTotals(DEFAULT_TOTALS);
+                    setLogs([]);
+                }
+            } finally {
+                if (isCurrent) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            isCurrent = false;
+        };
+    }, [activeDate, refreshIndex]);
+
+    // Handle deleting a meal entry
+    const handleDeleteLog = async (logId) => {
+        try {
+            await deleteDailyLog(logId);
+            toast.success("Meal entry removed.");
+            triggerRefetch();
+        } catch (error) {
+            console.error("Failed to delete log entry:", error);
+            const message =
+                error.response?.data?.message ||
+                "Failed to remove meal entry. Please try again.";
+            toast.error(message);
+        }
+    };
+
+    // Group logs by mealType
+    const logsByMealType = MEAL_TYPES.reduce((acc, { key }) => {
+        acc[key] = logs.filter((l) => l.mealType === key);
+        return acc;
+    }, {});
+
+    // Compute calories per meal category
+    const caloriesByMealType = MEAL_TYPES.reduce((acc, { key }) => {
+        const catLogs = logsByMealType[key] || [];
+        acc[key] = catLogs.reduce(
+            (sum, l) => sum + (l.snapshotCalories || 0),
+            0,
+        );
+        return acc;
+    }, {});
+
+    // Progress percentage helper
+    const getProgressPct = (current, target) => {
+        if (!target || target <= 0) return 0;
+        return Math.min(100, Math.round((current / target) * 100));
+    };
 
     return (
-        <div className="container" style={{ padding: "32px 20px 60px" }}>
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: "24px",
-                }}
-            >
-                <div>
-                    <h1 style={{ fontSize: "1.8rem", fontWeight: "700" }}>
-                        Today
-                    </h1>
-                    <p
-                        style={{
-                            fontSize: "0.9rem",
-                            color: "var(--color-text-muted)",
-                        }}
-                    >
-                        📅 {today}
-                    </p>
-                </div>
-                {user && (
-                    <span className="badge badge--green">
-                        Signed in as {user.email}
-                    </span>
-                )}
-            </div>
-
-            <div
-                style={{
-                    display: "grid",
-                    gridTemplateColumns: "2fr 1fr",
-                    gap: "24px",
-                }}
-            >
-                {/* Left Column: Meal Logs */}
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "16px",
-                    }}
-                >
-                    {["Breakfast", "Lunch", "Dinner", "Snacks"].map((meal) => (
-                        <div
-                            key={meal}
-                            className="card"
-                            style={{ padding: "20px" }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    marginBottom: "16px",
-                                }}
-                            >
-                                <div>
-                                    <h3 style={{ fontSize: "1.1rem" }}>
-                                        {meal}
-                                    </h3>
-                                    <span
-                                        style={{
-                                            fontSize: "0.85rem",
-                                            color: "var(--color-text-muted)",
-                                        }}
-                                    >
-                                        0 kcal
-                                    </span>
-                                </div>
-                                <button type="button" className="btn btn--soft">
-                                    + Add meal
-                                </button>
-                            </div>
-                            <div
-                                style={{
-                                    border: "1px dashed var(--color-border-dashed, #d2dfca)",
-                                    borderRadius: "12px",
-                                    padding: "24px",
-                                    textAlign: "center",
-                                    color: "var(--color-text-muted)",
-                                    fontSize: "0.9rem",
-                                }}
-                            >
-                                🍴 No meal added. Add your meal to track
-                                calories and macros.
-                            </div>
+        <main className="dashboard">
+            <div className="dashboard__container container">
+                {/* Top Header: Title, User Badge & DateNavigator */}
+                <header className="dashboard__header">
+                    <div className="dashboard__header-main">
+                        <div>
+                            <span className="dashboard__badge">
+                                Daily Diary & Tracker
+                            </span>
+                            <h1 className="dashboard__title">Dashboard</h1>
                         </div>
-                    ))}
-                </div>
 
-                {/* Right Column: Summary & Daily Tip */}
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "24px",
-                    }}
-                >
-                    <div className="card" style={{ padding: "24px" }}>
-                        <h3
-                            style={{ fontSize: "1.2rem", marginBottom: "16px" }}
-                        >
-                            Daily Summary
-                        </h3>
-                        <div
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                gap: "16px",
-                            }}
-                        >
-                            <div>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        fontSize: "0.9rem",
-                                        marginBottom: "4px",
-                                    }}
-                                >
-                                    <span>Calories</span>
-                                    <span
-                                        style={{
-                                            color: "var(--color-macro-calories, #469c3c)",
-                                            fontWeight: "600",
-                                        }}
-                                    >
-                                        0 / 2000 kcal
-                                    </span>
-                                </div>
-                                <div
-                                    style={{
-                                        height: "8px",
-                                        borderRadius: "999px",
-                                        background: "var(--color-border)",
-                                    }}
-                                ></div>
+                        {user?.email && (
+                            <div
+                                className="dashboard__user-pill"
+                                title={user.email}
+                            >
+                                <span className="dashboard__user-avatar">
+                                    {user.email.charAt(0).toUpperCase()}
+                                </span>
+                                <span className="dashboard__user-email">
+                                    {user.email}
+                                </span>
                             </div>
-                            <div>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        fontSize: "0.9rem",
-                                        marginBottom: "4px",
-                                    }}
-                                >
-                                    <span>Protein</span>
-                                    <span
-                                        style={{
-                                            color: "var(--color-macro-protein, #2563eb)",
-                                            fontWeight: "600",
-                                        }}
-                                    >
-                                        0 / 120 g
-                                    </span>
-                                </div>
-                                <div
-                                    style={{
-                                        height: "8px",
-                                        borderRadius: "999px",
-                                        background: "var(--color-border)",
-                                    }}
-                                ></div>
-                            </div>
-                            <div>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        fontSize: "0.9rem",
-                                        marginBottom: "4px",
-                                    }}
-                                >
-                                    <span>Fat</span>
-                                    <span
-                                        style={{
-                                            color: "var(--color-macro-fat, #e08b1a)",
-                                            fontWeight: "600",
-                                        }}
-                                    >
-                                        0 / 65 g
-                                    </span>
-                                </div>
-                                <div
-                                    style={{
-                                        height: "8px",
-                                        borderRadius: "999px",
-                                        background: "var(--color-border)",
-                                    }}
-                                ></div>
-                            </div>
-                            <div>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        fontSize: "0.9rem",
-                                        marginBottom: "4px",
-                                    }}
-                                >
-                                    <span>Carbs</span>
-                                    <span
-                                        style={{
-                                            color: "var(--color-macro-carbs, #8b5cf6)",
-                                            fontWeight: "600",
-                                        }}
-                                    >
-                                        0 / 250 g
-                                    </span>
-                                </div>
-                                <div
-                                    style={{
-                                        height: "8px",
-                                        borderRadius: "999px",
-                                        background: "var(--color-border)",
-                                    }}
-                                ></div>
-                            </div>
-                        </div>
+                        )}
                     </div>
 
-                    <div
-                        className="card"
-                        style={{
-                            padding: "24px",
-                            background: "var(--color-bg-card-muted, #f4f8f1)",
-                        }}
-                    >
-                        <h3 style={{ fontSize: "1.1rem", marginBottom: "8px" }}>
-                            Daily Tip
-                        </h3>
-                        <p
-                            style={{
-                                fontWeight: "600",
-                                color: "var(--color-text-dark)",
-                                marginBottom: "4px",
-                            }}
-                        >
-                            Drink more water
-                        </p>
-                        <p style={{ fontSize: "0.85rem" }}>
-                            Optimal hydration is essential for your health and
-                            well-being.
-                        </p>
+                    {/* Date Navigator Bar */}
+                    <div className="dashboard__nav-wrapper">
+                        <DateNavigator
+                            activeDate={activeDate}
+                            onDateChange={setActiveDate}
+                        />
                     </div>
+                </header>
+
+                {/* Main 2-Column Responsive Dashboard Layout */}
+                <div className="dashboard__layout">
+                    {/* Left Column: 4 Meal Categories */}
+                    <div className="dashboard__logs-col">
+                        {MEAL_TYPES.map(({ key, label }) => (
+                            <MealSection
+                                key={key}
+                                mealType={key}
+                                title={label}
+                                logs={logsByMealType[key] || []}
+                                totalCalories={caloriesByMealType[key] || 0}
+                                loading={loading}
+                                onAddMeal={(type) => setAddLogMealType(type)}
+                                onDeleteLog={handleDeleteLog}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Right Column: Daily Summary & Tip */}
+                    <aside className="dashboard__summary-col">
+                        {/* Summary Card */}
+                        <div className="dashboard-card daily-summary-card">
+                            <div className="daily-summary-card__header">
+                                <h2 className="daily-summary-card__title">
+                                    Daily Nutrition Summary
+                                </h2>
+                                <span className="daily-summary-card__date-pill">
+                                    {activeDate}
+                                </span>
+                            </div>
+
+                            {loading ? (
+                                <div className="daily-summary-card__skeleton-stack">
+                                    <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
+                                    <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
+                                    <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
+                                    <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
+                                </div>
+                            ) : (
+                                <div className="daily-summary-card__metrics">
+                                    {/* Calories */}
+                                    <div className="daily-summary-card__metric daily-summary-card__metric--calories">
+                                        <div className="daily-summary-card__metric-header">
+                                            <span className="metric-label">
+                                                🔥 Calories
+                                            </span>
+                                            <span className="metric-value">
+                                                <strong>
+                                                    {Math.round(
+                                                        totals.calories,
+                                                    )}
+                                                </strong>{" "}
+                                                / {goals.calories} kcal
+                                            </span>
+                                        </div>
+                                        <div className="daily-summary-card__progress-track">
+                                            <div
+                                                className="daily-summary-card__progress-bar daily-summary-card__progress-bar--calories"
+                                                style={{
+                                                    width: `${getProgressPct(
+                                                        totals.calories,
+                                                        goals.calories,
+                                                    )}%`,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Protein */}
+                                    <div className="daily-summary-card__metric daily-summary-card__metric--protein">
+                                        <div className="daily-summary-card__metric-header">
+                                            <span className="metric-label">
+                                                🥩 Protein
+                                            </span>
+                                            <span className="metric-value">
+                                                <strong>
+                                                    {Number(
+                                                        totals.protein,
+                                                    ).toFixed(1)}
+                                                </strong>{" "}
+                                                / {goals.protein} g
+                                            </span>
+                                        </div>
+                                        <div className="daily-summary-card__progress-track">
+                                            <div
+                                                className="daily-summary-card__progress-bar daily-summary-card__progress-bar--protein"
+                                                style={{
+                                                    width: `${getProgressPct(
+                                                        totals.protein,
+                                                        goals.protein,
+                                                    )}%`,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Fat */}
+                                    <div className="daily-summary-card__metric daily-summary-card__metric--fat">
+                                        <div className="daily-summary-card__metric-header">
+                                            <span className="metric-label">
+                                                🥑 Fat
+                                            </span>
+                                            <span className="metric-value">
+                                                <strong>
+                                                    {Number(totals.fat).toFixed(
+                                                        1,
+                                                    )}
+                                                </strong>{" "}
+                                                / {goals.fat} g
+                                            </span>
+                                        </div>
+                                        <div className="daily-summary-card__progress-track">
+                                            <div
+                                                className="daily-summary-card__progress-bar daily-summary-card__progress-bar--fat"
+                                                style={{
+                                                    width: `${getProgressPct(
+                                                        totals.fat,
+                                                        goals.fat,
+                                                    )}%`,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Carbs */}
+                                    <div className="daily-summary-card__metric daily-summary-card__metric--carbs">
+                                        <div className="daily-summary-card__metric-header">
+                                            <span className="metric-label">
+                                                🌾 Carbs
+                                            </span>
+                                            <span className="metric-value">
+                                                <strong>
+                                                    {Number(
+                                                        totals.carbs,
+                                                    ).toFixed(1)}
+                                                </strong>{" "}
+                                                / {goals.carbs} g
+                                            </span>
+                                        </div>
+                                        <div className="daily-summary-card__progress-track">
+                                            <div
+                                                className="daily-summary-card__progress-bar daily-summary-card__progress-bar--carbs"
+                                                style={{
+                                                    width: `${getProgressPct(
+                                                        totals.carbs,
+                                                        goals.carbs,
+                                                    )}%`,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Tip Card */}
+                        <div className="dashboard-card tip-card">
+                            <span className="tip-card__icon">💡</span>
+                            <div>
+                                <h3 className="tip-card__title">Daily Tip</h3>
+                                <p className="tip-card__bold">
+                                    Hydration & Balance
+                                </p>
+                                <p className="tip-card__desc">
+                                    Stay well-hydrated throughout the day.
+                                    Tracking cooked portion weight allows
+                                    NutriChef to accurately scale calories and
+                                    macros to your exact needs.
+                                </p>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
             </div>
-        </div>
+
+            {/* Add Meal Log Modal Dialog */}
+            {addLogMealType && (
+                <AddLogModal
+                    initialMealType={addLogMealType}
+                    activeDate={activeDate}
+                    onClose={() => setAddLogMealType(null)}
+                    onLogCreated={triggerRefetch}
+                />
+            )}
+        </main>
     );
 };
 

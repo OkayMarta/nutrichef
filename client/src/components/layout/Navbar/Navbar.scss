@@ -85,40 +85,86 @@
         @include flex-align;
         gap: 6px;
 
-        // In authenticated app mode: segmented pill group
+        // In authenticated app mode: clean tab group matching mockup
         &--app {
-            background-color: rgba(226, 235, 217, 0.4);
-            padding: 4px;
-            border-radius: $radius-pill;
-            border: 1px solid $color-border;
+            background-color: transparent;
+            padding: 0;
+            border: none;
+            gap: 8px;
+            align-items: stretch;
         }
 
         @media (max-width: 768px) {
-            gap: 2px;
+            gap: 4px;
         }
     }
 
     &__link {
         @include flex-align;
-        gap: 6px;
+        gap: 8px;
         padding: 8px 18px;
         border-radius: $radius-pill;
         font-size: 0.92rem;
         font-weight: $font-weight-medium;
-        color: $color-text-muted;
+        color: $color-text-secondary;
         text-decoration: none;
         transition: all $transition-fast;
 
-        &:hover {
-            color: $color-text-dark;
+        &-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: $color-text-secondary;
+            transition: color $transition-fast;
         }
 
-        // App nav link active style (pill in segmented group)
-        .navbar__nav--app &--active {
+        &:hover {
             color: $color-text-dark;
-            font-weight: $font-weight-semibold;
-            background-color: $color-bg-card;
-            box-shadow: 0 2px 8px rgba(27, 38, 20, 0.06);
+
+            .navbar__link-icon {
+                color: $color-text-dark;
+            }
+        }
+
+        // App nav tabs style (matches mockup image with white card & bottom green bar)
+        .navbar__nav--app & {
+            position: relative;
+            border-radius: 12px 12px 0 0;
+            padding: 10px 18px 12px;
+            color: $color-text-secondary;
+            background-color: transparent;
+
+            &:hover {
+                color: $color-text-dark;
+                background-color: rgba(255, 255, 255, 0.4);
+
+                .navbar__link-icon {
+                    color: $color-text-dark;
+                }
+            }
+
+            &--active {
+                background-color: $color-bg-card;
+                color: $color-text-dark;
+                font-weight: $font-weight-bold;
+                box-shadow: 0 -2px 10px rgba(27, 38, 20, 0.04);
+
+                .navbar__link-icon {
+                    color: $color-brand-dark;
+                }
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    height: 3px;
+                    background-color: $color-brand-medium;
+                    border-radius: 3px 3px 0 0;
+                }
+            }
         }
 
         // Landing nav link underline style

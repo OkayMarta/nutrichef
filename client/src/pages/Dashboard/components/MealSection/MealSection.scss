@@ -1,0 +1,313 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.meal-section {
+    background-color: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: 22px;
+    box-shadow: $shadow-card;
+    transition:
+        border-color $transition-fast,
+        box-shadow $transition-fast;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    &__title-group {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    &__icon-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        transition: transform $transition-fast;
+    }
+
+    // Category specific icon badge themes
+    &--breakfast &__icon-badge {
+        background-color: #fef6e7;
+        color: #e67e22;
+    }
+
+    &--lunch &__icon-badge {
+        background-color: #eaf5e5;
+        color: #469c3c;
+    }
+
+    &--dinner &__icon-badge {
+        background-color: #f1effe;
+        color: #6c5ce7;
+    }
+
+    &--snack &__icon-badge {
+        background-color: #fef1e6;
+        color: #d35400;
+    }
+
+    &__text-group {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+    }
+
+    &__title {
+        font-size: 1.18rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0 0 2px;
+    }
+
+    &__calories {
+        font-size: 0.85rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+    }
+
+    &__skeleton-cals {
+        display: inline-block;
+        width: 50px;
+        height: 14px;
+        border-radius: $radius-xs;
+        background: linear-gradient(
+            90deg,
+            $color-bg-subtle 25%,
+            #e3ecd9 50%,
+            $color-bg-subtle 75%
+        );
+        background-size: 200% 100%;
+        animation: meal-shimmer 1.5s infinite;
+    }
+
+    &__add-btn {
+        @include button-reset;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 38px;
+        padding: 0 16px;
+        background-color: #f0f7ec;
+        border: 1px solid rgba(116, 189, 87, 0.35);
+        border-radius: $radius-pill;
+        font-size: 0.88rem;
+        font-weight: $font-weight-semibold;
+        color: #367d2e;
+        transition: all $transition-fast;
+
+        &:hover {
+            background-color: #e2f0dc;
+            border-color: #74bd57;
+            color: #2b6724;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+
+    /* Dashed Empty Box matching screenshot */
+    &__empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 24px;
+        border: 1px dashed $color-border-dashed;
+        border-radius: $radius-md;
+        background-color: #fafcf8;
+        cursor: pointer;
+        transition: all $transition-fast;
+        text-align: left;
+
+        &:hover {
+            border-color: $color-brand-medium;
+            background-color: #f6faf2;
+            transform: translateY(-1px);
+
+            .meal-section__empty-icon {
+                color: $color-brand-dark;
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid $color-brand-medium;
+            outline-offset: 2px;
+        }
+    }
+
+    &__empty-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8a9981;
+        flex-shrink: 0;
+        transition: color $transition-fast;
+    }
+
+    &__empty-text-wrap {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.35;
+    }
+
+    &__empty-title {
+        font-size: 0.95rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+    }
+
+    &__empty-desc {
+        font-size: 0.85rem;
+        color: $color-text-muted;
+    }
+
+    /* Populated Log List */
+    &__log-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__log-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 16px;
+        border-radius: $radius-md;
+        background-color: $color-bg-subtle;
+        border: 1px solid $color-border-subtle;
+        transition: background-color $transition-fast;
+
+        &:hover {
+            background-color: #eaf1e5;
+        }
+
+        @include respond-to("sm") {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
+    &__log-main {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+    }
+
+    &__log-name {
+        font-size: 1rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+    }
+
+    &__log-weight {
+        font-size: 0.8rem;
+        color: $color-text-muted;
+    }
+
+    &__log-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+
+        @include respond-to("sm") {
+            justify-content: flex-end;
+        }
+    }
+
+    &__log-macros {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    &__delete-btn {
+        @include button-reset;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        color: $color-text-subtle;
+        transition: all $transition-fast;
+
+        &:hover {
+            background-color: rgba(220, 38, 38, 0.1);
+            color: $color-status-danger;
+        }
+    }
+
+    /* Skeleton Loading State */
+    &__skeleton-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__skeleton-row {
+        height: 72px;
+        width: 100%;
+        border-radius: $radius-md;
+        background: linear-gradient(
+            90deg,
+            $color-bg-subtle 25%,
+            #e3ecd9 50%,
+            $color-bg-subtle 75%
+        );
+        background-size: 200% 100%;
+        animation: meal-shimmer 1.5s infinite;
+    }
+}
+
+.macro-chip {
+    font-size: 0.78rem;
+    font-weight: $font-weight-semibold;
+    padding: 3px 8px;
+    border-radius: $radius-sm;
+
+    &--cal {
+        background-color: rgba(70, 156, 60, 0.12);
+        color: $color-macro-calories;
+    }
+    &--p {
+        background-color: rgba(37, 99, 235, 0.1);
+        color: $color-macro-protein;
+    }
+    &--f {
+        background-color: rgba(224, 139, 26, 0.1);
+        color: $color-macro-fat;
+    }
+    &--c {
+        background-color: rgba(139, 92, 246, 0.1);
+        color: $color-macro-carbs;
+    }
+}
+
+@keyframes meal-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
