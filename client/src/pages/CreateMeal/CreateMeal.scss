@@ -1,0 +1,157 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.create-meal {
+    min-height: calc(100vh - 72px);
+    background-color: $color-bg-light;
+    padding: 36px 0 72px 0;
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    // --- Page Header ---
+    &__header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__badge {
+        @include badge-pill;
+        background-color: rgba(202, 228, 180, 0.45);
+        color: $color-brand-darker;
+        font-size: 0.78rem;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        width: fit-content;
+    }
+
+    &__title {
+        font-size: 2rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        margin: 0;
+
+        @media (max-width: 640px) {
+            font-size: 1.65rem;
+        }
+    }
+
+    &__subtitle {
+        font-size: 0.98rem;
+        color: $color-text-muted;
+        margin: 0;
+        max-width: 680px;
+        line-height: 1.45;
+    }
+
+    // --- Success Banner ---
+    &__success-banner {
+        @include flex-between;
+        gap: 20px;
+        flex-wrap: wrap;
+        padding: 20px 24px;
+        background: linear-gradient(
+            135deg,
+            rgba(202, 228, 180, 0.35) 0%,
+            rgba(234, 243, 227, 0.8) 100%
+        );
+        border: 1px solid $color-brand-light;
+        border-radius: $radius-lg;
+        box-shadow: 0 4px 16px rgba(70, 156, 60, 0.08);
+        animation: fade-in 0.3s ease;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+
+    &__success-info {
+        @include flex-align;
+        gap: 14px;
+    }
+
+    &__success-icon {
+        font-size: 1.75rem;
+        flex-shrink: 0;
+    }
+
+    &__success-title {
+        font-size: 1.05rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0 0 4px 0;
+    }
+
+    &__success-desc {
+        font-size: 0.84rem;
+        color: $color-text-secondary;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    &__success-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        @media (max-width: 480px) {
+            flex-direction: column;
+
+            .btn {
+                width: 100%;
+            }
+        }
+    }
+
+    // --- 2-Column Responsive Layout ---
+    &__layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(340px, 1fr);
+        gap: 32px;
+        align-items: start;
+
+        @media (max-width: 960px) {
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+    }
+
+    &__form-col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__preview-col {
+        display: flex;
+        flex-direction: column;
+
+        @media (max-width: 960px) {
+            order: -1; // On mobile, show the live preview right above or keep in order
+        }
+    }
+
+    &__preview-sticky {
+        position: sticky;
+        top: 96px; // Below the 72px sticky navbar with breathing room
+        z-index: 10;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

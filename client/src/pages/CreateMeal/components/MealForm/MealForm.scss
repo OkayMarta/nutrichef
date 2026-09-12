@@ -1,0 +1,201 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.meal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    &__section {
+        @include card-base;
+        padding: 28px 26px;
+        background-color: $color-bg-card;
+        border: 1px solid $color-border;
+        border-radius: $radius-lg;
+        box-shadow: $shadow-card;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        @media (max-width: 640px) {
+            padding: 20px 16px;
+        }
+    }
+
+    &__section-header {
+        @include flex-align;
+        gap: 12px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid $color-border-subtle;
+    }
+
+    &__section-icon {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background-color: $color-bg-subtle;
+        @include flex-center;
+    }
+
+    &__section-title {
+        font-size: 1.15rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0 0 2px 0;
+    }
+
+    &__section-subtitle {
+        font-size: 0.84rem;
+        color: $color-text-muted;
+        margin: 0;
+    }
+
+    &__fields-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+
+        @media (max-width: 520px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    &__label {
+        font-size: 0.88rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+    }
+
+    &__required {
+        color: $color-status-danger;
+        margin-left: 2px;
+    }
+
+    &__input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .meal-form__input {
+            padding-right: 52px;
+        }
+    }
+
+    &__input {
+        width: 100%;
+        padding: 11px 14px;
+        font-size: 0.95rem;
+        border-radius: $radius-sm;
+        border: 1px solid $color-border;
+        background-color: #ffffff;
+        color: $color-text-dark;
+        outline: none;
+        transition:
+            border-color $transition-fast,
+            box-shadow $transition-fast;
+
+        &:focus {
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba(116, 189, 87, 0.2);
+        }
+
+        &::placeholder {
+            color: rgba(94, 109, 85, 0.55);
+        }
+
+        &--error {
+            border-color: $color-status-danger !important;
+
+            &:focus {
+                box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+            }
+        }
+    }
+
+    &__unit {
+        position: absolute;
+        right: 12px;
+        font-size: 0.84rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-muted;
+        pointer-events: none;
+        background-color: $color-bg-subtle;
+        padding: 2px 8px;
+        border-radius: $radius-xs;
+    }
+
+    &__hint {
+        font-size: 0.78rem;
+        color: $color-text-muted;
+        line-height: 1.35;
+    }
+
+    &__error-msg {
+        font-size: 0.8rem;
+        font-weight: $font-weight-medium;
+        color: $color-status-danger;
+        margin-top: 2px;
+    }
+
+    // Actions Row
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 10px 0;
+
+        @media (max-width: 480px) {
+            flex-direction: column;
+            width: 100%;
+
+            .btn {
+                width: 100%;
+            }
+        }
+    }
+
+    &__submit-btn {
+        padding: 12px 28px;
+        font-size: 0.98rem;
+        font-weight: $font-weight-semibold;
+
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    }
+
+    &__reset-btn {
+        padding: 12px 20px;
+        font-size: 0.92rem;
+    }
+
+    &__spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

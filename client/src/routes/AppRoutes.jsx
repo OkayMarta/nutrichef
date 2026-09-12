@@ -26,6 +26,7 @@ const AppRoutes = () => {
             <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/calculator" element={<CreateMeal />} />
+                <Route path="/create-meal" element={<CreateMeal />} />
                 <Route path="/meals" element={<SavedMeals />} />
             </Route>
 

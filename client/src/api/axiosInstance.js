@@ -9,13 +9,35 @@ const axiosInstance = axios.create({
     },
 });
 
-// Request Interceptor: Attach JWT Bearer token
+// Request Interceptor: Attach JWT Bearer token & sanitize numeric payloads
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem("nutrichef_token");
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
+
+        // Ensure meal macros are strictly numbers (not strings) before POST/PUT to /api/meals
+        if (
+            config.data &&
+            typeof config.data === "object" &&
+            typeof config.url === "string" &&
+            config.url.includes("/api/meals")
+        ) {
+            const macroFields = [
+                "caloriesPer100g",
+                "proteinPer100g",
+                "fatPer100g",
+                "carbsPer100g",
+            ];
+            macroFields.forEach((field) => {
+                if (field in config.data && config.data[field] !== undefined) {
+                    const parsed = parseFloat(config.data[field]);
+                    config.data[field] = isNaN(parsed) ? 0 : parsed;
+                }
+            });
+        }
+
         return config;
     },
     (error) => Promise.reject(error),
