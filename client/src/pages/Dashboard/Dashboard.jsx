@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
-import { useAuth } from "../../context/AuthContext";
 import { getDashboardData } from "../../api/dashboardApi";
 import { deleteDailyLog } from "../../api/dailyLogApi";
 import { getLocalDateString } from "../../utils/dateUtils";
@@ -20,10 +19,9 @@ const DEFAULT_TOTALS = { calories: 0, protein: 0, fat: 0, carbs: 0 };
 const DEFAULT_GOALS = { calories: 2000, protein: 120, fat: 65, carbs: 250 };
 
 const Dashboard = () => {
-    const { user } = useAuth();
     const [activeDate, setActiveDate] = useState(() => getLocalDateString());
     const [refreshIndex, setRefreshIndex] = useState(0);
-    const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true);
     const [totals, setTotals] = useState(DEFAULT_TOTALS);
     const [goals, setGoals] = useState(DEFAULT_GOALS);
     const [logs, setLogs] = useState([]);
@@ -37,7 +35,6 @@ const Dashboard = () => {
         let isCurrent = true;
 
         const fetchData = async () => {
-            setLoading(true);
             try {
                 const response = await getDashboardData(activeDate);
                 if (isCurrent) {
@@ -61,7 +58,7 @@ const Dashboard = () => {
                 }
             } finally {
                 if (isCurrent) {
-                    setLoading(false);
+                    setInitialLoading(false);
                 }
             }
         };
@@ -113,39 +110,13 @@ const Dashboard = () => {
     return (
         <main className="dashboard">
             <div className="dashboard__container container">
-                {/* Top Header: Title, User Badge & DateNavigator */}
-                <header className="dashboard__header">
-                    <div className="dashboard__header-main">
-                        <div>
-                            <span className="dashboard__badge">
-                                Daily Diary & Tracker
-                            </span>
-                            <h1 className="dashboard__title">Dashboard</h1>
-                        </div>
-
-                        {user?.email && (
-                            <div
-                                className="dashboard__user-pill"
-                                title={user.email}
-                            >
-                                <span className="dashboard__user-avatar">
-                                    {user.email.charAt(0).toUpperCase()}
-                                </span>
-                                <span className="dashboard__user-email">
-                                    {user.email}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Date Navigator Bar */}
-                    <div className="dashboard__nav-wrapper">
-                        <DateNavigator
-                            activeDate={activeDate}
-                            onDateChange={setActiveDate}
-                        />
-                    </div>
-                </header>
+                {/* Global Date Row directly above main content grid */}
+                <div className="dashboard__date-header">
+                    <DateNavigator
+                        activeDate={activeDate}
+                        onDateChange={setActiveDate}
+                    />
+                </div>
 
                 {/* Main 2-Column Responsive Dashboard Layout */}
                 <div className="dashboard__layout">
@@ -158,7 +129,7 @@ const Dashboard = () => {
                                 title={label}
                                 logs={logsByMealType[key] || []}
                                 totalCalories={caloriesByMealType[key] || 0}
-                                loading={loading}
+                                loading={initialLoading}
                                 onAddMeal={(type) => setAddLogMealType(type)}
                                 onDeleteLog={handleDeleteLog}
                             />
@@ -178,7 +149,7 @@ const Dashboard = () => {
                                 </span>
                             </div>
 
-                            {loading ? (
+                            {initialLoading ? (
                                 <div className="daily-summary-card__skeleton-stack">
                                     <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
                                     <div className="dashboard-skeleton dashboard-skeleton--bar-block" />

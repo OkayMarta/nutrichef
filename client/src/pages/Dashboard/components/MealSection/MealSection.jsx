@@ -1,41 +1,30 @@
-import { Sun, SunMedium, Moon, Utensils, Plus, Trash2 } from "lucide-react";
+import {
+    Coffee,
+    UtensilsCrossed,
+    CookingPot,
+    Candy,
+    Utensils,
+    Plus,
+    Trash2,
+} from "lucide-react";
 import "./MealSection.scss";
-
-// Clean custom Cupcake icon matching the mockup image for Snacks
-const CupcakeIcon = ({ size = 20, className }) => (
-    <svg
-        width={size}
-        height={size}
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={className}
-    >
-        <path d="M5.5 11.5L7 20h10l1.5-8.5" />
-        <path d="M4 11.5c0-1.8 1.4-2.8 3.2-2.8 1.6 0 2.5.8 4.8.8s3.2-.8 4.8-.8c1.8 0 3.2 1 3.2 2.8" />
-        <circle cx="12" cy="5" r="1.5" />
-    </svg>
-);
 
 const CATEGORY_META = {
     BREAKFAST: {
         themeClass: "meal-section--breakfast",
-        IconComponent: Sun,
+        IconComponent: Coffee,
     },
     LUNCH: {
         themeClass: "meal-section--lunch",
-        IconComponent: SunMedium,
+        IconComponent: UtensilsCrossed,
     },
     DINNER: {
         themeClass: "meal-section--dinner",
-        IconComponent: Moon,
+        IconComponent: CookingPot,
     },
     SNACK: {
         themeClass: "meal-section--snack",
-        IconComponent: CupcakeIcon,
+        IconComponent: Candy,
     },
 };
 

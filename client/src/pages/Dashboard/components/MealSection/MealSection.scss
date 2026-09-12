@@ -129,7 +129,10 @@
         border-radius: $radius-md;
         background-color: #fafcf8;
         cursor: pointer;
-        transition: all $transition-fast;
+        transition:
+            border-color $transition-fast,
+            background-color $transition-fast,
+            transform $transition-fast;
         text-align: left;
 
         &:hover {

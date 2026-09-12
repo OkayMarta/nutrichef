@@ -3,93 +3,104 @@
 
 .date-navigator {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 12px;
-
-    @include respond-to("sm") {
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 16px;
-    }
+    flex-wrap: wrap;
+    gap: 16px;
 
     &__controls {
         display: inline-flex;
         align-items: center;
-        background-color: $color-bg-card;
-        border: 1px solid $color-border;
-        border-radius: $radius-pill;
-        padding: 4px;
-        box-shadow: $shadow-sm;
-        transition: box-shadow $transition-fast;
-
-        &:hover {
-            box-shadow: $shadow-md;
-        }
+        gap: 6px;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
     }
 
     &__arrow-btn {
         @include button-reset;
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 44px;
-        height: 44px;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
-        color: $color-text-secondary;
+        color: $color-text-muted;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        cursor: pointer;
         transition:
             background-color $transition-fast,
             color $transition-fast,
             transform $transition-fast;
 
         &:hover {
-            background-color: $color-bg-subtle;
-            color: $color-brand-dark;
-            transform: scale(1.05);
+            background-color: rgba(27, 38, 20, 0.06);
+            color: $color-text-dark;
+            transform: scale(1.08);
         }
 
         &:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
+        }
+
+        &:focus-visible {
+            outline: 2px solid $color-brand-medium;
+            outline-offset: 2px;
         }
     }
 
     &__center {
-        position: relative;
-        display: flex;
+        @include button-reset;
+        display: inline-flex;
         align-items: center;
-        gap: 10px;
-        padding: 0 16px;
+        gap: 8px;
+        padding: 4px 10px;
+        border-radius: $radius-sm;
+        background: transparent;
+        border: none;
+        box-shadow: none;
         cursor: pointer;
         user-select: none;
-        height: 44px;
-        border-radius: $radius-pill;
         transition: background-color $transition-fast;
 
         &:hover {
-            background-color: $color-bg-subtle;
+            background-color: rgba(27, 38, 20, 0.05);
 
-            .date-navigator__calendar-btn {
+            .date-navigator__calendar-icon {
+                color: $color-brand-dark;
+            }
+
+            .date-navigator__label {
                 color: $color-brand-dark;
             }
         }
+
+        &:focus-visible {
+            outline: 2px solid $color-brand-medium;
+            outline-offset: 2px;
+        }
     }
 
-    &__calendar-btn {
-        @include button-reset;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    &__calendar-icon {
         color: $color-text-muted;
+        flex-shrink: 0;
         transition: color $transition-fast;
     }
 
     &__label {
-        font-size: 1.05rem;
+        font-size: 1.3rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
         margin: 0;
+        letter-spacing: -0.01em;
         white-space: nowrap;
+        transition: color $transition-fast;
+
+        @include respond-to("sm") {
+            font-size: 1.45rem;
+        }
     }
 
     &__hidden-input {
@@ -106,12 +117,12 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        height: 38px;
-        padding: 0 16px;
+        height: 32px;
+        padding: 0 14px;
         background-color: $color-brand-badge-bg;
         border: 1px solid rgba(116, 189, 87, 0.3);
         border-radius: $radius-pill;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         font-weight: $font-weight-semibold;
         color: $color-brand-badge-text;
         transition: all $transition-fast;

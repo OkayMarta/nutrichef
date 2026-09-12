@@ -1,16 +1,22 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { Search } from "lucide-react";
+import {
+    Search,
+    Coffee,
+    UtensilsCrossed,
+    CookingPot,
+    Candy,
+} from "lucide-react";
 import { getMeals } from "../../../../api/mealApi";
 import { createDailyLog } from "../../../../api/dailyLogApi";
 import "./AddLogModal.scss";
 
 const MEAL_OPTIONS = [
-    { key: "BREAKFAST", label: "Breakfast", icon: "🌅" },
-    { key: "LUNCH", label: "Lunch", icon: "☀️" },
-    { key: "DINNER", label: "Dinner", icon: "🌙" },
-    { key: "SNACK", label: "Snacks", icon: "🍎" },
+    { key: "BREAKFAST", label: "Breakfast", Icon: Coffee },
+    { key: "LUNCH", label: "Lunch", Icon: UtensilsCrossed },
+    { key: "DINNER", label: "Dinner", Icon: CookingPot },
+    { key: "SNACK", label: "Snacks", Icon: Candy },
 ];
 
 const QUICK_PORTIONS = [100, 150, 200, 250, 300];
@@ -191,7 +197,7 @@ const AddLogModal = ({
                             Meal Category
                         </label>
                         <div className="add-log-modal__type-tabs">
-                            {MEAL_OPTIONS.map(({ key, label, icon }) => (
+                            {MEAL_OPTIONS.map(({ key, label, Icon }) => (
                                 <button
                                     key={key}
                                     type="button"
@@ -202,7 +208,7 @@ const AddLogModal = ({
                                     }`}
                                     onClick={() => setSelectedMealType(key)}
                                 >
-                                    <span>{icon}</span>
+                                    <Icon size={16} strokeWidth={2} />
                                     <span>{label}</span>
                                 </button>
                             ))}
