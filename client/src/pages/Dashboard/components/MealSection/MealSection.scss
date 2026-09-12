@@ -38,23 +38,23 @@
 
     // Category specific icon badge themes
     &--breakfast &__icon-badge {
-        background-color: #fef6e7;
-        color: #e67e22;
+        background-color: #fef8e7;
+        color: $color-meal-breakfast;
     }
 
     &--lunch &__icon-badge {
-        background-color: #eaf5e5;
-        color: #469c3c;
+        background-color: #fef0ea;
+        color: $color-meal-lunch;
     }
 
     &--dinner &__icon-badge {
         background-color: #f1effe;
-        color: #6c5ce7;
+        color: $color-meal-dinner;
     }
 
     &--snack &__icon-badge {
-        background-color: #fef1e6;
-        color: #d35400;
+        background-color: #fdf2f8;
+        color: $color-meal-snack;
     }
 
     &__text-group {

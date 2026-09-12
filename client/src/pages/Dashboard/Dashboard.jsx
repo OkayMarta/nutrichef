@@ -6,6 +6,8 @@ import { getLocalDateString } from "../../utils/dateUtils";
 import DateNavigator from "./components/DateNavigator/DateNavigator";
 import MealSection from "./components/MealSection/MealSection";
 import AddLogModal from "./components/AddLogModal/AddLogModal";
+import DailyNutritionSummary from "./components/DailyNutritionSummary/DailyNutritionSummary";
+import DailyTip from "./components/DailyTip/DailyTip";
 import "./Dashboard.scss";
 
 const MEAL_TYPES = [
@@ -101,12 +103,6 @@ const Dashboard = () => {
         return acc;
     }, {});
 
-    // Progress percentage helper
-    const getProgressPct = (current, target) => {
-        if (!target || target <= 0) return 0;
-        return Math.min(100, Math.round((current / target) * 100));
-    };
-
     return (
         <main className="dashboard">
             <div className="dashboard__container container">
@@ -138,157 +134,13 @@ const Dashboard = () => {
 
                     {/* Right Column: Daily Summary & Tip */}
                     <aside className="dashboard__summary-col">
-                        {/* Summary Card */}
-                        <div className="dashboard-card daily-summary-card">
-                            <div className="daily-summary-card__header">
-                                <h2 className="daily-summary-card__title">
-                                    Daily Nutrition Summary
-                                </h2>
-                                <span className="daily-summary-card__date-pill">
-                                    {activeDate}
-                                </span>
-                            </div>
-
-                            {initialLoading ? (
-                                <div className="daily-summary-card__skeleton-stack">
-                                    <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
-                                    <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
-                                    <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
-                                    <div className="dashboard-skeleton dashboard-skeleton--bar-block" />
-                                </div>
-                            ) : (
-                                <div className="daily-summary-card__metrics">
-                                    {/* Calories */}
-                                    <div className="daily-summary-card__metric daily-summary-card__metric--calories">
-                                        <div className="daily-summary-card__metric-header">
-                                            <span className="metric-label">
-                                                🔥 Calories
-                                            </span>
-                                            <span className="metric-value">
-                                                <strong>
-                                                    {Math.round(
-                                                        totals.calories,
-                                                    )}
-                                                </strong>{" "}
-                                                / {goals.calories} kcal
-                                            </span>
-                                        </div>
-                                        <div className="daily-summary-card__progress-track">
-                                            <div
-                                                className="daily-summary-card__progress-bar daily-summary-card__progress-bar--calories"
-                                                style={{
-                                                    width: `${getProgressPct(
-                                                        totals.calories,
-                                                        goals.calories,
-                                                    )}%`,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Protein */}
-                                    <div className="daily-summary-card__metric daily-summary-card__metric--protein">
-                                        <div className="daily-summary-card__metric-header">
-                                            <span className="metric-label">
-                                                🥩 Protein
-                                            </span>
-                                            <span className="metric-value">
-                                                <strong>
-                                                    {Number(
-                                                        totals.protein,
-                                                    ).toFixed(1)}
-                                                </strong>{" "}
-                                                / {goals.protein} g
-                                            </span>
-                                        </div>
-                                        <div className="daily-summary-card__progress-track">
-                                            <div
-                                                className="daily-summary-card__progress-bar daily-summary-card__progress-bar--protein"
-                                                style={{
-                                                    width: `${getProgressPct(
-                                                        totals.protein,
-                                                        goals.protein,
-                                                    )}%`,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Fat */}
-                                    <div className="daily-summary-card__metric daily-summary-card__metric--fat">
-                                        <div className="daily-summary-card__metric-header">
-                                            <span className="metric-label">
-                                                🥑 Fat
-                                            </span>
-                                            <span className="metric-value">
-                                                <strong>
-                                                    {Number(totals.fat).toFixed(
-                                                        1,
-                                                    )}
-                                                </strong>{" "}
-                                                / {goals.fat} g
-                                            </span>
-                                        </div>
-                                        <div className="daily-summary-card__progress-track">
-                                            <div
-                                                className="daily-summary-card__progress-bar daily-summary-card__progress-bar--fat"
-                                                style={{
-                                                    width: `${getProgressPct(
-                                                        totals.fat,
-                                                        goals.fat,
-                                                    )}%`,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Carbs */}
-                                    <div className="daily-summary-card__metric daily-summary-card__metric--carbs">
-                                        <div className="daily-summary-card__metric-header">
-                                            <span className="metric-label">
-                                                🌾 Carbs
-                                            </span>
-                                            <span className="metric-value">
-                                                <strong>
-                                                    {Number(
-                                                        totals.carbs,
-                                                    ).toFixed(1)}
-                                                </strong>{" "}
-                                                / {goals.carbs} g
-                                            </span>
-                                        </div>
-                                        <div className="daily-summary-card__progress-track">
-                                            <div
-                                                className="daily-summary-card__progress-bar daily-summary-card__progress-bar--carbs"
-                                                style={{
-                                                    width: `${getProgressPct(
-                                                        totals.carbs,
-                                                        goals.carbs,
-                                                    )}%`,
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Tip Card */}
-                        <div className="dashboard-card tip-card">
-                            <span className="tip-card__icon">💡</span>
-                            <div>
-                                <h3 className="tip-card__title">Daily Tip</h3>
-                                <p className="tip-card__bold">
-                                    Hydration & Balance
-                                </p>
-                                <p className="tip-card__desc">
-                                    Stay well-hydrated throughout the day.
-                                    Tracking cooked portion weight allows
-                                    NutriChef to accurately scale calories and
-                                    macros to your exact needs.
-                                </p>
-                            </div>
-                        </div>
+                        <DailyNutritionSummary
+                            activeDate={activeDate}
+                            totals={totals}
+                            goals={goals}
+                            loading={initialLoading}
+                        />
+                        <DailyTip activeDate={activeDate} />
                     </aside>
                 </div>
             </div>

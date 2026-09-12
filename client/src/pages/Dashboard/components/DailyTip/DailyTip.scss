@@ -1,0 +1,59 @@
+@use "../../../../styles/variables" as *;
+
+.tip-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 22px;
+    background-color: $color-bg-card-muted;
+    border: 1px solid rgba(116, 189, 87, 0.28);
+    border-radius: $radius-lg;
+    box-shadow: $shadow-xs;
+
+    &__icon-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: $radius-md;
+        background-color: $color-brand-badge-bg;
+        color: $color-brand-dark;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(70, 156, 60, 0.12);
+    }
+
+    &__icon {
+        stroke-width: 2.2;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    &__label {
+        font-size: 0.76rem;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $color-brand-dark;
+        margin-bottom: 2px;
+    }
+
+    &__title {
+        font-size: 1.05rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0 0 6px;
+        line-height: 1.35;
+    }
+
+    &__desc {
+        font-size: 0.88rem;
+        color: $color-text-muted;
+        line-height: 1.55;
+        margin: 0;
+    }
+}

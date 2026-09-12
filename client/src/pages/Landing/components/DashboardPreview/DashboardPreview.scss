@@ -137,18 +137,23 @@
         font-size: 11px;
 
         &--breakfast {
-            background-color: rgba(230, 126, 34, 0.12);
-            color: #e67e22;
+            background-color: rgba(217, 119, 6, 0.12);
+            color: $color-meal-breakfast;
         }
 
         &--lunch {
-            background-color: rgba(70, 156, 60, 0.12);
-            color: #469c3c;
+            background-color: rgba(234, 88, 12, 0.12);
+            color: $color-meal-lunch;
         }
 
         &--dinner {
             background-color: rgba(108, 92, 231, 0.12);
-            color: #6c5ce7;
+            color: $color-meal-dinner;
+        }
+
+        &--snack {
+            background-color: rgba(219, 39, 119, 0.12);
+            color: $color-meal-snack;
         }
     }
 

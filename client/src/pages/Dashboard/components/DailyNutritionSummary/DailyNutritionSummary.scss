@@ -1,0 +1,134 @@
+@use "../../../../styles/variables" as *;
+
+.daily-summary-card {
+    background-color: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: 24px;
+    box-shadow: $shadow-sm;
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid $color-border-subtle;
+    }
+
+    &__title {
+        font-size: 1.15rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0;
+    }
+
+    &__date-pill {
+        font-size: 0.8rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+        background-color: $color-bg-subtle;
+        padding: 4px 10px;
+        border-radius: $radius-pill;
+    }
+
+    &__metrics {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    &__metric {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        &--exceeded {
+            .metric-value strong {
+                color: $color-status-danger;
+            }
+        }
+    }
+
+    &__metric-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.92rem;
+    }
+
+    .metric-label {
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+    }
+
+    .metric-value-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .metric-value {
+        color: $color-text-muted;
+        font-size: 0.9rem;
+
+        strong {
+            color: $color-text-dark;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &__badge-exceeded {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 7px;
+        font-size: 0.72rem;
+        font-weight: $font-weight-bold;
+        color: $color-status-danger;
+        background-color: #fee2e2;
+        border-radius: $radius-pill;
+        border: 1px solid rgba(220, 38, 38, 0.25);
+    }
+
+    &__progress-track {
+        height: 9px;
+        border-radius: $radius-pill;
+        background-color: $color-border;
+        overflow: hidden;
+
+        &--exceeded {
+            background-color: #fde8e8;
+        }
+    }
+
+    &__progress-bar {
+        height: 100%;
+        border-radius: $radius-pill;
+        transition: width $transition-normal;
+
+        &--calories {
+            background-color: $color-macro-calories;
+        }
+        &--protein {
+            background-color: $color-macro-protein;
+        }
+        &--fat {
+            background-color: $color-macro-fat;
+        }
+        &--carbs {
+            background-color: $color-macro-carbs;
+        }
+
+        // Highlight with accent red when exceeded >100%
+        &--exceeded {
+            background-color: $color-status-danger !important;
+            box-shadow: 0 0 8px rgba(220, 38, 38, 0.4);
+        }
+    }
+
+    &__skeleton-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+}
