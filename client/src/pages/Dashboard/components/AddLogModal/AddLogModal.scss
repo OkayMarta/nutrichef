@@ -28,25 +28,12 @@
 
     &__header {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
         gap: 12px;
         margin-bottom: 20px;
         padding-bottom: 16px;
         border-bottom: 1px solid $color-border-subtle;
-    }
-
-    &__badge {
-        display: inline-block;
-        font-size: 0.8rem;
-        font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: $color-brand-badge-text;
-        background-color: $color-brand-badge-bg;
-        padding: 3px 10px;
-        border-radius: $radius-pill;
-        margin-bottom: 6px;
     }
 
     &__title {

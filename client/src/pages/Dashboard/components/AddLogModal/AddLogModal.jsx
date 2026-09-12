@@ -170,12 +170,9 @@ const AddLogModal = ({
             <div className="add-log-modal">
                 {/* Modal Header */}
                 <div className="add-log-modal__header">
-                    <div>
-                        <span className="add-log-modal__badge">Log Meal</span>
-                        <h2 id="add-log-title" className="add-log-modal__title">
-                            Add to Diary
-                        </h2>
-                    </div>
+                    <h2 id="add-log-title" className="add-log-modal__title">
+                        Add to Diary
+                    </h2>
                     <button
                         type="button"
                         className="add-log-modal__close-btn"
