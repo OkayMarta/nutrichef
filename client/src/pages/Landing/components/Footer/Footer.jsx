@@ -43,6 +43,23 @@ const Footer = () => {
                     </span>
                 </nav>
             </div>
+
+            <div className="landing-footer__bottom container">
+                <p className="landing-footer__copyright">
+                    &copy; {new Date().getFullYear()} NutriChef. All rights
+                    reserved.
+                </p>
+                <div className="landing-footer__legal-links">
+                    <Link to="/privacy">Privacy Policy</Link>
+                    <span
+                        className="landing-footer__separator"
+                        aria-hidden="true"
+                    >
+                        &bull;
+                    </span>
+                    <Link to="/terms">Terms of Service</Link>
+                </div>
+            </div>
         </footer>
     );
 };

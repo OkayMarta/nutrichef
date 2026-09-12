@@ -8,13 +8,17 @@ import Register from "../pages/Auth/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import CreateMeal from "../pages/CreateMeal/CreateMeal";
 import SavedMeals from "../pages/SavedMeals/SavedMeals";
+import PrivacyPolicy from "../pages/Legal/PrivacyPolicy";
+import TermsOfService from "../pages/Legal/TermsOfService";
 import NotFound from "../pages/NotFound/NotFound";
 
 const AppRoutes = () => {
     return (
         <Routes>
-            {/* Public Landing */}
+            {/* Public Landing & Legal */}
             <Route path="/" element={<Landing />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
 
             {/* Guest Only Routes */}
             <Route element={<GuestRoute />}>

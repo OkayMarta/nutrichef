@@ -72,4 +72,48 @@
         color: $color-brand-medium;
         margin-left: 4px;
     }
+
+    &__bottom {
+        @include flex-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid $color-border-subtle;
+        font-size: 0.84rem;
+        color: $color-text-subtle;
+
+        @media (max-width: 640px) {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 12px;
+        }
+    }
+
+    &__copyright {
+        margin: 0;
+    }
+
+    &__legal-links {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        a {
+            color: $color-text-muted;
+            text-decoration: none;
+            transition: color $transition-fast;
+
+            &:hover {
+                color: $color-brand-dark;
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__separator {
+        color: $color-border;
+        user-select: none;
+    }
 }

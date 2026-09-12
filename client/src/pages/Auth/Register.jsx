@@ -387,6 +387,12 @@ const Register = () => {
                     >
                         {loading ? "Creating account..." : "Get started"}
                     </button>
+
+                    <p className="auth-page__terms-subtext">
+                        By creating an account, you agree to our{" "}
+                        <Link to="/terms">Terms of Service</Link> and{" "}
+                        <Link to="/privacy">Privacy Policy</Link>.
+                    </p>
                 </form>
 
                 <div className="auth-page__divider">

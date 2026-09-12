@@ -223,6 +223,26 @@
         margin-top: 6px;
     }
 
+    &__terms-subtext {
+        margin-top: 12px;
+        font-size: 0.78rem;
+        color: $color-text-muted;
+        text-align: center;
+        line-height: 1.45;
+
+        a {
+            color: $color-brand-dark;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            font-weight: $font-weight-medium;
+            transition: color $transition-fast;
+
+            &:hover {
+                color: $color-brand-darker;
+            }
+        }
+    }
+
     &__divider {
         display: flex;
         align-items: center;
