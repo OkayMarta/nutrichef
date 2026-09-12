@@ -1,0 +1,236 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.edit-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(27, 38, 20, 0.55);
+    backdrop-filter: blur(4px);
+    animation: modal-fade-in 0.2s ease;
+}
+
+.edit-modal {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: 28px;
+    box-shadow: $shadow-lg;
+    animation: modal-scale-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &__header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid $color-border-subtle;
+    }
+
+    &__badge {
+        display: inline-block;
+        font-size: 0.8rem;
+        font-weight: $font-weight-semibold;
+        color: $color-brand-badge-text;
+        background-color: $color-brand-badge-bg;
+        padding: 3px 10px;
+        border-radius: $radius-pill;
+        margin-bottom: 6px;
+    }
+
+    &__title {
+        font-size: 1.35rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0;
+    }
+
+    &__close-btn {
+        @include button-reset;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: $color-bg-subtle;
+        color: $color-text-muted;
+        font-size: 1.3rem;
+        line-height: 1;
+        transition: all $transition-fast;
+
+        &:hover {
+            background-color: $color-border;
+            color: $color-text-dark;
+        }
+    }
+
+    &__notice {
+        font-size: 0.82rem;
+        color: $color-text-muted;
+        margin: 0 0 14px;
+        padding: 6px 12px;
+        background-color: $color-bg-subtle;
+        border-radius: $radius-sm;
+        border-left: 3px solid $color-brand-medium;
+    }
+
+    &__macros-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 18px;
+
+        @include respond-to("sm") {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+
+    &__label {
+        font-size: 0.88rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+    }
+
+    &__required {
+        color: $color-status-danger;
+    }
+
+    &__input {
+        height: 44px;
+        padding: 0 14px;
+        background-color: $color-bg-light;
+        border: 1px solid $color-border;
+        border-radius: $radius-sm;
+        font-family: $font-family-base;
+        font-size: 0.95rem;
+        color: $color-text-dark;
+        transition:
+            border-color $transition-fast,
+            box-shadow $transition-fast;
+
+        &:focus {
+            outline: none;
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba(116, 189, 87, 0.2);
+            background-color: $color-bg-card;
+        }
+
+        &--error {
+            border-color: $color-status-danger;
+            background-color: rgba(220, 38, 38, 0.02);
+        }
+    }
+
+    &__error-msg {
+        font-size: 0.78rem;
+        color: $color-status-danger;
+    }
+
+    &__ratio-preview {
+        padding: 12px;
+        background-color: $color-bg-subtle;
+        border-radius: $radius-sm;
+        margin-bottom: 22px;
+    }
+
+    &__ratio-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.76rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+        margin-bottom: 6px;
+    }
+
+    &__ratio-bar {
+        display: flex;
+        height: 6px;
+        border-radius: $radius-pill;
+        overflow: hidden;
+        background-color: $color-border;
+    }
+
+    &__ratio-seg {
+        height: 100%;
+        transition: width $transition-fast;
+
+        &--protein {
+            background-color: $color-macro-protein;
+        }
+        &--fat {
+            background-color: $color-macro-fat;
+        }
+        &--carbs {
+            background-color: $color-macro-carbs;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid $color-border-subtle;
+    }
+
+    &__submit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: modal-spin 0.6s linear infinite;
+    }
+}
+
+@keyframes modal-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modal-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes modal-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

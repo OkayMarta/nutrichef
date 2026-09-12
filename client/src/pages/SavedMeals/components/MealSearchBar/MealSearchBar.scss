@@ -1,0 +1,140 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.meal-search-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 28px;
+
+    @include respond-to("md") {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__input-group {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1;
+        max-width: 540px;
+    }
+
+    &__icon {
+        position: absolute;
+        left: 16px;
+        color: $color-text-subtle;
+        display: flex;
+        align-items: center;
+        pointer-events: none;
+    }
+
+    &__input {
+        width: 100%;
+        height: 48px;
+        padding: 0 44px 0 46px;
+        background-color: $color-bg-card;
+        border: 1px solid $color-border;
+        border-radius: $radius-pill;
+        font-family: $font-family-base;
+        font-size: 0.95rem;
+        color: $color-text-dark;
+        box-shadow: $shadow-xs;
+        transition:
+            border-color $transition-fast,
+            box-shadow $transition-fast;
+
+        &::placeholder {
+            color: $color-text-subtle;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba(116, 189, 87, 0.2);
+        }
+    }
+
+    &__clear-btn {
+        @include button-reset;
+        position: absolute;
+        right: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background-color: $color-bg-subtle;
+        color: $color-text-muted;
+        font-size: 1.2rem;
+        line-height: 1;
+        transition:
+            background-color $transition-fast,
+            color $transition-fast;
+
+        &:hover {
+            background-color: $color-brand-light;
+            color: $color-text-dark;
+        }
+    }
+
+    &__spinner {
+        position: absolute;
+        right: 46px;
+        width: 16px;
+        height: 16px;
+        border: 2px solid $color-border;
+        border-top-color: $color-brand-medium;
+        border-radius: 50%;
+        animation: search-spin 0.6s linear infinite;
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+
+        @include respond-to("md") {
+            justify-content: flex-end;
+        }
+    }
+
+    &__counter {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 14px;
+        background-color: $color-bg-subtle;
+        border: 1px solid $color-border;
+        border-radius: $radius-pill;
+        font-size: 0.85rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+        white-space: nowrap;
+    }
+
+    &__add-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 22px;
+        font-size: 0.95rem;
+        font-weight: $font-weight-semibold;
+        border-radius: $radius-pill;
+        white-space: nowrap;
+        box-shadow: 0 2px 8px rgba(70, 156, 60, 0.2);
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba(70, 156, 60, 0.3);
+            transform: translateY(-1px);
+        }
+    }
+}
+
+@keyframes search-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
