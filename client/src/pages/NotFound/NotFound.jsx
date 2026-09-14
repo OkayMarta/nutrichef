@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const NotFound = () => {
+    const { user } = useAuth();
+
     return (
         <div
             className="container"
@@ -31,11 +34,11 @@ const NotFound = () => {
                     moved.
                 </p>
                 <Link
-                    to="/"
+                    to={user ? "/dashboard" : "/"}
                     className="btn btn--primary"
                     style={{ display: "inline-flex" }}
                 >
-                    Back to Home
+                    {user ? "Back to Dashboard" : "Back to Home"}
                 </Link>
             </div>
         </div>

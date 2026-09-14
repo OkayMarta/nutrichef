@@ -16,13 +16,13 @@ import NotFound from "../pages/NotFound/NotFound";
 const AppRoutes = () => {
     return (
         <Routes>
-            {/* Public Landing & Legal */}
-            <Route path="/" element={<Landing />} />
+            {/* Public Legal */}
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsOfService />} />
 
-            {/* Guest Only Routes */}
+            {/* Guest Only Routes (Landing & Auth) */}
             <Route element={<GuestRoute />}>
+                <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
             </Route>

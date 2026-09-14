@@ -152,11 +152,29 @@ const Navbar = () => {
         navigate("/login");
     };
 
+    const handleBrandClick = (e) => {
+        if (user) {
+            // Authenticated user navigates to /dashboard
+            return;
+        }
+
+        // Unauthenticated user: scroll smoothly to top if already on landing
+        if (location.pathname === "/") {
+            e.preventDefault();
+            setActiveSection("home");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    };
+
     return (
         <header className="navbar">
             <div className="navbar__container">
                 {/* Brand Logo */}
-                <Link to="/" className="navbar__brand">
+                <Link
+                    to={user ? "/dashboard" : "/"}
+                    onClick={handleBrandClick}
+                    className="navbar__brand"
+                >
                     <div className="navbar__logo-icon">
                         <img
                             src="/logo.svg"
