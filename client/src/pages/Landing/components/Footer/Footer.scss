@@ -2,39 +2,49 @@
 @use "../../../../styles/mixins" as *;
 
 .landing-footer {
+    width: 100%;
+    background-color: $color-bg-subtle;
     border-top: 1px solid $color-border;
-    background-color: $color-bg-light;
-    padding: 32px 0;
+    padding: 18px 0;
 
     &__container {
         @include flex-between;
-        flex-wrap: wrap;
-        gap: 20px;
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 24px;
+        gap: 24px;
 
-        @media (max-width: 640px) {
+        @media (max-width: 860px) {
             flex-direction: column;
             align-items: center;
             text-align: center;
+            gap: 16px;
+            padding: 12px 20px;
         }
     }
 
+    // --- Left: Brand Logo & Text ---
     &__brand {
         @include flex-align;
-        gap: 8px;
-        font-size: 1.15rem;
-        font-weight: $font-weight-bold;
-        color: $color-text-dark;
+        gap: 10px;
         text-decoration: none;
+        color: $color-text-dark;
+        transition: opacity $transition-fast;
+
+        &:hover {
+            opacity: 0.9;
+        }
     }
 
     &__logo-icon {
-        width: 28px;
-        height: 28px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         background-color: $color-brand-light;
         color: $color-brand-dark;
         @include flex-center;
-        font-size: 16px;
+        font-size: 18px;
+        flex-shrink: 0;
         overflow: hidden;
         position: relative;
     }
@@ -52,68 +62,102 @@
         height: 100%;
     }
 
-    &__nav {
-        @include flex-align;
-        gap: 24px;
-        font-size: 0.92rem;
-        color: $color-text-muted;
+    &__brand-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
 
-        a {
-            text-decoration: none;
-            transition: color $transition-fast;
-
-            &:hover {
-                color: $color-text-dark;
-            }
+        @media (max-width: 860px) {
+            align-items: center;
         }
     }
 
-    &__leaf-icon {
-        color: $color-brand-medium;
-        margin-left: 4px;
+    &__title {
+        font-size: 1.15rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
     }
 
-    &__bottom {
-        @include flex-between;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-top: 24px;
-        padding-top: 20px;
-        border-top: 1px solid $color-border-subtle;
-        font-size: 0.84rem;
-        color: $color-text-subtle;
+    &__tagline {
+        font-size: 0.76rem;
+        color: $color-text-muted;
+        line-height: 1.2;
+        margin-top: 1px;
+    }
+
+    // --- Center: Nav Links ---
+    &__nav {
+        @include flex-align;
+        gap: 32px;
 
         @media (max-width: 640px) {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 12px;
+            gap: 20px;
+        }
+    }
+
+    &__link {
+        font-size: 0.92rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+        text-decoration: none;
+        transition: color $transition-fast;
+
+        &:hover {
+            color: $color-brand-dark;
+        }
+    }
+
+    // --- Right: GitHub & Copyright ---
+    &__right {
+        @include flex-align;
+        gap: 14px;
+
+        @media (max-width: 860px) {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+
+    &__github-link {
+        @include flex-center;
+        color: $color-text-secondary;
+        text-decoration: none;
+        transition:
+            color $transition-fast,
+            transform $transition-fast;
+        flex-shrink: 0;
+
+        &:hover {
+            color: $color-brand-dark;
+            transform: scale(1.08);
+        }
+    }
+
+    &__github-icon {
+        display: block;
+    }
+
+    &__divider {
+        display: inline-block;
+        width: 1px;
+        height: 16px;
+        background-color: $color-border;
+        flex-shrink: 0;
+
+        @media (max-width: 480px) {
+            display: none;
         }
     }
 
     &__copyright {
-        margin: 0;
-    }
+        font-size: 0.82rem;
+        color: $color-text-muted;
+        white-space: nowrap;
 
-    &__legal-links {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-
-        a {
-            color: $color-text-muted;
-            text-decoration: none;
-            transition: color $transition-fast;
-
-            &:hover {
-                color: $color-brand-dark;
-                text-decoration: underline;
-            }
+        @media (max-width: 480px) {
+            white-space: normal;
         }
-    }
-
-    &__separator {
-        color: $color-border;
-        user-select: none;
     }
 }
