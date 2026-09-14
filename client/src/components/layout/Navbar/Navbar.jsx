@@ -21,6 +21,28 @@ const Navbar = () => {
     // Dropdown state
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const hoverTimeoutRef = useRef(null);
+
+    const handleMouseEnter = () => {
+        if (hoverTimeoutRef.current) {
+            clearTimeout(hoverTimeoutRef.current);
+        }
+        setIsDropdownOpen(true);
+    };
+
+    const handleMouseLeave = () => {
+        hoverTimeoutRef.current = setTimeout(() => {
+            setIsDropdownOpen(false);
+        }, 150);
+    };
+
+    useEffect(() => {
+        return () => {
+            if (hoverTimeoutRef.current) {
+                clearTimeout(hoverTimeoutRef.current);
+            }
+        };
+    }, []);
 
     // Close dropdown on outside click or Escape key
     useEffect(() => {
@@ -112,16 +134,7 @@ const Navbar = () => {
         };
     }, [location.pathname]);
 
-    const scrollToSection = (e, sectionId) => {
-        e.preventDefault();
-        setActiveSection(sectionId);
-
-        if (location.pathname !== "/") {
-            navigate(`/#${sectionId === "home" ? "" : sectionId}`);
-            return;
-        }
-
-        // Lock scroll spy to prevent back-and-forth blinking during smooth scroll
+    const lockScrollSpy = () => {
         isManualScrollingRef.current = true;
         if (scrollTimeoutRef.current) {
             clearTimeout(scrollTimeoutRef.current);
@@ -133,7 +146,42 @@ const Navbar = () => {
         };
 
         window.addEventListener("scrollend", unlockScroll, { once: true });
-        scrollTimeoutRef.current = setTimeout(unlockScroll, 850);
+        scrollTimeoutRef.current = setTimeout(unlockScroll, 1200);
+    };
+
+    // Listen for footer or external section scroll requests
+    useEffect(() => {
+        const handleExternalScroll = (e) => {
+            const sectionId = e.detail;
+            if (sectionId) {
+                setActiveSection(sectionId);
+                lockScrollSpy();
+            }
+        };
+
+        window.addEventListener(
+            "nutrichef:scroll-to-section",
+            handleExternalScroll,
+        );
+        return () => {
+            window.removeEventListener(
+                "nutrichef:scroll-to-section",
+                handleExternalScroll,
+            );
+        };
+    }, []);
+
+    const scrollToSection = (e, sectionId) => {
+        if (e) e.preventDefault();
+        setActiveSection(sectionId);
+
+        if (location.pathname !== "/") {
+            navigate(`/#${sectionId === "home" ? "" : sectionId}`);
+            return;
+        }
+
+        // Lock scroll spy to prevent back-and-forth blinking during smooth scroll
+        lockScrollSpy();
 
         if (sectionId === "home") {
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -158,11 +206,9 @@ const Navbar = () => {
             return;
         }
 
-        // Unauthenticated user: scroll smoothly to top if already on landing
+        // Unauthenticated user: smoothly scroll to top and switch active tab to Home immediately
         if (location.pathname === "/") {
-            e.preventDefault();
-            setActiveSection("home");
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            scrollToSection(e, "home");
         }
     };
 
@@ -290,7 +336,12 @@ const Navbar = () => {
                 {/* Actions Area */}
                 <div className="navbar__actions">
                     {user ? (
-                        <div className="navbar__user" ref={dropdownRef}>
+                        <div
+                            className="navbar__user"
+                            ref={dropdownRef}
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                        >
                             <button
                                 type="button"
                                 className="navbar__avatar-btn"

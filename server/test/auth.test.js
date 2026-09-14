@@ -1,4 +1,6 @@
 require("dotenv").config();
+const fs = require("fs");
+const path = require("path");
 const { test, describe, before, after } = require("node:test");
 const assert = require("node:assert/strict");
 const jwt = require("jsonwebtoken");
@@ -551,6 +553,16 @@ describe("Authentication & Security Module Tests", () => {
             // Verify the static endpoint serves the avatar
             const staticRes = await fetch(`${baseUrl}${data.user.avatarUrl}`);
             assert.equal(staticRes.status, 200);
+
+            // Clean up uploaded test avatar file from disk
+            const uploadedFilePath = path.join(
+                __dirname,
+                "..",
+                data.user.avatarUrl,
+            );
+            if (fs.existsSync(uploadedFilePath)) {
+                fs.unlinkSync(uploadedFilePath);
+            }
         });
     });
 });

@@ -275,6 +275,16 @@
         z-index: 200;
         padding: 8px 0;
         animation: navbar-dropdown-in 0.15s ease-out;
+
+        // Invisible bridge to keep hover continuous across the 8px gap
+        &::before {
+            content: "";
+            position: absolute;
+            top: -12px;
+            left: 0;
+            right: 0;
+            height: 12px;
+        }
     }
 
     &__dropdown-preview {

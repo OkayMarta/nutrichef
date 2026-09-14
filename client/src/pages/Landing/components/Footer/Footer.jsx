@@ -3,6 +3,11 @@ import "./Footer.scss";
 const Footer = () => {
     const scrollToSection = (e, sectionId) => {
         e.preventDefault();
+        window.dispatchEvent(
+            new CustomEvent("nutrichef:scroll-to-section", {
+                detail: sectionId,
+            }),
+        );
         if (sectionId === "home") {
             window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
