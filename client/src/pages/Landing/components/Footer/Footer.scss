@@ -139,6 +139,19 @@
         display: block;
     }
 
+    &__legal-link {
+        font-size: 0.82rem;
+        color: $color-text-muted;
+        text-decoration: none;
+        transition: color $transition-fast;
+        white-space: nowrap;
+
+        &:hover {
+            color: $color-brand-dark;
+            text-decoration: underline;
+        }
+    }
+
     &__divider {
         display: inline-block;
         width: 1px;

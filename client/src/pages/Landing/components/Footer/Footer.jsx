@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Footer.scss";
 
 const Footer = () => {
@@ -84,7 +85,7 @@ const Footer = () => {
                     </a>
                 </nav>
 
-                {/* Right Area: GitHub & Copyright */}
+                {/* Right Area: GitHub | Privacy Policy | Terms of Service | Copyright */}
                 <div className="landing-footer__right">
                     <a
                         href="https://github.com"
@@ -115,8 +116,26 @@ const Footer = () => {
                         aria-hidden="true"
                     />
 
+                    <Link to="/privacy" className="landing-footer__legal-link">
+                        Privacy Policy
+                    </Link>
+
+                    <span
+                        className="landing-footer__divider"
+                        aria-hidden="true"
+                    />
+
+                    <Link to="/terms" className="landing-footer__legal-link">
+                        Terms of Service
+                    </Link>
+
+                    <span
+                        className="landing-footer__divider"
+                        aria-hidden="true"
+                    />
+
                     <span className="landing-footer__copyright">
-                        &copy; 2026 NutriChef. All rights reserved.
+                        &copy; 2026 NutriChef
                     </span>
                 </div>
             </div>
