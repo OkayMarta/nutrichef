@@ -19,15 +19,20 @@ enum MealType {
 }
 
 model User {
-  id           String  @id @default(uuid())
-  email        String  @unique
+  id           String   @id @default(uuid())
+  email        String   @unique
   passwordHash String
-  
+  name         String?
+  avatarUrl    String?
+
   // Щоденні цілі (можуть бути порожніми при реєстрації, тому ставимо знак питання '?', що означає необов'язкове поле)
   goalCalories Int?
   goalProtein  Int?
   goalFat      Int?
   goalCarbs    Int?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt @default(now())
 
   // Зв'язки: один користувач може мати багато збережених страв та багато записів у щоденнику
   meals        Meal[]

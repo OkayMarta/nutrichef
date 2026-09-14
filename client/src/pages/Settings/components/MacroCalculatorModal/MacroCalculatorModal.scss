@@ -8,7 +8,9 @@
     width: 100%;
     max-width: 560px;
     max-height: 90vh;
+    overflow-x: hidden;
     overflow-y: auto;
+    box-sizing: border-box;
     animation: macro-modal-in 0.2s ease-out;
 
     &__backdrop {
@@ -19,11 +21,15 @@
         backdrop-filter: blur(4px);
         @include flex-center;
         padding: 20px;
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
 
     &__header {
         @include flex-between;
         padding: 20px 24px 0;
+        box-sizing: border-box;
+        width: 100%;
     }
 
     &__title {
@@ -55,6 +61,10 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
     }
 
     // --- Fieldsets & Inputs ---
@@ -62,6 +72,8 @@
         border: none;
         padding: 0;
         margin: 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     &__legend {
@@ -76,6 +88,7 @@
     &__radio-group {
         display: flex;
         gap: 12px;
+        flex-wrap: wrap;
     }
 
     &__radio-label {
@@ -88,6 +101,7 @@
         font-size: 0.9rem;
         color: $color-text-secondary;
         transition: all $transition-fast;
+        box-sizing: border-box;
 
         &:has(input:checked) {
             border-color: $color-brand-medium;
@@ -103,21 +117,25 @@
 
     &__inputs-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
 
         @media (max-width: 480px) {
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 1fr);
         }
     }
 
     &__selects-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
 
         @media (max-width: 480px) {
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 1fr);
         }
     }
 
@@ -125,16 +143,26 @@
         display: flex;
         flex-direction: column;
         gap: 4px;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     &__label {
         font-size: 0.8rem;
         font-weight: $font-weight-medium;
         color: $color-text-muted;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &__input,
     &__select {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
         padding: 10px 12px;
         border: 1px solid $color-border;
         border-radius: $radius-sm;
@@ -163,6 +191,9 @@
     &__select {
         cursor: pointer;
         -moz-appearance: auto;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     // --- Results Preview ---
@@ -171,6 +202,9 @@
         border: 1px solid $color-border;
         border-radius: $radius-md;
         padding: 16px;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
     }
 
     &__results-title {
@@ -184,11 +218,13 @@
 
     &__results-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
 
         @media (max-width: 480px) {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
@@ -200,21 +236,24 @@
         border-radius: $radius-sm;
         background-color: $color-bg-card;
         border: 1px solid $color-border;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
 
         &--calories {
-            border-left: 3px solid $color-macro-calories;
+            border-top: 3px solid $color-macro-calories;
         }
 
         &--protein {
-            border-left: 3px solid $color-macro-protein;
+            border-top: 3px solid $color-macro-protein;
         }
 
         &--fat {
-            border-left: 3px solid $color-macro-fat;
+            border-top: 3px solid $color-macro-fat;
         }
 
         &--carbs {
-            border-left: 3px solid $color-macro-carbs;
+            border-top: 3px solid $color-macro-carbs;
         }
     }
 
@@ -222,6 +261,10 @@
         font-size: 1.05rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
     }
 
     &__result-label {
@@ -229,6 +272,7 @@
         color: $color-text-muted;
         text-transform: uppercase;
         letter-spacing: 0.03em;
+        white-space: nowrap;
     }
 
     // --- Footer ---
@@ -237,6 +281,8 @@
         justify-content: flex-end;
         gap: 10px;
         padding: 0 24px 20px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     &__cancel-btn {

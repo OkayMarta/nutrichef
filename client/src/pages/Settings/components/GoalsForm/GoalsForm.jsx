@@ -11,28 +11,24 @@ const GOAL_FIELDS = [
         label: "Daily Calories",
         unit: "kcal",
         placeholder: "2000",
-        colorClass: "goals-form__field--calories",
     },
     {
         key: "goalProtein",
         label: "Protein",
         unit: "g",
         placeholder: "140",
-        colorClass: "goals-form__field--protein",
     },
     {
         key: "goalFat",
         label: "Fat",
         unit: "g",
         placeholder: "65",
-        colorClass: "goals-form__field--fat",
     },
     {
         key: "goalCarbs",
         label: "Carbs",
         unit: "g",
         placeholder: "210",
-        colorClass: "goals-form__field--carbs",
     },
 ];
 
@@ -129,10 +125,7 @@ const GoalsForm = ({ user, onGoalsUpdate }) => {
 
                 <div className="goals-form__fields">
                     {GOAL_FIELDS.map((field) => (
-                        <div
-                            key={field.key}
-                            className={`goals-form__field ${field.colorClass}`}
-                        >
+                        <div key={field.key} className="goals-form__field">
                             <label
                                 className="goals-form__label"
                                 htmlFor={field.key}

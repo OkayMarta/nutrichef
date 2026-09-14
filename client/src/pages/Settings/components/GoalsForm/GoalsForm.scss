@@ -34,24 +34,7 @@
     }
 
     &__field {
-        border-left: 3px solid $color-border;
-        padding-left: 14px;
-
-        &--calories {
-            border-left-color: $color-macro-calories;
-        }
-
-        &--protein {
-            border-left-color: $color-macro-protein;
-        }
-
-        &--fat {
-            border-left-color: $color-macro-fat;
-        }
-
-        &--carbs {
-            border-left-color: $color-macro-carbs;
-        }
+        // Clean field without color accents
     }
 
     &__label {

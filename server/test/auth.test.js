@@ -399,4 +399,158 @@ describe("Authentication & Security Module Tests", () => {
             }
         });
     });
+
+    describe("PUT /api/auth/goals", () => {
+        test("should reject request when unauthenticated", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/goals`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    goalCalories: 2000,
+                    goalProtein: 140,
+                    goalFat: 65,
+                    goalCarbs: 210,
+                }),
+            });
+            assert.equal(res.status, 401);
+        });
+
+        test("should reject request when any goal field is missing", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/goals`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({
+                    goalCalories: 2000,
+                }),
+            });
+            assert.equal(res.status, 400);
+            const data = await res.json();
+            assert.ok(data.message.includes("required"));
+        });
+
+        test("should reject request when goal value is not a positive number", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/goals`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({
+                    goalCalories: -500,
+                    goalProtein: 140,
+                    goalFat: 65,
+                    goalCarbs: 210,
+                }),
+            });
+            assert.equal(res.status, 400);
+            const data = await res.json();
+            assert.ok(data.message.includes("positive number"));
+        });
+
+        test("should successfully update goals and return updated user", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/goals`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({
+                    goalCalories: 2200,
+                    goalProtein: 160,
+                    goalFat: 70,
+                    goalCarbs: 230,
+                }),
+            });
+            assert.equal(res.status, 200);
+            const data = await res.json();
+            assert.equal(data.user.goalCalories, 2200);
+            assert.equal(data.user.goalProtein, 160);
+            assert.equal(data.user.goalFat, 70);
+            assert.equal(data.user.goalCarbs, 230);
+        });
+    });
+
+    describe("PUT /api/auth/profile", () => {
+        test("should reject profile update when unauthenticated", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/profile`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: "Jane Doe" }),
+            });
+            assert.equal(res.status, 401);
+        });
+
+        test("should reject non-string name", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/profile`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({ name: 12345 }),
+            });
+            assert.equal(res.status, 400);
+        });
+
+        test("should successfully update user name (including Cyrillic)", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/profile`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({ name: "Олександр Шевченко" }),
+            });
+            assert.equal(res.status, 200);
+            const data = await res.json();
+            assert.equal(data.user.name, "Олександр Шевченко");
+        });
+    });
+
+    describe("POST /api/auth/avatar", () => {
+        test("should reject avatar upload when unauthenticated", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/avatar`, {
+                method: "POST",
+            });
+            assert.equal(res.status, 401);
+        });
+
+        test("should reject avatar upload when no file is provided", async () => {
+            const formData = new FormData();
+            const res = await fetch(`${baseUrl}/api/auth/avatar`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${authToken}` },
+                body: formData,
+            });
+            assert.equal(res.status, 400);
+        });
+
+        test("should upload avatar image and return updated user with avatarUrl", async () => {
+            // Create a minimal PNG buffer
+            const png1x1 = Buffer.from(
+                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+                "base64",
+            );
+            const blob = new Blob([png1x1], { type: "image/png" });
+            const formData = new FormData();
+            formData.append("avatar", blob, "avatar.png");
+
+            const res = await fetch(`${baseUrl}/api/auth/avatar`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${authToken}` },
+                body: formData,
+            });
+            assert.equal(res.status, 200);
+            const data = await res.json();
+            assert.ok(data.user.avatarUrl);
+            assert.ok(data.user.avatarUrl.startsWith("/uploads/avatars/"));
+
+            // Verify the static endpoint serves the avatar
+            const staticRes = await fetch(`${baseUrl}${data.user.avatarUrl}`);
+            assert.equal(staticRes.status, 200);
+        });
+    });
 });

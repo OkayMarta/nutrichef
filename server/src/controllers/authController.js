@@ -1,6 +1,9 @@
 const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
 const { OAuth2Client } = require("google-auth-library");
 const prisma = require("../lib/prisma");
 
@@ -310,10 +313,130 @@ const updateGoals = async (req, res) => {
     }
 };
 
+/**
+ * PUT /api/auth/profile (Protected route)
+ * Updates the authenticated user's profile (name).
+ */
+const updateProfile = async (req, res) => {
+    try {
+        const { name } = req.body;
+
+        if (name !== undefined && name !== null) {
+            if (typeof name !== "string") {
+                return res.status(400).json({
+                    message: "Name must be a string",
+                });
+            }
+
+            const trimmedName = name.trim();
+            if (trimmedName.length > 100) {
+                return res.status(400).json({
+                    message: "Name must be at most 100 characters",
+                });
+            }
+
+            const updatedUser = await prisma.user.update({
+                where: { id: req.userId },
+                data: { name: trimmedName || null },
+            });
+
+            return res.status(200).json({
+                user: sanitizeUser(updatedUser),
+            });
+        }
+
+        return res.status(400).json({
+            message: "No valid fields to update",
+        });
+    } catch (error) {
+        console.error("Update profile error:", error);
+        return res.status(500).json({
+            message: "An error occurred while updating profile",
+            error: error.message,
+        });
+    }
+};
+
+/**
+ * Multer configuration for avatar uploads.
+ * Stores files in server/uploads/avatars/ with unique filenames.
+ */
+const avatarStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadDir = path.join(__dirname, "../../uploads/avatars");
+        if (!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir, { recursive: true });
+        }
+        cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname).toLowerCase();
+        const uniqueName = `${req.userId}-${Date.now()}${ext}`;
+        cb(null, uniqueName);
+    },
+});
+
+const avatarUpload = multer({
+    storage: avatarStorage,
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+    fileFilter: (req, file, cb) => {
+        const allowedMimes = [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+        ];
+        if (allowedMimes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(
+                new Error(
+                    "Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.",
+                ),
+                false,
+            );
+        }
+    },
+});
+
+/**
+ * POST /api/auth/avatar (Protected route)
+ * Uploads and sets user avatar image.
+ */
+const uploadAvatar = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                message: "No image file provided",
+            });
+        }
+
+        const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+
+        const updatedUser = await prisma.user.update({
+            where: { id: req.userId },
+            data: { avatarUrl },
+        });
+
+        return res.status(200).json({
+            user: sanitizeUser(updatedUser),
+        });
+    } catch (error) {
+        console.error("Upload avatar error:", error);
+        return res.status(500).json({
+            message: "An error occurred while uploading avatar",
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     register,
     login,
     googleAuth,
     getMe,
     updateGoals,
+    updateProfile,
+    avatarUpload,
+    uploadAvatar,
 };

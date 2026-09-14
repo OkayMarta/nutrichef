@@ -9,31 +9,198 @@
     gap: 16px;
     padding: 32px 24px;
 
+    // --- Avatar Container & Upload ---
+    &__avatar-container {
+        position: relative;
+        display: inline-block;
+    }
+
     &__avatar {
-        width: 72px;
-        height: 72px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         background-color: $color-brand-light;
         color: $color-brand-darker;
         font-weight: $font-weight-bold;
-        font-size: 1.6rem;
+        font-size: 1.8rem;
         @include flex-center;
         text-transform: uppercase;
         flex-shrink: 0;
         border: 3px solid $color-brand-medium;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all $transition-fast;
+        position: relative;
+
+        &:hover {
+            opacity: 0.92;
+            border-color: $color-brand-dark;
+            box-shadow: 0 0 0 4px rgba($color-brand-medium, 0.2);
+        }
+
+        &--loading {
+            cursor: wait;
+            background-color: $color-bg-card-muted;
+        }
     }
 
+    &__avatar-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    &__avatar-fallback {
+        @include flex-center;
+        width: 100%;
+        height: 100%;
+    }
+
+    &__avatar-btn {
+        @include button-reset;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: $color-brand-dark;
+        color: $color-white;
+        @include flex-center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        border: 2px solid $color-white;
+        transition: all $transition-fast;
+
+        &:hover:not(:disabled) {
+            background-color: $color-brand-hover;
+            transform: scale(1.08);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+
+    &__spinner {
+        animation: profile-spin 0.8s linear infinite;
+        color: $color-brand-dark;
+    }
+
+    // --- Details ---
     &__details {
         @include flex-column;
         align-items: center;
-        gap: 4px;
+        gap: 6px;
+        width: 100%;
+    }
+
+    // --- Name Display & Editing ---
+    &__name-row {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        max-width: calc(100% - 36px);
     }
 
     &__name {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
         font-weight: $font-weight-semibold;
         color: $color-text-dark;
         margin: 0;
+        text-align: center;
+        word-break: break-word;
+    }
+
+    &__edit-btn {
+        @include button-reset;
+        @include flex-center;
+        position: absolute;
+        left: calc(100% + 8px);
+        top: 50%;
+        transform: translateY(-50%);
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        color: $color-text-subtle;
+        transition: all $transition-fast;
+        flex-shrink: 0;
+
+        &:hover {
+            color: $color-brand-dark;
+            background-color: $color-bg-subtle;
+        }
+    }
+
+    &__name-form {
+        @include flex-align;
+        gap: 6px;
+        width: 100%;
+        max-width: 240px;
+    }
+
+    &__name-input {
+        flex: 1;
+        min-width: 0;
+        padding: 6px 10px;
+        font-size: 0.95rem;
+        font-weight: $font-weight-medium;
+        border: 1px solid $color-brand-medium;
+        border-radius: $radius-sm;
+        outline: none;
+        color: $color-text-dark;
+        background-color: $color-bg-card;
+        font-family: $font-family-base;
+        box-shadow: 0 0 0 2px rgba($color-brand-medium, 0.15);
+
+        &:focus {
+            border-color: $color-brand-dark;
+            box-shadow: 0 0 0 3px rgba($color-brand-medium, 0.25);
+        }
+    }
+
+    &__name-actions {
+        @include flex-align;
+        gap: 4px;
+    }
+
+    &__action-btn {
+        @include button-reset;
+        @include flex-center;
+        width: 28px;
+        height: 28px;
+        border-radius: $radius-xs;
+        transition: all $transition-fast;
+
+        &--confirm {
+            background-color: $color-brand-dark;
+            color: $color-white;
+
+            &:hover:not(:disabled) {
+                background-color: $color-brand-hover;
+            }
+
+            .profile-info-card__spinner {
+                color: $color-white;
+            }
+        }
+
+        &--cancel {
+            background-color: $color-bg-subtle;
+            color: $color-text-muted;
+
+            &:hover:not(:disabled) {
+                background-color: rgba($color-status-danger, 0.1);
+                color: $color-status-danger;
+            }
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     }
 
     &__email {
@@ -46,9 +213,18 @@
     &__member-since {
         font-size: 0.82rem;
         color: $color-text-subtle;
-        margin: 8px 0 0;
+        margin: 6px 0 0;
         padding: 4px 12px;
         background-color: $color-bg-subtle;
         border-radius: $radius-pill;
+    }
+}
+
+@keyframes profile-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }

@@ -3,7 +3,11 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { House, BookMarked, CirclePlus, Settings, LogOut } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
-import { getUserDisplayName, getUserInitials } from "../../../utils/user";
+import {
+    getUserDisplayName,
+    getUserInitials,
+    getUserAvatarUrl,
+} from "../../../utils/user";
 import "./Navbar.scss";
 
 const Navbar = () => {
@@ -279,7 +283,31 @@ const Navbar = () => {
                                 aria-expanded={isDropdownOpen}
                                 title={user.email}
                             >
-                                {getUserInitials(user)}
+                                {getUserAvatarUrl(user) ? (
+                                    <img
+                                        src={getUserAvatarUrl(user)}
+                                        alt={getUserDisplayName(user)}
+                                        className="navbar__avatar-img"
+                                        onError={(e) => {
+                                            e.currentTarget.style.display =
+                                                "none";
+                                            const fallback =
+                                                e.currentTarget.parentElement?.querySelector(
+                                                    ".navbar__avatar-fallback",
+                                                );
+                                            if (fallback)
+                                                fallback.style.display = "flex";
+                                        }}
+                                    />
+                                ) : (
+                                    getUserInitials(user)
+                                )}
+                                <span
+                                    className="navbar__avatar-fallback"
+                                    style={{ display: "none" }}
+                                >
+                                    {getUserInitials(user)}
+                                </span>
                             </button>
 
                             {isDropdownOpen && (

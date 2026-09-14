@@ -18,7 +18,10 @@ const Settings = () => {
 
                 <div className="settings__layout">
                     <aside className="settings__sidebar">
-                        <ProfileInfoCard user={user} />
+                        <ProfileInfoCard
+                            user={user}
+                            onProfileUpdate={updateUser}
+                        />
                     </aside>
 
                     <section className="settings__main">
