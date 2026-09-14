@@ -1,0 +1,49 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.settings {
+    min-height: 100%;
+    background-color: $color-bg-light;
+    padding: 32px 24px 48px;
+
+    &__container {
+        max-width: 960px;
+        margin: 0 auto;
+    }
+
+    &__header {
+        margin-bottom: 32px;
+    }
+
+    &__title {
+        font-size: 1.75rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0 0 6px;
+    }
+
+    &__subtitle {
+        font-size: 0.95rem;
+        color: $color-text-muted;
+        margin: 0;
+    }
+
+    &__layout {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+
+        @include respond-to("md") {
+            grid-template-columns: 300px 1fr;
+            align-items: start;
+        }
+    }
+
+    &__sidebar {
+        width: 100%;
+    }
+
+    &__main {
+        width: 100%;
+    }
+}

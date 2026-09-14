@@ -1,0 +1,54 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.profile-info-card {
+    @include card-base;
+    @include flex-column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    padding: 32px 24px;
+
+    &__avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background-color: $color-brand-light;
+        color: $color-brand-darker;
+        font-weight: $font-weight-bold;
+        font-size: 1.6rem;
+        @include flex-center;
+        text-transform: uppercase;
+        flex-shrink: 0;
+        border: 3px solid $color-brand-medium;
+    }
+
+    &__details {
+        @include flex-column;
+        align-items: center;
+        gap: 4px;
+    }
+
+    &__name {
+        font-size: 1.1rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+        margin: 0;
+    }
+
+    &__email {
+        font-size: 0.88rem;
+        color: $color-text-muted;
+        margin: 0;
+        word-break: break-all;
+    }
+
+    &__member-since {
+        font-size: 0.82rem;
+        color: $color-text-subtle;
+        margin: 8px 0 0;
+        padding: 4px 12px;
+        background-color: $color-bg-subtle;
+        border-radius: $radius-pill;
+    }
+}

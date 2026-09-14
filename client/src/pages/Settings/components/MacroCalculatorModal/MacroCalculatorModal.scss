@@ -1,0 +1,289 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.macro-modal {
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-lg;
+    width: 100%;
+    max-width: 560px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: macro-modal-in 0.2s ease-out;
+
+    &__backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background-color: rgba(27, 38, 20, 0.45);
+        backdrop-filter: blur(4px);
+        @include flex-center;
+        padding: 20px;
+    }
+
+    &__header {
+        @include flex-between;
+        padding: 20px 24px 0;
+    }
+
+    &__title {
+        @include flex-align;
+        gap: 8px;
+        font-size: 1.1rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+        margin: 0;
+    }
+
+    &__close {
+        @include button-reset;
+        @include flex-center;
+        width: 32px;
+        height: 32px;
+        border-radius: $radius-sm;
+        color: $color-text-muted;
+        transition: all $transition-fast;
+
+        &:hover {
+            background-color: $color-bg-subtle;
+            color: $color-text-dark;
+        }
+    }
+
+    &__body {
+        padding: 20px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    // --- Fieldsets & Inputs ---
+    &__fieldset {
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    &__legend {
+        font-size: 0.82rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 8px;
+    }
+
+    &__radio-group {
+        display: flex;
+        gap: 12px;
+    }
+
+    &__radio-label {
+        @include flex-align;
+        gap: 6px;
+        cursor: pointer;
+        padding: 8px 16px;
+        border: 1px solid $color-border;
+        border-radius: $radius-sm;
+        font-size: 0.9rem;
+        color: $color-text-secondary;
+        transition: all $transition-fast;
+
+        &:has(input:checked) {
+            border-color: $color-brand-medium;
+            background-color: rgba($color-brand-light, 0.3);
+            color: $color-brand-dark;
+            font-weight: $font-weight-medium;
+        }
+
+        input[type="radio"] {
+            accent-color: $color-brand-dark;
+        }
+    }
+
+    &__inputs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__selects-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    &__label {
+        font-size: 0.8rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+    }
+
+    &__input,
+    &__select {
+        padding: 10px 12px;
+        border: 1px solid $color-border;
+        border-radius: $radius-sm;
+        font-size: 0.92rem;
+        color: $color-text-dark;
+        background-color: $color-bg-card;
+        outline: none;
+        transition: border-color $transition-fast;
+        font-family: $font-family-base;
+
+        &:focus {
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba($color-brand-medium, 0.12);
+        }
+
+        // Hide number input spinners
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        -moz-appearance: textfield;
+    }
+
+    &__select {
+        cursor: pointer;
+        -moz-appearance: auto;
+    }
+
+    // --- Results Preview ---
+    &__results {
+        background-color: $color-bg-subtle;
+        border: 1px solid $color-border;
+        border-radius: $radius-md;
+        padding: 16px;
+    }
+
+    &__results-title {
+        font-size: 0.82rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin: 0 0 12px;
+    }
+
+    &__results-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+
+        @media (max-width: 480px) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    &__result-pill {
+        @include flex-column;
+        align-items: center;
+        gap: 2px;
+        padding: 10px 8px;
+        border-radius: $radius-sm;
+        background-color: $color-bg-card;
+        border: 1px solid $color-border;
+
+        &--calories {
+            border-left: 3px solid $color-macro-calories;
+        }
+
+        &--protein {
+            border-left: 3px solid $color-macro-protein;
+        }
+
+        &--fat {
+            border-left: 3px solid $color-macro-fat;
+        }
+
+        &--carbs {
+            border-left: 3px solid $color-macro-carbs;
+        }
+    }
+
+    &__result-value {
+        font-size: 1.05rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+    }
+
+    &__result-label {
+        font-size: 0.72rem;
+        color: $color-text-muted;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    // --- Footer ---
+    &__footer {
+        @include flex-align;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 0 24px 20px;
+    }
+
+    &__cancel-btn {
+        @include button-reset;
+        padding: 10px 20px;
+        border: 1px solid $color-border;
+        border-radius: $radius-sm;
+        font-size: 0.88rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+        background-color: $color-bg-card;
+        transition: all $transition-fast;
+
+        &:hover {
+            background-color: $color-bg-subtle;
+            color: $color-text-dark;
+        }
+    }
+
+    &__apply-btn {
+        @include button-reset;
+        padding: 10px 24px;
+        border-radius: $radius-sm;
+        font-size: 0.88rem;
+        font-weight: $font-weight-semibold;
+        color: $color-white;
+        background-color: $color-brand-dark;
+        transition: all $transition-fast;
+
+        &:hover:not(:disabled) {
+            background-color: $color-brand-hover;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+}
+
+@keyframes macro-modal-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}

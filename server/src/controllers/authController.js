@@ -256,9 +256,64 @@ const getMe = async (req, res) => {
     }
 };
 
+/**
+ * PUT /api/auth/goals (Protected route)
+ * Updates the authenticated user's daily nutritional goals.
+ */
+const updateGoals = async (req, res) => {
+    try {
+        const { goalCalories, goalProtein, goalFat, goalCarbs } = req.body;
+
+        // Validate all four fields are present
+        if (
+            goalCalories === undefined ||
+            goalProtein === undefined ||
+            goalFat === undefined ||
+            goalCarbs === undefined
+        ) {
+            return res.status(400).json({
+                message:
+                    "All goal fields are required: goalCalories, goalProtein, goalFat, goalCarbs",
+            });
+        }
+
+        // Parse and validate as positive integers
+        const parsed = {
+            goalCalories: parseInt(goalCalories, 10),
+            goalProtein: parseInt(goalProtein, 10),
+            goalFat: parseInt(goalFat, 10),
+            goalCarbs: parseInt(goalCarbs, 10),
+        };
+
+        for (const [field, value] of Object.entries(parsed)) {
+            if (isNaN(value) || value <= 0) {
+                return res.status(400).json({
+                    message: `${field} must be a positive number`,
+                });
+            }
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: req.userId },
+            data: parsed,
+        });
+
+        return res.status(200).json({
+            user: sanitizeUser(updatedUser),
+        });
+    } catch (error) {
+        console.error("Update goals error:", error);
+        return res.status(500).json({
+            message: "An error occurred while updating nutritional goals",
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     register,
     login,
     googleAuth,
     getMe,
+    updateGoals,
 };

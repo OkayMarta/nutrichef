@@ -8,6 +8,7 @@ import Register from "../pages/Auth/Register";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import CreateMeal from "../pages/CreateMeal/CreateMeal";
 import SavedMeals from "../pages/SavedMeals/SavedMeals";
+import Settings from "../pages/Settings/Settings";
 import PrivacyPolicy from "../pages/Legal/PrivacyPolicy";
 import TermsOfService from "../pages/Legal/TermsOfService";
 import NotFound from "../pages/NotFound/NotFound";
@@ -32,6 +33,7 @@ const AppRoutes = () => {
                 <Route path="/calculator" element={<CreateMeal />} />
                 <Route path="/create-meal" element={<CreateMeal />} />
                 <Route path="/meals" element={<SavedMeals />} />
+                <Route path="/settings" element={<Settings />} />
             </Route>
 
             {/* Catch-all 404 */}

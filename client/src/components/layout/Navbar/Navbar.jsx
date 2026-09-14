@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { House, BookMarked, CirclePlus } from "lucide-react";
+import { House, BookMarked, CirclePlus, Settings, LogOut } from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
+import { getUserDisplayName, getUserInitials } from "../../../utils/user";
 import "./Navbar.scss";
 
 const Navbar = () => {
@@ -12,6 +13,38 @@ const Navbar = () => {
     const [activeSection, setActiveSection] = useState("home");
     const isManualScrollingRef = useRef(false);
     const scrollTimeoutRef = useRef(null);
+
+    // Dropdown state
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    // Close dropdown on outside click or Escape key
+    useEffect(() => {
+        if (!isDropdownOpen) return;
+
+        const handleClickOutside = (e) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(e.target)
+            ) {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        const handleEscape = (e) => {
+            if (e.key === "Escape") {
+                setIsDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("keydown", handleEscape);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("keydown", handleEscape);
+        };
+    }, [isDropdownOpen]);
 
     // Scroll spy for landing page sections
     useEffect(() => {
@@ -109,16 +142,10 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
+        setIsDropdownOpen(false);
         logout();
         toast.info("You have been logged out.");
         navigate("/login");
-    };
-
-    const getAvatarLetter = () => {
-        if (user?.email) {
-            return user.email.charAt(0).toUpperCase();
-        }
-        return "U";
     };
 
     return (
@@ -241,17 +268,52 @@ const Navbar = () => {
                 {/* Actions Area */}
                 <div className="navbar__actions">
                     {user ? (
-                        <div className="navbar__user">
-                            <div className="navbar__avatar" title={user.email}>
-                                {getAvatarLetter()}
-                            </div>
+                        <div className="navbar__user" ref={dropdownRef}>
                             <button
                                 type="button"
-                                className="navbar__logout-btn"
-                                onClick={handleLogout}
+                                className="navbar__avatar-btn"
+                                onClick={() =>
+                                    setIsDropdownOpen((prev) => !prev)
+                                }
+                                aria-haspopup="true"
+                                aria-expanded={isDropdownOpen}
+                                title={user.email}
                             >
-                                Log out
+                                {getUserInitials(user)}
                             </button>
+
+                            {isDropdownOpen && (
+                                <div className="navbar__dropdown">
+                                    <div className="navbar__dropdown-preview">
+                                        <span className="navbar__dropdown-name">
+                                            {getUserDisplayName(user)}
+                                        </span>
+                                        <span className="navbar__dropdown-email">
+                                            {user.email}
+                                        </span>
+                                    </div>
+
+                                    <hr className="navbar__dropdown-divider" />
+
+                                    <Link
+                                        to="/settings"
+                                        className="navbar__dropdown-item"
+                                        onClick={() => setIsDropdownOpen(false)}
+                                    >
+                                        <Settings size={16} strokeWidth={2} />
+                                        <span>Settings</span>
+                                    </Link>
+
+                                    <button
+                                        type="button"
+                                        className="navbar__dropdown-item navbar__dropdown-item--danger"
+                                        onClick={handleLogout}
+                                    >
+                                        <LogOut size={16} strokeWidth={2} />
+                                        <span>Log out</span>
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div

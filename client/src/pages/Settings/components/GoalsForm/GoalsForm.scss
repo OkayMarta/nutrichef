@@ -1,0 +1,201 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.goals-form {
+    @include card-base;
+
+    &__header {
+        margin-bottom: 24px;
+    }
+
+    &__title {
+        font-size: 1.15rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+        margin: 0 0 4px;
+    }
+
+    &__description {
+        font-size: 0.88rem;
+        color: $color-text-muted;
+        margin: 0;
+    }
+
+    // --- Fields Grid ---
+    &__fields {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 28px;
+
+        @include respond-to("sm") {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    &__field {
+        border-left: 3px solid $color-border;
+        padding-left: 14px;
+
+        &--calories {
+            border-left-color: $color-macro-calories;
+        }
+
+        &--protein {
+            border-left-color: $color-macro-protein;
+        }
+
+        &--fat {
+            border-left-color: $color-macro-fat;
+        }
+
+        &--carbs {
+            border-left-color: $color-macro-carbs;
+        }
+    }
+
+    &__label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    &__input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__input {
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px solid $color-border;
+        border-radius: $radius-sm;
+        font-size: 1rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+        background-color: $color-bg-card;
+        transition: border-color $transition-fast;
+        outline: none;
+        font-family: $font-family-base;
+
+        &:focus {
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba($color-brand-medium, 0.12);
+        }
+
+        &--error {
+            border-color: $color-status-danger;
+
+            &:focus {
+                box-shadow: 0 0 0 3px rgba($color-status-danger, 0.12);
+            }
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        // Hide number input spinners
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        -moz-appearance: textfield;
+    }
+
+    &__unit {
+        font-size: 0.85rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-subtle;
+        min-width: 32px;
+    }
+
+    &__error {
+        display: block;
+        font-size: 0.78rem;
+        color: $color-status-danger;
+        margin-top: 4px;
+    }
+
+    // --- Actions ---
+    &__actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        @include respond-to("sm") {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+
+    &__calc-btn {
+        @include button-reset;
+        @include flex-align;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: 1px dashed $color-border-dashed;
+        border-radius: $radius-sm;
+        font-size: 0.88rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+        background-color: $color-bg-card-muted;
+        transition: all $transition-fast;
+
+        &:hover:not(:disabled) {
+            border-color: $color-brand-medium;
+            color: $color-brand-dark;
+            background-color: rgba($color-brand-light, 0.3);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    &__save-btn {
+        @include button-reset;
+        @include flex-align;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 28px;
+        border-radius: $radius-sm;
+        font-size: 0.9rem;
+        font-weight: $font-weight-semibold;
+        color: $color-white;
+        background-color: $color-brand-dark;
+        transition: all $transition-fast;
+
+        &:hover:not(:disabled) {
+            background-color: $color-brand-hover;
+        }
+
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+    }
+
+    &__spinner {
+        animation: goals-spin 0.8s linear infinite;
+    }
+}
+
+@keyframes goals-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

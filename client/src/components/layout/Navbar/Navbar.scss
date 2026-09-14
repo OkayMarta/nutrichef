@@ -216,11 +216,13 @@
     }
 
     &__user {
+        position: relative;
         @include flex-align;
         gap: 10px;
     }
 
-    &__avatar {
+    &__avatar-btn {
+        @include button-reset;
         width: 38px;
         height: 38px;
         border-radius: 50%;
@@ -230,19 +232,102 @@
         font-size: 0.95rem;
         @include flex-center;
         text-transform: uppercase;
-    }
-
-    &__logout-btn {
-        @include button-reset;
-        padding: 8px 14px;
-        font-size: 0.88rem;
-        color: $color-text-muted;
-        border-radius: $radius-pill;
-        transition: all $transition-fast;
+        cursor: pointer;
+        transition: box-shadow $transition-fast;
+        border: 2px solid transparent;
 
         &:hover {
-            color: $color-status-danger;
-            background-color: rgba(220, 38, 38, 0.08);
+            box-shadow: 0 0 0 3px rgba($color-brand-medium, 0.3);
         }
+
+        &[aria-expanded="true"] {
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba($color-brand-medium, 0.2);
+        }
+    }
+
+    // --- Dropdown Menu ---
+    &__dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        min-width: 240px;
+        max-width: 280px;
+        background-color: $color-bg-card;
+        border: 1px solid $color-border;
+        border-radius: $radius-md;
+        box-shadow: $shadow-lg;
+        z-index: 200;
+        padding: 8px 0;
+        animation: navbar-dropdown-in 0.15s ease-out;
+    }
+
+    &__dropdown-preview {
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    &__dropdown-name {
+        font-size: 0.92rem;
+        font-weight: $font-weight-semibold;
+        color: $color-text-dark;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__dropdown-email {
+        font-size: 0.8rem;
+        color: $color-text-muted;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 248px;
+    }
+
+    &__dropdown-divider {
+        border: none;
+        height: 1px;
+        background-color: $color-border;
+        margin: 4px 0;
+    }
+
+    &__dropdown-item {
+        @include button-reset;
+        @include flex-align;
+        gap: 10px;
+        width: 100%;
+        padding: 10px 16px;
+        font-size: 0.88rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+        text-decoration: none;
+        transition: all $transition-fast;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $color-bg-subtle;
+            color: $color-text-dark;
+        }
+
+        &--danger {
+            &:hover {
+                color: $color-status-danger;
+                background-color: rgba(220, 38, 38, 0.06);
+            }
+        }
+    }
+}
+
+@keyframes navbar-dropdown-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

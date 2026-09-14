@@ -4,6 +4,7 @@ const {
     login,
     googleAuth,
     getMe,
+    updateGoals,
 } = require("../controllers/authController");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -16,5 +17,6 @@ router.post("/google", googleAuth);
 
 // Protected routes
 router.get("/me", authMiddleware, getMe);
+router.put("/goals", authMiddleware, updateGoals);
 
 module.exports = router;
