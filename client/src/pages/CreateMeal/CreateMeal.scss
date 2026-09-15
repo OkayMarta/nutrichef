@@ -29,67 +29,6 @@
         margin-bottom: auto;
     }
 
-    // --- Success Banner ---
-    &__success-banner {
-        @include flex-between;
-        gap: 16px;
-        flex-wrap: wrap;
-        padding: 14px 20px;
-        background: linear-gradient(
-            135deg,
-            rgba(202, 228, 180, 0.35) 0%,
-            rgba(234, 243, 227, 0.8) 100%
-        );
-        border: 1px solid $color-brand-light;
-        border-radius: $radius-md;
-        box-shadow: 0 3px 12px rgba(70, 156, 60, 0.08);
-        animation: fade-in 0.3s ease;
-
-        @media (max-width: 768px) {
-            flex-direction: column;
-            align-items: stretch;
-        }
-    }
-
-    &__success-info {
-        @include flex-align;
-        gap: 12px;
-    }
-
-    &__success-icon {
-        font-size: 1.4rem;
-        flex-shrink: 0;
-    }
-
-    &__success-title {
-        font-size: 0.98rem;
-        font-weight: $font-weight-bold;
-        color: $color-text-dark;
-        margin: 0 0 2px 0;
-    }
-
-    &__success-desc {
-        font-size: 0.82rem;
-        color: $color-text-secondary;
-        margin: 0;
-        line-height: 1.35;
-    }
-
-    &__success-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        @media (max-width: 480px) {
-            flex-direction: column;
-            align-items: stretch;
-
-            .btn {
-                width: 100%;
-            }
-        }
-    }
-
     // --- 2-Column Responsive Layout ---
     &__layout {
         display: grid;
@@ -121,16 +60,5 @@
         position: sticky;
         top: 88px;
         z-index: 10;
-    }
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(-6px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }

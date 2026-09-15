@@ -1,5 +1,4 @@
 import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createMeal } from "../../api/mealApi";
 import { calculateMacroPer100g } from "../../utils/nutrition";
@@ -17,12 +16,10 @@ const initialFormState = {
 };
 
 const CreateMeal = () => {
-    const navigate = useNavigate();
     const [formData, setFormData] = useState(initialFormState);
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
     const [submitting, setSubmitting] = useState(false);
-    const [savedMeal, setSavedMeal] = useState(null);
 
     // Weight validity check
     const weightNum = parseFloat(formData.totalWeight);
@@ -121,7 +118,6 @@ const CreateMeal = () => {
         setFormData(initialFormState);
         setErrors({});
         setTouched({});
-        setSavedMeal(null);
     };
 
     const handleSubmit = async (e) => {
@@ -159,11 +155,11 @@ const CreateMeal = () => {
                 carbsPer100g: parseFloat(carbsPer100g) || 0,
             };
 
-            const response = await createMeal(payload);
-            setSavedMeal(response.data);
+            await createMeal(payload);
             toast.success(
                 "Meal successfully created and saved to your recipes!",
             );
+            handleReset();
         } catch (error) {
             console.error("Failed to create meal:", error);
             const message =
@@ -178,46 +174,6 @@ const CreateMeal = () => {
     return (
         <div className="create-meal">
             <div className="create-meal__container container">
-                {/* Success Banner (when a meal was just saved) */}
-                {savedMeal && (
-                    <div className="create-meal__success-banner">
-                        <div className="create-meal__success-info">
-                            <span className="create-meal__success-icon">
-                                🎉
-                            </span>
-                            <div>
-                                <h3 className="create-meal__success-title">
-                                    Meal &quot;{savedMeal.name}&quot;
-                                    successfully saved!
-                                </h3>
-                                <p className="create-meal__success-desc">
-                                    Base profile calculated:{" "}
-                                    {savedMeal.caloriesPer100g} kcal,{" "}
-                                    {savedMeal.proteinPer100g} g protein,{" "}
-                                    {savedMeal.fatPer100g} g fat,{" "}
-                                    {savedMeal.carbsPer100g} g carbs per 100 g.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="create-meal__success-actions">
-                            <button
-                                type="button"
-                                className="btn btn--primary"
-                                onClick={() => navigate("/meals")}
-                            >
-                                View in Saved Meals &rarr;
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn--secondary"
-                                onClick={handleReset}
-                            >
-                                + Create Another Meal
-                            </button>
-                        </div>
-                    </div>
-                )}
-
                 {/* 2-Column Responsive Layout */}
                 <div className="create-meal__layout">
                     {/* Left Column: Input Form */}
