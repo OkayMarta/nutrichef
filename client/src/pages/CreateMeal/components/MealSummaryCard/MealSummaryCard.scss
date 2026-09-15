@@ -3,14 +3,14 @@
 
 .meal-summary-card {
     @include card-base;
-    padding: 28px 24px;
+    padding: 16px 20px;
     background-color: $color-bg-card;
     border: 1px solid $color-border;
     border-radius: $radius-lg;
     box-shadow: $shadow-md;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 14px;
     position: relative;
     overflow: hidden;
 
@@ -21,7 +21,7 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
+        height: 3px;
         background: linear-gradient(
             90deg,
             $color-brand-light,
@@ -32,26 +32,26 @@
 
     &__top {
         @include flex-between;
-        gap: 12px;
+        gap: 10px;
     }
 
     &__badge {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        font-size: 0.76rem;
+        gap: 5px;
+        font-size: 0.72rem;
         font-weight: $font-weight-semibold;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.04em;
         color: $color-brand-darker;
         background-color: rgba(202, 228, 180, 0.4);
-        padding: 4px 10px;
+        padding: 3px 8px;
         border-radius: $radius-pill;
     }
 
     &__badge-pulse {
-        width: 7px;
-        height: 7px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
         background-color: $color-brand-dark;
         box-shadow: 0 0 0 0 rgba(70, 156, 60, 0.7);
@@ -59,7 +59,7 @@
     }
 
     &__serving-tag {
-        font-size: 0.82rem;
+        font-size: 0.78rem;
         font-weight: $font-weight-medium;
         color: $color-text-muted;
     }
@@ -67,39 +67,24 @@
     &__identity {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 4px;
     }
 
     &__title {
-        font-size: 1.35rem;
+        font-size: 1.15rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
         line-height: 1.25;
         letter-spacing: -0.01em;
         word-break: break-word;
-    }
-
-    &__weight-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 0.82rem;
-        color: $color-text-muted;
-        background-color: $color-bg-subtle;
-        padding: 4px 10px;
-        border-radius: $radius-sm;
-        width: fit-content;
-    }
-
-    &__weight-icon {
-        font-size: 0.85rem;
+        margin: 0;
     }
 
     // 4 Macro Badges Grid
     &__grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 8px;
 
         @media (max-width: 480px) {
             grid-template-columns: 1fr;
@@ -107,67 +92,26 @@
     }
 
     &__macro {
-        padding: 14px 16px;
+        padding: 10px 14px;
         border-radius: $radius-md;
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        transition:
-            transform $transition-fast,
-            box-shadow $transition-fast;
+        gap: 4px;
+        background-color: rgba(202, 228, 180, 0.25);
+        border: 1px solid rgba(116, 189, 87, 0.3);
 
-        &:hover {
-            transform: translateY(-2px);
-        }
-
-        &--calories {
-            background-color: rgba(70, 156, 60, 0.08);
-            border: 1px solid rgba(70, 156, 60, 0.2);
-
-            .meal-summary-card__macro-val {
-                color: $color-macro-calories;
-            }
-        }
-
-        &--protein {
-            background-color: rgba(37, 99, 235, 0.07);
-            border: 1px solid rgba(37, 99, 235, 0.2);
-
-            .meal-summary-card__macro-val {
-                color: $color-macro-protein;
-            }
-        }
-
-        &--fat {
-            background-color: rgba(224, 139, 26, 0.08);
-            border: 1px solid rgba(224, 139, 26, 0.2);
-
-            .meal-summary-card__macro-val {
-                color: $color-macro-fat;
-            }
-        }
-
-        &--carbs {
-            background-color: rgba(139, 92, 246, 0.08);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-
-            .meal-summary-card__macro-val {
-                color: $color-macro-carbs;
-            }
+        .meal-summary-card__macro-val {
+            color: $color-brand-dark;
         }
     }
 
     &__macro-header {
         @include flex-align;
-        gap: 6px;
-    }
-
-    &__macro-icon {
-        font-size: 0.95rem;
+        gap: 5px;
     }
 
     &__macro-label {
-        font-size: 0.8rem;
+        font-size: 0.76rem;
         font-weight: $font-weight-medium;
         color: $color-text-secondary;
     }
@@ -175,109 +119,40 @@
     &__macro-value-group {
         display: flex;
         align-items: baseline;
-        gap: 4px;
+        gap: 3px;
     }
 
     &__macro-val {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         font-weight: $font-weight-bold;
         letter-spacing: -0.02em;
         line-height: 1;
     }
 
     &__macro-unit {
-        font-size: 0.8rem;
-        font-weight: $font-weight-medium;
-        color: $color-text-muted;
-    }
-
-    // Ratio Bar
-    &__ratio-section {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding-top: 4px;
-    }
-
-    &__ratio-header {
-        @include flex-between;
-        font-size: 0.8rem;
-        font-weight: $font-weight-medium;
-        color: $color-text-muted;
-    }
-
-    &__ratio-legend {
-        display: flex;
-        align-items: center;
-        gap: 8px;
         font-size: 0.74rem;
-
-        .legend-item {
-            font-weight: $font-weight-semibold;
-
-            &--protein {
-                color: $color-macro-protein;
-            }
-
-            &--fat {
-                color: $color-macro-fat;
-            }
-
-            &--carbs {
-                color: $color-macro-carbs;
-            }
-        }
-    }
-
-    &__ratio-bar {
-        display: flex;
-        height: 8px;
-        width: 100%;
-        background-color: $color-bg-subtle;
-        border-radius: $radius-pill;
-        overflow: hidden;
-    }
-
-    &__ratio-segment {
-        height: 100%;
-        transition: width $transition-normal;
-
-        &--protein {
-            background-color: $color-macro-protein;
-        }
-
-        &--fat {
-            background-color: $color-macro-fat;
-        }
-
-        &--carbs {
-            background-color: $color-macro-carbs;
-        }
-
-        &--empty {
-            width: 100%;
-            background-color: $color-border;
-        }
+        font-weight: $font-weight-medium;
+        color: $color-text-muted;
     }
 
     // Informational Notice
     &__notice {
         display: flex;
         align-items: flex-start;
-        gap: 10px;
-        padding: 12px 14px;
+        gap: 8px;
+        padding: 10px 12px;
         background-color: rgba(226, 235, 217, 0.4);
         border: 1px solid $color-border;
         border-radius: $radius-sm;
-        font-size: 0.78rem;
-        line-height: 1.45;
+        font-size: 0.74rem;
+        line-height: 1.35;
         color: $color-text-secondary;
     }
 
     &__notice-icon {
-        font-size: 0.95rem;
+        color: $color-brand-dark;
         flex-shrink: 0;
-        margin-top: 1px;
+        margin-top: 2px;
     }
 
     &__notice-text {

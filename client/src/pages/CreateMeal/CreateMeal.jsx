@@ -178,18 +178,6 @@ const CreateMeal = () => {
     return (
         <div className="create-meal">
             <div className="create-meal__container container">
-                {/* Page Header */}
-                <header className="create-meal__header">
-                    <span className="create-meal__badge">
-                        Calculator & Recipe Builder
-                    </span>
-                    <h1 className="create-meal__title">Create a New Meal</h1>
-                    <p className="create-meal__subtitle">
-                        Calculate exact nutritional values per 100&nbsp;g based
-                        on your ingredients and final cooked weight.
-                    </p>
-                </header>
-
                 {/* Success Banner (when a meal was just saved) */}
                 {savedMeal && (
                     <div className="create-meal__success-banner">

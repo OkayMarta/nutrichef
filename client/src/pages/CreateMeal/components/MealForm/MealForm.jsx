@@ -1,3 +1,4 @@
+import { Utensils, Activity, BookmarkPlus } from "lucide-react";
 import "./MealForm.scss";
 
 const MealForm = ({
@@ -25,16 +26,10 @@ const MealForm = ({
             {/* Section 1: Basic Information */}
             <div className="meal-form__section">
                 <div className="meal-form__section-header">
-                    <span className="meal-form__section-icon">🍳</span>
-                    <div>
-                        <h2 className="meal-form__section-title">
-                            Dish Details
-                        </h2>
-                        <p className="meal-form__section-subtitle">
-                            Enter the name and the total cooked weight of your
-                            dish
-                        </p>
-                    </div>
+                    <span className="meal-form__section-icon">
+                        <Utensils size={18} strokeWidth={2.2} />
+                    </span>
+                    <h2 className="meal-form__section-title">Dish Details</h2>
                 </div>
 
                 <div className="meal-form__fields-stack">
@@ -116,16 +111,12 @@ const MealForm = ({
             {/* Section 2: Total Macros */}
             <div className="meal-form__section">
                 <div className="meal-form__section-header">
-                    <span className="meal-form__section-icon">📊</span>
-                    <div>
-                        <h2 className="meal-form__section-title">
-                            Total Cooked Nutrition
-                        </h2>
-                        <p className="meal-form__section-subtitle">
-                            Total calories and macronutrients for the entire
-                            cooked batch
-                        </p>
-                    </div>
+                    <span className="meal-form__section-icon">
+                        <Activity size={18} strokeWidth={2.2} />
+                    </span>
+                    <h2 className="meal-form__section-title">
+                        Total Cooked Nutrition
+                    </h2>
                 </div>
 
                 <div className="meal-form__grid">
@@ -287,7 +278,7 @@ const MealForm = ({
                         </>
                     ) : (
                         <>
-                            <span>💾</span>
+                            <BookmarkPlus size={18} strokeWidth={2.2} />
                             <span>Save to Recipe Book</span>
                         </>
                     )}
