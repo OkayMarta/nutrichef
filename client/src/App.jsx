@@ -17,7 +17,14 @@ function App() {
                     }}
                 >
                     <Navbar />
-                    <main className="app-main" style={{ flex: 1 }}>
+                    <main
+                        className="app-main"
+                        style={{
+                            flex: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
                         <AppRoutes />
                     </main>
                     <ToastContainer

@@ -2,44 +2,17 @@
 @use "../../styles/mixins" as *;
 
 .saved-meals {
-    min-height: calc(100vh - 72px);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     background-color: $color-bg-light;
-    padding: 36px 0 80px;
+    padding: 24px 0 32px;
 
-    &__header {
-        margin-bottom: 28px;
-    }
-
-    &__badge {
-        display: inline-block;
-        font-size: 0.82rem;
-        font-weight: $font-weight-semibold;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        color: $color-brand-badge-text;
-        background-color: $color-brand-badge-bg;
-        padding: 4px 14px;
-        border-radius: $radius-pill;
-        margin-bottom: 10px;
-    }
-
-    &__title {
-        font-size: 2rem;
-        font-weight: $font-weight-bold;
-        color: $color-text-dark;
-        margin: 0 0 8px;
-
-        @include respond-to("md") {
-            font-size: 2.3rem;
-        }
-    }
-
-    &__subtitle {
-        font-size: 1.05rem;
-        color: $color-text-muted;
-        max-width: 640px;
-        margin: 0;
-        line-height: 1.5;
+    &__container {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        width: 100%;
     }
 
     &__grid {
@@ -56,46 +29,49 @@
         }
     }
 
-    &__empty-card {
+    &__empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        padding: 56px 24px;
-        max-width: 560px;
-        margin: 32px auto;
-        border-radius: $radius-lg;
-        background-color: $color-bg-card;
-        border: 1px solid $color-border;
-        box-shadow: $shadow-card;
+        padding: 40px 20px;
+        margin: auto;
+        max-width: 440px;
+        width: 100%;
     }
 
     &__empty-icon-wrap {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 68px;
-        height: 68px;
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         background-color: $color-brand-light;
-        margin-bottom: 20px;
+        color: $color-brand-dark;
+        margin-bottom: 16px;
     }
 
     &__empty-icon {
-        font-size: 2rem;
-        line-height: 1;
+        width: 32px;
+        height: 32px;
+        color: $color-brand-dark;
     }
 
     &__empty-title {
         font-size: 1.35rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
-        margin: 0 0 10px;
+        margin: 0 0 8px;
     }
 
     &__empty-desc {
         font-size: 0.95rem;
         color: $color-text-muted;
-        line-height: 1.55;
-        margin: 0 auto 24px;
-        max-width: 440px;
+        line-height: 1.5;
+        margin: 0 auto 20px;
+        max-width: 380px;
     }
 }
 

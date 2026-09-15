@@ -6,6 +6,7 @@ import MealSearchBar from "./components/MealSearchBar/MealSearchBar";
 import MealCard from "./components/MealCard/MealCard";
 import EditMealModal from "./components/EditMealModal/EditMealModal";
 import DeleteConfirmModal from "./components/DeleteConfirmModal/DeleteConfirmModal";
+import { CookingPot, SearchX } from "lucide-react";
 import "./SavedMeals.scss";
 
 const SavedMeals = () => {
@@ -80,21 +81,8 @@ const SavedMeals = () => {
     const hasSearch = Boolean(searchQuery.trim());
 
     return (
-        <main className="saved-meals">
+        <div className="saved-meals">
             <div className="saved-meals__container container">
-                {/* Page Header */}
-                <header className="saved-meals__header">
-                    <span className="saved-meals__badge">
-                        Database & Recipes
-                    </span>
-                    <h1 className="saved-meals__title">Saved Meals</h1>
-                    <p className="saved-meals__subtitle">
-                        Browse, update, and manage your personal collection of
-                        home-cooked dishes with nutritional profiles per
-                        100&nbsp;g.
-                    </p>
-                </header>
-
                 {/* Search & Actions Bar */}
                 <MealSearchBar
                     value={searchQuery}
@@ -138,17 +126,20 @@ const SavedMeals = () => {
                     </div>
                 ) : hasSearch ? (
                     // No Search Results State
-                    <div className="saved-meals__empty-card card">
+                    <div className="saved-meals__empty">
                         <div className="saved-meals__empty-icon-wrap">
-                            <span className="saved-meals__empty-icon">🔍</span>
+                            <SearchX
+                                className="saved-meals__empty-icon"
+                                size={32}
+                                strokeWidth={1.75}
+                            />
                         </div>
                         <h3 className="saved-meals__empty-title">
                             No dishes found matching &quot;{searchQuery}&quot;
                         </h3>
                         <p className="saved-meals__empty-desc">
-                            We couldn&apos;t find any saved meals with that
-                            name. Try checking for typos or searching for
-                            different keywords.
+                            No dishes found. Try checking for typos or searching
+                            for different keywords.
                         </p>
                         <button
                             type="button"
@@ -160,18 +151,20 @@ const SavedMeals = () => {
                     </div>
                 ) : (
                     // Empty Catalog State (First-time user)
-                    <div className="saved-meals__empty-card card">
+                    <div className="saved-meals__empty">
                         <div className="saved-meals__empty-icon-wrap">
-                            <span className="saved-meals__empty-icon">🍲</span>
+                            <CookingPot
+                                className="saved-meals__empty-icon"
+                                size={32}
+                                strokeWidth={1.75}
+                            />
                         </div>
                         <h3 className="saved-meals__empty-title">
                             Your meal catalog is empty
                         </h3>
                         <p className="saved-meals__empty-desc">
-                            You haven&apos;t saved any dishes yet. Use our Meal
-                            Calculator to calculate nutrition per 100&nbsp;g for
-                            your home-cooked meals and save them here for easy
-                            daily tracking!
+                            You haven&apos;t saved any dishes yet. Create your
+                            first meal to start tracking!
                         </p>
                         <Link to="/calculator" className="btn btn--primary">
                             + Create Your First Meal
@@ -197,7 +190,7 @@ const SavedMeals = () => {
                     onDeleted={handleMealDeleted}
                 />
             )}
-        </main>
+        </div>
     );
 };
 

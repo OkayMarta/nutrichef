@@ -37,7 +37,9 @@
     }
 
     &__badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         font-size: 0.8rem;
         font-weight: $font-weight-semibold;
         color: $color-brand-badge-text;
@@ -45,6 +47,10 @@
         padding: 3px 10px;
         border-radius: $radius-pill;
         margin-bottom: 6px;
+    }
+
+    &__badge-icon {
+        flex-shrink: 0;
     }
 
     &__title {
@@ -144,7 +150,7 @@
     }
 
     &__ratio-preview {
-        padding: 12px;
+        padding: 10px 12px;
         background-color: $color-bg-subtle;
         border-radius: $radius-sm;
         margin-bottom: 22px;
@@ -156,30 +162,6 @@
         font-size: 0.76rem;
         font-weight: $font-weight-medium;
         color: $color-text-muted;
-        margin-bottom: 6px;
-    }
-
-    &__ratio-bar {
-        display: flex;
-        height: 6px;
-        border-radius: $radius-pill;
-        overflow: hidden;
-        background-color: $color-border;
-    }
-
-    &__ratio-seg {
-        height: 100%;
-        transition: width $transition-fast;
-
-        &--protein {
-            background-color: $color-macro-protein;
-        }
-        &--fat {
-            background-color: $color-macro-fat;
-        }
-        &--carbs {
-            background-color: $color-macro-carbs;
-        }
     }
 
     &__actions {

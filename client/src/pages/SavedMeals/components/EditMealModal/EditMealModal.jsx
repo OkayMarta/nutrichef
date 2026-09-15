@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
+import { Pencil } from "lucide-react";
 import { updateMeal } from "../../../../api/mealApi";
 import { calculateCalorieDistribution } from "../../../../utils/nutrition";
 import "./EditMealModal.scss";
@@ -133,7 +134,13 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                 {/* Modal Header */}
                 <div className="edit-modal__header">
                     <div className="edit-modal__title-group">
-                        <span className="edit-modal__badge">✏️ Edit Dish</span>
+                        <span className="edit-modal__badge">
+                            <Pencil
+                                size={13}
+                                className="edit-modal__badge-icon"
+                            />
+                            <span>Edit Dish</span>
+                        </span>
                         <h2 id="edit-modal-title" className="edit-modal__title">
                             {meal.name}
                         </h2>
@@ -315,30 +322,16 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                         </div>
                     </div>
 
-                    {/* Mini Ratio Bar Preview */}
+                    {/* Mini Ratio Preview */}
                     {macroStats.hasData && (
                         <div className="edit-modal__ratio-preview">
                             <div className="edit-modal__ratio-header">
                                 <span>Ratio:</span>
                                 <span>
-                                    P {macroStats.pPct}% &bull; F{" "}
-                                    {macroStats.fPct}% &bull; C{" "}
+                                    Protein {macroStats.pPct}% &bull; Fat{" "}
+                                    {macroStats.fPct}% &bull; Carbs{" "}
                                     {macroStats.cPct}%
                                 </span>
-                            </div>
-                            <div className="edit-modal__ratio-bar">
-                                <div
-                                    className="edit-modal__ratio-seg edit-modal__ratio-seg--protein"
-                                    style={{ width: `${macroStats.pPct}%` }}
-                                />
-                                <div
-                                    className="edit-modal__ratio-seg edit-modal__ratio-seg--fat"
-                                    style={{ width: `${macroStats.fPct}%` }}
-                                />
-                                <div
-                                    className="edit-modal__ratio-seg edit-modal__ratio-seg--carbs"
-                                    style={{ width: `${macroStats.cPct}%` }}
-                                />
                             </div>
                         </div>
                     )}

@@ -109,73 +109,66 @@ const MealCard = ({ meal, onEdit, onDelete }) => {
             <div className="meal-card__macros">
                 {/* Calories */}
                 <div className="meal-card__macro-tag meal-card__macro-tag--calories">
-                    <span className="meal-card__macro-icon">🔥</span>
                     <div className="meal-card__macro-data">
-                        <span className="meal-card__macro-val">
-                            {Number(caloriesPer100g || 0).toFixed(1)}
-                        </span>
-                        <span className="meal-card__macro-unit">kcal</span>
+                        <div className="meal-card__macro-value-row">
+                            <span className="meal-card__macro-val">
+                                {Number(caloriesPer100g || 0).toFixed(1)}
+                            </span>
+                            <span className="meal-card__macro-unit">kcal</span>
+                        </div>
+                        <span className="meal-card__macro-label">Calories</span>
                     </div>
                 </div>
 
                 {/* Protein */}
                 <div className="meal-card__macro-tag meal-card__macro-tag--protein">
-                    <span className="meal-card__macro-icon">🥩</span>
                     <div className="meal-card__macro-data">
-                        <span className="meal-card__macro-val">
-                            {Number(proteinPer100g || 0).toFixed(1)}
-                        </span>
-                        <span className="meal-card__macro-unit">g P</span>
+                        <div className="meal-card__macro-value-row">
+                            <span className="meal-card__macro-val">
+                                {Number(proteinPer100g || 0).toFixed(1)}
+                            </span>
+                            <span className="meal-card__macro-unit">g</span>
+                        </div>
+                        <span className="meal-card__macro-label">Protein</span>
                     </div>
                 </div>
 
                 {/* Fat */}
                 <div className="meal-card__macro-tag meal-card__macro-tag--fat">
-                    <span className="meal-card__macro-icon">🥑</span>
                     <div className="meal-card__macro-data">
-                        <span className="meal-card__macro-val">
-                            {Number(fatPer100g || 0).toFixed(1)}
-                        </span>
-                        <span className="meal-card__macro-unit">g F</span>
+                        <div className="meal-card__macro-value-row">
+                            <span className="meal-card__macro-val">
+                                {Number(fatPer100g || 0).toFixed(1)}
+                            </span>
+                            <span className="meal-card__macro-unit">g</span>
+                        </div>
+                        <span className="meal-card__macro-label">Fat</span>
                     </div>
                 </div>
 
                 {/* Carbs */}
                 <div className="meal-card__macro-tag meal-card__macro-tag--carbs">
-                    <span className="meal-card__macro-icon">🌾</span>
                     <div className="meal-card__macro-data">
-                        <span className="meal-card__macro-val">
-                            {Number(carbsPer100g || 0).toFixed(1)}
-                        </span>
-                        <span className="meal-card__macro-unit">g C</span>
+                        <div className="meal-card__macro-value-row">
+                            <span className="meal-card__macro-val">
+                                {Number(carbsPer100g || 0).toFixed(1)}
+                            </span>
+                            <span className="meal-card__macro-unit">g</span>
+                        </div>
+                        <span className="meal-card__macro-label">Carbs</span>
                     </div>
                 </div>
             </div>
 
-            {/* Macro Proportion Bar */}
+            {/* Macro Proportion Legend */}
             {macroStats.hasData && (
                 <div className="meal-card__ratio">
-                    <div className="meal-card__ratio-bar">
-                        <div
-                            className="meal-card__ratio-seg meal-card__ratio-seg--protein"
-                            style={{ width: `${macroStats.pPct}%` }}
-                            title={`Protein: ${macroStats.pPct}%`}
-                        />
-                        <div
-                            className="meal-card__ratio-seg meal-card__ratio-seg--fat"
-                            style={{ width: `${macroStats.fPct}%` }}
-                            title={`Fat: ${macroStats.fPct}%`}
-                        />
-                        <div
-                            className="meal-card__ratio-seg meal-card__ratio-seg--carbs"
-                            style={{ width: `${macroStats.cPct}%` }}
-                            title={`Carbs: ${macroStats.cPct}%`}
-                        />
-                    </div>
                     <div className="meal-card__ratio-legend">
-                        <span>P: {macroStats.pPct}%</span>
-                        <span>F: {macroStats.fPct}%</span>
-                        <span>C: {macroStats.cPct}%</span>
+                        <span>Protein {macroStats.pPct}%</span>
+                        <span className="meal-card__ratio-dot">&middot;</span>
+                        <span>Fat {macroStats.fPct}%</span>
+                        <span className="meal-card__ratio-dot">&middot;</span>
+                        <span>Carbs {macroStats.cPct}%</span>
                     </div>
                 </div>
             )}
