@@ -436,26 +436,13 @@
     &__val {
         font-size: 0.95rem;
         font-weight: $font-weight-bold;
-        color: $color-text-dark;
+        color: $color-brand-dark;
     }
 
     &__unit {
         font-size: 0.72rem;
         color: $color-text-muted;
         margin-top: 2px;
-    }
-
-    &--cal .portion-chip__val {
-        color: $color-macro-calories;
-    }
-    &--p .portion-chip__val {
-        color: $color-macro-protein;
-    }
-    &--f .portion-chip__val {
-        color: $color-macro-fat;
-    }
-    &--c .portion-chip__val {
-        color: $color-macro-carbs;
     }
 }
 
