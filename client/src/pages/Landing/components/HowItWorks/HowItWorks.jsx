@@ -1,105 +1,34 @@
+import { Scale, Calculator, Sparkles, BookOpen } from "lucide-react";
 import "./HowItWorks.scss";
 
 const HowItWorks = () => {
     const steps = [
         {
             num: 1,
-            title: "Add ingredients",
-            desc: "Enter all the ingredients in your calorie app.",
-            icon: (
-                // Carrot icon
-                <svg
-                    width="34"
-                    height="34"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                >
-                    <path d="M2.27 21.7s9.87-3.5 12.73-6.36a4.5 4.5 0 0 0-6.36-6.37C5.77 11.84 2.27 21.7 2.27 21.7z" />
-                    <path d="M15 9l5-5" />
-                    <path d="M18 4l2 2" />
-                    <path d="M20 2l2 2" />
-                    <path d="M9 15l2 2" />
-                </svg>
-            ),
+            title: "Cook & weigh",
+            desc: "Weigh your finished dish after cooking to accurately account for water loss, boiling, or reduction.",
+            icon: <Scale size={30} strokeWidth={1.8} />,
             hasArrow: true,
         },
         {
             num: 2,
-            title: "Enter dish data",
-            desc: "In our app, add the total calories and macros, plus the final cooked weight.",
-            icon: (
-                // Cooking Pot icon
-                <svg
-                    width="34"
-                    height="34"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                >
-                    <path d="M3 11h18v7a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-7z" />
-                    <path d="M2 11h20" />
-                    <path d="M4 7c3 0 5 4 8 4s5-4 8-4" />
-                    <line x1="12" y1="3" x2="12" y2="7" />
-                </svg>
-            ),
+            title: "Enter dish totals",
+            desc: "In our calculator, enter the final cooked weight along with total calories and macros of all ingredients.",
+            icon: <Calculator size={30} strokeWidth={1.8} />,
             hasArrow: true,
         },
         {
             num: 3,
-            title: "Get the result",
-            desc: "We'll calculate the nutritional value per 100 g of your dish (calories, protein, fats, carbs).",
-            icon: (
-                // Calculator icon
-                <svg
-                    width="34"
-                    height="34"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                >
-                    <rect x="4" y="2" width="16" height="20" rx="3" />
-                    <line x1="8" y1="6" x2="16" y2="6" />
-                    <circle cx="8.5" cy="11.5" r="1" fill="currentColor" />
-                    <circle cx="12" cy="11.5" r="1" fill="currentColor" />
-                    <circle cx="15.5" cy="11.5" r="1" fill="currentColor" />
-                    <circle cx="8.5" cy="15.5" r="1" fill="currentColor" />
-                    <circle cx="12" cy="15.5" r="1" fill="currentColor" />
-                    <circle cx="15.5" cy="15.5" r="1" fill="currentColor" />
-                </svg>
-            ),
+            title: "Get 100 g profile",
+            desc: "NutriChef instantly calculates the exact nutrition per 100 g and saves the dish to your recipe book.",
+            icon: <Sparkles size={30} strokeWidth={1.8} />,
             hasArrow: true,
         },
         {
             num: 4,
-            title: "Save & track",
-            desc: "Save the dish to your database and log how much you eat. The app will calculate the nutritional value for your portion.",
-            icon: (
-                // Bookmark / ribbon icon
-                <svg
-                    width="34"
-                    height="34"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                >
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                    <line x1="12" y1="7" x2="12" y2="13" />
-                    <line x1="9" y1="10" x2="15" y2="10" />
-                </svg>
-            ),
+            title: "Log to diary",
+            desc: "Add any eaten portion to your daily diary — the app automatically scales calories and macros to your plate.",
+            icon: <BookOpen size={30} strokeWidth={1.8} />,
             hasArrow: false,
         },
     ];
