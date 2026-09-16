@@ -187,21 +187,44 @@
     }
 
     &__dish-list {
-        max-height: 160px;
+        max-height: 134px;
         overflow-y: auto;
         padding: 4px;
         display: flex;
         flex-direction: column;
         gap: 4px;
+
+        // Slim branded scrollbar
+        scrollbar-width: thin;
+        scrollbar-color: rgba($color-brand-medium, 0.4) transparent;
+
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(116, 189, 87, 0.35);
+            border-radius: $radius-pill;
+
+            &:hover {
+                background: rgba(116, 189, 87, 0.6);
+            }
+        }
     }
 
     &__dish-item {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        min-height: 38px;
         padding: 8px 12px;
         border-radius: $radius-sm;
         cursor: pointer;
+        flex-shrink: 0;
         transition: background-color $transition-fast;
 
         &:hover {
