@@ -21,14 +21,22 @@ const DailyLogItem = ({ log, onEdit, onDelete }) => {
 
             <div className="meal-section__log-meta">
                 <div className="meal-section__log-macros">
-                    <span className="macro-chip macro-chip--cal">
-                        {calories} kcal
-                    </span>
-                    <span className="macro-chip macro-chip--p">
-                        {protein}g P
-                    </span>
-                    <span className="macro-chip macro-chip--f">{fat}g F</span>
-                    <span className="macro-chip macro-chip--c">{carbs}g C</span>
+                    <div className="macro-chip macro-chip--cal">
+                        <span className="macro-chip__val">{calories} kcal</span>
+                        <span className="macro-chip__lbl">Energy</span>
+                    </div>
+                    <div className="macro-chip macro-chip--p">
+                        <span className="macro-chip__val">{protein} g</span>
+                        <span className="macro-chip__lbl">Protein</span>
+                    </div>
+                    <div className="macro-chip macro-chip--f">
+                        <span className="macro-chip__val">{fat} g</span>
+                        <span className="macro-chip__lbl">Fat</span>
+                    </div>
+                    <div className="macro-chip macro-chip--c">
+                        <span className="macro-chip__val">{carbs} g</span>
+                        <span className="macro-chip__lbl">Carbs</span>
+                    </div>
                 </div>
 
                 <div className="meal-section__log-actions">

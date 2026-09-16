@@ -105,19 +105,7 @@
         height: 100%;
         border-radius: $radius-pill;
         transition: width $transition-normal;
-
-        &--calories {
-            background-color: $color-macro-calories;
-        }
-        &--protein {
-            background-color: $color-macro-protein;
-        }
-        &--fat {
-            background-color: $color-macro-fat;
-        }
-        &--carbs {
-            background-color: $color-macro-carbs;
-        }
+        background-color: $color-brand-dark;
 
         // Highlight with accent red when exceeded >100%
         &--exceeded {

@@ -190,7 +190,7 @@
     &__log-item {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 10px;
         padding: 12px 16px;
         border-radius: $radius-md;
         background-color: $color-bg-subtle;
@@ -211,17 +211,18 @@
     &__log-main {
         display: flex;
         flex-direction: column;
+        gap: 2px;
         line-height: 1.25;
     }
 
     &__log-name {
-        font-size: 1rem;
+        font-size: 1.05rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
     }
 
     &__log-weight {
-        font-size: 0.8rem;
+        font-size: 0.82rem;
         color: $color-text-muted;
     }
 
@@ -239,7 +240,7 @@
     &__log-macros {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
         flex-wrap: wrap;
     }
 
@@ -247,6 +248,7 @@
         display: flex;
         align-items: center;
         gap: 4px;
+        flex-shrink: 0;
     }
 
     &__action-btn,
@@ -255,8 +257,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 30px;
-        height: 30px;
+        width: 32px;
+        height: 32px;
         border-radius: 6px;
         color: $color-text-subtle;
         transition:
@@ -264,17 +266,17 @@
             color $transition-fast;
 
         &:hover {
-            background-color: rgba(220, 38, 38, 0.1);
+            background-color: rgba(220, 38, 38, 0.08);
             color: $color-status-danger;
         }
 
         &--edit:hover {
-            background-color: rgba(37, 99, 235, 0.1);
-            color: $color-macro-protein;
+            background-color: rgba(70, 156, 60, 0.08);
+            color: $color-brand-dark;
         }
 
         &--delete:hover {
-            background-color: rgba(220, 38, 38, 0.1);
+            background-color: rgba(220, 38, 38, 0.08);
             color: $color-status-danger;
         }
     }
@@ -302,26 +304,31 @@
 }
 
 .macro-chip {
-    font-size: 0.78rem;
-    font-weight: $font-weight-semibold;
-    padding: 3px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6px 12px;
     border-radius: $radius-sm;
+    min-width: 58px;
+    line-height: 1.25;
+    background-color: rgba(202, 228, 180, 0.25);
+    border: 1px solid rgba(116, 189, 87, 0.3);
 
-    &--cal {
-        background-color: rgba(70, 156, 60, 0.12);
-        color: $color-macro-calories;
+    &__val {
+        font-size: 0.85rem;
+        font-weight: $font-weight-bold;
+        color: $color-brand-dark;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
     }
-    &--p {
-        background-color: rgba(37, 99, 235, 0.1);
-        color: $color-macro-protein;
-    }
-    &--f {
-        background-color: rgba(224, 139, 26, 0.1);
-        color: $color-macro-fat;
-    }
-    &--c {
-        background-color: rgba(139, 92, 246, 0.1);
-        color: $color-macro-carbs;
+
+    &__lbl {
+        font-size: 0.72rem;
+        font-weight: $font-weight-medium;
+        color: $color-text-secondary;
+        margin-top: 2px;
     }
 }
 
