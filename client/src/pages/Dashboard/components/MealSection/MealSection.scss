@@ -332,6 +332,50 @@
     }
 }
 
+/* Mobile responsive overrides */
+@media (max-width: 767px) {
+    .meal-section {
+        padding: 16px;
+
+        &__icon-badge {
+            width: 38px;
+            height: 38px;
+        }
+
+        &__title {
+            font-size: 1.05rem;
+        }
+
+        &__add-btn {
+            height: 34px;
+            font-size: 0.82rem;
+            padding: 0 12px;
+        }
+
+        &__empty {
+            padding: 18px;
+            gap: 12px;
+        }
+
+        &__log-item {
+            padding: 10px 12px;
+        }
+    }
+
+    .macro-chip {
+        padding: 4px 8px;
+        min-width: 50px;
+
+        &__val {
+            font-size: 0.78rem;
+        }
+
+        &__lbl {
+            font-size: 0.66rem;
+        }
+    }
+}
+
 @keyframes meal-shimmer {
     0% {
         background-position: 200% 0;

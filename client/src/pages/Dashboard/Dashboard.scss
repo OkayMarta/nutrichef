@@ -4,7 +4,8 @@
 .dashboard {
     min-height: calc(100vh - 72px);
     background-color: $color-bg-light;
-    padding: 32px 0 80px;
+    padding-top: 24px;
+    padding-bottom: 60px;
 
     &__date-header {
         display: flex;
@@ -38,6 +39,24 @@
         @include respond-to("lg") {
             position: sticky;
             top: 96px;
+        }
+    }
+
+    /* Mobile responsive overrides */
+    @media (max-width: 767px) {
+        padding-top: 16px;
+        padding-bottom: 40px;
+
+        &__layout {
+            gap: 16px;
+        }
+
+        &__summary-col {
+            order: -1;
+
+            .tip-card {
+                display: none;
+            }
         }
     }
 }

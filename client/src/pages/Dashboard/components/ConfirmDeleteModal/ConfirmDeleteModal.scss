@@ -122,3 +122,22 @@
         transform: scale(1);
     }
 }
+
+/* Mobile responsive overrides */
+@media (max-width: 767px) {
+    .confirm-delete-modal {
+        padding: 22px 18px;
+    }
+}
+
+@media (max-width: 380px) {
+    .confirm-delete-modal {
+        &__actions {
+            flex-direction: column;
+        }
+
+        &__btn {
+            width: 100%;
+        }
+    }
+}

@@ -145,6 +145,26 @@
     }
 }
 
+/* Mobile responsive overrides */
+@media (max-width: 767px) {
+    .date-navigator {
+        &__label {
+            font-size: 1.15rem;
+        }
+
+        &__today-btn {
+            height: 28px;
+            padding: 0 10px;
+            font-size: 0.76rem;
+        }
+
+        &__arrow-btn {
+            width: 30px;
+            height: 30px;
+        }
+    }
+}
+
 @keyframes today-pulse {
     0%,
     100% {

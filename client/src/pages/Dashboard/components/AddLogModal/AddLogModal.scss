@@ -494,3 +494,26 @@
         transform: scale(1) translateY(0);
     }
 }
+
+/* Mobile responsive overrides */
+@media (max-width: 767px) {
+    .add-log-backdrop {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .add-log-modal {
+        max-width: 100%;
+        max-height: 95vh;
+        border-radius: 20px 20px 0 0;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 380px) {
+    .add-log-modal {
+        &__preview-macros {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}

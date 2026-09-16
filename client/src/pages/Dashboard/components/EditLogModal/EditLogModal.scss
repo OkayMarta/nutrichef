@@ -306,3 +306,26 @@
         transform: scale(1);
     }
 }
+
+/* Mobile responsive overrides */
+@media (max-width: 767px) {
+    .edit-log-backdrop {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .edit-log-modal {
+        max-width: 100%;
+        border-radius: 20px 20px 0 0;
+        padding: 20px;
+
+        &__preview-grid {
+            gap: 6px;
+        }
+
+        &__chip {
+            padding: 4px 10px;
+            font-size: 0.75rem;
+        }
+    }
+}

@@ -57,3 +57,10 @@
         margin: 0;
     }
 }
+
+/* Mobile responsive: hide tip card on small screens */
+@media (max-width: 767px) {
+    .tip-card {
+        display: none;
+    }
+}
