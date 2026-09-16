@@ -27,3 +27,11 @@ export const uploadAvatar = (formData) => {
         },
     });
 };
+
+/**
+ * DELETE /api/auth/account
+ * Permanently deletes the authenticated user's account and all associated data.
+ */
+export const deleteAccount = () => {
+    return axiosInstance.delete("/api/auth/account");
+};

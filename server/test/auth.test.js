@@ -731,4 +731,111 @@ describe("Authentication & Security Module Tests", () => {
             assert.ok(loginData.token);
         });
     });
+
+    describe("Account Deletion Module (DELETE /api/auth/account)", () => {
+        test("should reject delete account if unauthenticated", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/account`, {
+                method: "DELETE",
+            });
+            assert.equal(res.status, 401);
+        });
+
+        test("should delete user, cascade delete meals and daily logs, and remove avatar from disk", async () => {
+            // 1. Register a dedicated test user
+            const deleteTestEmail = `delete_me_${Date.now()}@example.com`;
+            const regRes = await fetch(`${baseUrl}/api/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: deleteTestEmail,
+                    password: "ValidPassword123!",
+                }),
+            });
+            const regData = await regRes.json();
+            const delToken = regData.token;
+            const delUserId = regData.user.id;
+
+            // 2. Create a meal for this user
+            const meal = await prisma.meal.create({
+                data: {
+                    userId: delUserId,
+                    name: "Meal to be deleted",
+                    caloriesPer100g: 200,
+                    proteinPer100g: 10,
+                    fatPer100g: 5,
+                    carbsPer100g: 20,
+                },
+            });
+
+            // 3. Create a daily log for this user
+            const dailyLog = await prisma.dailyLog.create({
+                data: {
+                    userId: delUserId,
+                    mealId: meal.id,
+                    date: new Date(),
+                    mealType: "LUNCH",
+                    consumedGrams: 150,
+                    snapshotCalories: 300,
+                    snapshotProtein: 15,
+                    snapshotFat: 7.5,
+                    snapshotCarbs: 30,
+                },
+            });
+
+            // 4. Create a mock avatar file on disk
+            const uploadDir = path.join(__dirname, "../uploads/avatars");
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+            const avatarFilename = `${delUserId}-mock-avatar.png`;
+            const avatarPath = path.join(uploadDir, avatarFilename);
+            fs.writeFileSync(avatarPath, "fake image bytes");
+            assert.ok(fs.existsSync(avatarPath));
+
+            await prisma.user.update({
+                where: { id: delUserId },
+                data: { avatarUrl: `/uploads/avatars/${avatarFilename}` },
+            });
+
+            // 5. Perform account deletion
+            const deleteRes = await fetch(`${baseUrl}/api/auth/account`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${delToken}`,
+                },
+            });
+            assert.equal(deleteRes.status, 200);
+            const deleteData = await deleteRes.json();
+            assert.ok(deleteData.message.includes("permanently deleted"));
+
+            // 6. Verify User no longer exists in DB
+            const userInDb = await prisma.user.findUnique({
+                where: { id: delUserId },
+            });
+            assert.equal(userInDb, null);
+
+            // 7. Verify Meal was cascade-deleted
+            const mealInDb = await prisma.meal.findUnique({
+                where: { id: meal.id },
+            });
+            assert.equal(mealInDb, null);
+
+            // 8. Verify DailyLog was cascade-deleted
+            const logInDb = await prisma.dailyLog.findUnique({
+                where: { id: dailyLog.id },
+            });
+            assert.equal(logInDb, null);
+
+            // 9. Verify Avatar file was removed from disk
+            assert.equal(fs.existsSync(avatarPath), false);
+
+            // 10. Verify old token returns 404 (user no longer exists)
+            const meRes = await fetch(`${baseUrl}/api/auth/me`, {
+                headers: {
+                    Authorization: `Bearer ${delToken}`,
+                },
+            });
+            assert.equal(meRes.status, 404);
+        });
+    });
 });

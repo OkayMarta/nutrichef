@@ -1,10 +1,43 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthContext";
+import { deleteAccount } from "../../api/userApi";
 import ProfileInfoCard from "./components/ProfileInfoCard/ProfileInfoCard";
 import GoalsForm from "./components/GoalsForm/GoalsForm";
+import DangerZoneCard from "./components/DangerZoneCard/DangerZoneCard";
+import DeleteAccountModal from "./components/DeleteAccountModal/DeleteAccountModal";
 import "./Settings.scss";
 
 const Settings = () => {
-    const { user, updateUser } = useAuth();
+    const { user, updateUser, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+
+    const handleConfirmDelete = async () => {
+        setIsDeletingAccount(true);
+        try {
+            const res = await deleteAccount();
+            const successMsg =
+                res.data?.message ||
+                "Your account and all associated data have been permanently deleted.";
+
+            logout();
+            setIsDeleteModalOpen(false);
+            toast.success(successMsg);
+            navigate("/");
+        } catch (error) {
+            console.error("Account deletion failed:", error);
+            const errorMsg =
+                error.response?.data?.message ||
+                "Failed to delete account. Please try again later.";
+            toast.error(errorMsg);
+        } finally {
+            setIsDeletingAccount(false);
+        }
+    };
 
     return (
         <div className="settings">
@@ -26,9 +59,19 @@ const Settings = () => {
 
                     <section className="settings__main">
                         <GoalsForm user={user} onGoalsUpdate={updateUser} />
+                        <DangerZoneCard
+                            onDeleteClick={() => setIsDeleteModalOpen(true)}
+                        />
                     </section>
                 </div>
             </div>
+
+            <DeleteAccountModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                isDeleting={isDeletingAccount}
+            />
         </div>
     );
 };

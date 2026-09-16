@@ -10,6 +10,7 @@ const {
     uploadAvatar,
     forgotPassword,
     resetPassword,
+    deleteAccount,
 } = require("../controllers/authController");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -26,6 +27,7 @@ router.post("/reset-password", resetPassword);
 router.get("/me", authMiddleware, getMe);
 router.put("/goals", authMiddleware, updateGoals);
 router.put("/profile", authMiddleware, updateProfile);
+router.delete("/account", authMiddleware, deleteAccount);
 router.post(
     "/avatar",
     authMiddleware,

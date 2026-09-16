@@ -612,6 +612,73 @@ const resetPassword = async (req, res) => {
     }
 };
 
+/**
+ * DELETE /api/auth/account (Protected route)
+ * Permanently deletes user account, all associated data, and uploaded avatars.
+ */
+const deleteAccount = async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
+
+        // Clean up any uploaded avatar files from disk
+        try {
+            const uploadDir = path.join(__dirname, "../../uploads/avatars");
+            if (fs.existsSync(uploadDir)) {
+                const files = await fs.promises.readdir(uploadDir);
+                const userFiles = files.filter(
+                    (file) =>
+                        file.startsWith(`${userId}-`) ||
+                        (user.avatarUrl &&
+                            user.avatarUrl.startsWith("/uploads/avatars/") &&
+                            file === path.basename(user.avatarUrl)),
+                );
+
+                for (const file of userFiles) {
+                    try {
+                        await fs.promises.unlink(path.join(uploadDir, file));
+                    } catch (unlinkErr) {
+                        console.warn(
+                            `Failed to remove avatar file ${file}:`,
+                            unlinkErr.message,
+                        );
+                    }
+                }
+            }
+        } catch (fileCleanErr) {
+            console.warn(
+                "Error scanning avatar directory during account deletion:",
+                fileCleanErr.message,
+            );
+        }
+
+        // Delete user from DB (PostgreSQL / Prisma cascade removes Meals and DailyLogs)
+        await prisma.user.delete({
+            where: { id: userId },
+        });
+
+        return res.status(200).json({
+            message:
+                "Account and all associated data have been permanently deleted.",
+        });
+    } catch (error) {
+        console.error("Delete account error:", error);
+        return res.status(500).json({
+            message: "An error occurred while deleting account",
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     register,
     login,
@@ -623,4 +690,5 @@ module.exports = {
     uploadAvatar,
     forgotPassword,
     resetPassword,
+    deleteAccount,
 };

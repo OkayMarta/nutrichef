@@ -1,0 +1,80 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.danger-zone-card {
+    @include card-base;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    background-color: $color-bg-card;
+    padding: 24px 28px;
+    margin-top: 24px;
+    transition: border-color $transition-fast;
+
+    &:hover {
+        border-color: rgba(239, 68, 68, 0.45);
+    }
+
+    &__header {
+        margin-bottom: 12px;
+    }
+
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background-color: #fee2e2;
+        color: #b91c1c;
+        font-size: 0.76rem;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 8px;
+    }
+
+    &__title {
+        font-size: 1.15rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0;
+    }
+
+    &__desc {
+        font-size: 0.92rem;
+        color: $color-text-muted;
+        line-height: 1.55;
+        margin: 0 0 20px;
+    }
+
+    &__action {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    &__btn {
+        @include button-reset;
+        height: 40px;
+        padding: 0 18px;
+        border-radius: $radius-sm;
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        background-color: #fff;
+        color: $color-status-danger;
+        font-size: 0.9rem;
+        font-weight: $font-weight-semibold;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all $transition-fast;
+
+        &:hover {
+            background-color: #fee2e2;
+            border-color: $color-status-danger;
+            color: #b91c1c;
+            transform: translateY(-1px);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+    }
+}

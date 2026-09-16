@@ -1,0 +1,162 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/mixins" as *;
+
+.delete-account-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: rgba(27, 38, 20, 0.55);
+    backdrop-filter: blur(4px);
+    animation: modal-fade-in 0.2s ease;
+}
+
+.delete-account-modal {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background-color: $color-bg-card;
+    border-radius: $radius-lg;
+    padding: 32px 28px;
+    box-shadow: $shadow-lg;
+    text-align: center;
+    animation: modal-scale-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &__icon-wrap {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: #fee2e2;
+        color: $color-status-danger;
+        margin-bottom: 18px;
+    }
+
+    &__title {
+        font-size: 1.35rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-dark;
+        margin: 0 0 10px;
+    }
+
+    &__desc {
+        font-size: 0.94rem;
+        color: $color-text-secondary;
+        line-height: 1.5;
+        margin: 0 0 14px;
+    }
+
+    &__list {
+        margin: 0 0 16px;
+        padding-left: 24px;
+        text-align: left;
+        font-size: 0.9rem;
+        color: $color-text-muted;
+        line-height: 1.6;
+
+        li {
+            margin-bottom: 4px;
+        }
+    }
+
+    &__warning {
+        background-color: #fff1f2;
+        border: 1px solid #fecdd3;
+        border-radius: $radius-sm;
+        padding: 10px 14px;
+        font-size: 0.86rem;
+        color: #9f1239;
+        line-height: 1.45;
+        margin: 0 0 24px;
+        text-align: left;
+
+        strong {
+            font-weight: $font-weight-semibold;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    &__btn {
+        @include button-reset;
+        flex: 1;
+        height: 44px;
+        padding: 0 16px;
+        border-radius: $radius-sm;
+        font-size: 0.92rem;
+        font-weight: $font-weight-semibold;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all $transition-fast;
+
+        &--cancel {
+            border: 1px solid $color-border;
+            background-color: transparent;
+            color: $color-text-secondary;
+
+            &:hover:not(:disabled) {
+                background-color: $color-bg-subtle;
+                color: $color-text-dark;
+            }
+        }
+
+        &--delete {
+            background-color: $color-status-danger;
+            color: $color-white;
+
+            &:hover:not(:disabled) {
+                background-color: #b91c1c;
+            }
+
+            &:disabled {
+                opacity: 0.65;
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    &__spinner {
+        animation: spin 1s linear infinite;
+    }
+}
+
+@keyframes modal-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes modal-scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
