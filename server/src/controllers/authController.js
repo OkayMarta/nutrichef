@@ -71,7 +71,7 @@ const register = async (req, res) => {
 
         if (existingUser) {
             return res.status(400).json({
-                message: "User with this email already exists",
+                message: "An account with this email already exists",
             });
         }
 
@@ -129,7 +129,7 @@ const login = async (req, res) => {
 
         if (!user) {
             return res.status(401).json({
-                message: "Invalid email or password",
+                message: "No account found with this email",
             });
         }
 
@@ -141,7 +141,7 @@ const login = async (req, res) => {
 
         if (!isPasswordValid) {
             return res.status(401).json({
-                message: "Invalid email or password",
+                message: "Incorrect password. Please try again.",
             });
         }
 

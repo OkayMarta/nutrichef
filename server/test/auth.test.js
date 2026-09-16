@@ -149,7 +149,10 @@ describe("Authentication & Security Module Tests", () => {
 
             assert.equal(res.status, 400);
             const data = await res.json();
-            assert.equal(data.message, "User with this email already exists");
+            assert.equal(
+                data.message,
+                "An account with this email already exists",
+            );
         });
     });
 
@@ -174,7 +177,7 @@ describe("Authentication & Security Module Tests", () => {
             });
             assert.equal(res.status, 401);
             const data = await res.json();
-            assert.equal(data.message, "Invalid email or password");
+            assert.equal(data.message, "No account found with this email");
         });
 
         test("should reject login with wrong password with 401 Unauthorized", async () => {
@@ -188,7 +191,7 @@ describe("Authentication & Security Module Tests", () => {
             });
             assert.equal(res.status, 401);
             const data = await res.json();
-            assert.equal(data.message, "Invalid email or password");
+            assert.equal(data.message, "Incorrect password. Please try again.");
         });
 
         test("should successfully login and return JWT and user info without passwordHash", async () => {

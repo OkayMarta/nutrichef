@@ -65,13 +65,23 @@ const Register = () => {
         e.preventDefault();
         const trimmedEmail = email.trim().toLowerCase();
 
-        if (!trimmedEmail || !password) {
+        if (!trimmedEmail && !password) {
             toast.error("Please fill in all required fields.");
+            return;
+        }
+
+        if (!trimmedEmail) {
+            toast.error("Please enter your email address.");
             return;
         }
 
         if (!EMAIL_REGEX.test(trimmedEmail)) {
             toast.error("Please provide a valid email address.");
+            return;
+        }
+
+        if (!password) {
+            toast.error("Please create a password.");
             return;
         }
 
@@ -82,6 +92,25 @@ const Register = () => {
 
         if (!criteria.hasNumber) {
             toast.error("Password must contain at least one number.");
+            return;
+        }
+
+        if (!criteria.hasMixedCase) {
+            toast.error(
+                "Password must contain both uppercase and lowercase letters.",
+            );
+            return;
+        }
+
+        if (!criteria.hasSpecial) {
+            toast.error(
+                "Password must contain at least one special character.",
+            );
+            return;
+        }
+
+        if (!confirmPassword) {
+            toast.error("Please confirm your password.");
             return;
         }
 

@@ -20,8 +20,18 @@ const Login = () => {
         e.preventDefault();
         const trimmedEmail = email.trim();
 
-        if (!trimmedEmail || !password) {
-            toast.error("Please fill in all fields.");
+        if (!trimmedEmail && !password) {
+            toast.error("Please enter your email and password.");
+            return;
+        }
+
+        if (!trimmedEmail) {
+            toast.error("Please enter your email address.");
+            return;
+        }
+
+        if (!password) {
+            toast.error("Please enter your password.");
             return;
         }
 
@@ -42,7 +52,8 @@ const Login = () => {
             navigate("/dashboard");
         } catch (error) {
             const message =
-                error.response?.data?.message || "Invalid email or password.";
+                error.response?.data?.message ||
+                "Unable to log in. Please check your connection and try again.";
             toast.error(message);
         } finally {
             setLoading(false);
