@@ -25,7 +25,7 @@
             #e2eedc 100%
         );
         border: 1px solid $color-border;
-        border-radius: $radius-xl;
+        border-radius: 28px;
         padding: 48px 32px;
         display: flex;
         justify-content: center;
@@ -69,101 +69,93 @@
         position: absolute;
         z-index: 3;
         background-color: #ffffff;
-        border: 1px solid $color-border;
+        border: 1px solid rgba(226, 235, 217, 0.85);
         border-radius: $radius-md;
-        box-shadow: 0 6px 16px rgba(27, 38, 20, 0.08);
-        padding: 8px 14px;
-        @include flex-align;
-        gap: 8px;
-        font-size: 0.8rem;
-        transition: transform $transition-normal;
-
-        &:hover {
-            transform: translateY(-2px);
-        }
+        box-shadow: 0 8px 24px rgba(27, 38, 20, 0.08);
+        padding: 10px 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
 
         &--calories {
-            top: 24px;
-            left: 20px;
+            top: 28px;
+            left: 28px;
         }
 
         &--protein {
-            top: 24px;
-            right: 20px;
+            top: 28px;
+            right: 28px;
         }
 
         &--fats {
             top: 50%;
-            right: 12px;
+            right: 20px;
             transform: translateY(-50%);
-
-            &:hover {
-                transform: translateY(-52%);
-            }
         }
 
         &--carbs {
-            bottom: 24px;
-            right: 48px;
+            bottom: 28px;
+            right: 28px;
         }
 
         @media (max-width: 480px) {
-            padding: 6px 10px;
-            font-size: 0.72rem;
+            padding: 7px 12px;
+            border-radius: 12px;
 
             &--calories {
-                top: 12px;
-                left: 8px;
+                top: 14px;
+                left: 12px;
             }
             &--protein {
-                top: 12px;
-                right: 8px;
+                top: 14px;
+                right: 12px;
             }
             &--fats {
-                right: 6px;
+                right: 8px;
             }
             &--carbs {
-                bottom: 12px;
-                right: 18px;
+                bottom: 14px;
+                right: 12px;
             }
         }
     }
 
-    &__tag-icon {
-        font-size: 14px;
+    &__tag-name {
+        font-size: 0.78rem;
+        color: $color-text-muted;
+        font-weight: $font-weight-medium;
+        line-height: 1.1;
+
+        @media (max-width: 480px) {
+            font-size: 0.7rem;
+        }
     }
 
-    &__tag-text {
-        display: flex;
-        flex-direction: column;
+    &__tag-value {
+        font-size: 1.05rem;
+        color: $color-text-dark;
+        font-weight: $font-weight-bold;
         line-height: 1.2;
 
-        span {
-            font-size: 0.72rem;
-            color: $color-text-muted;
-        }
-
-        strong {
-            color: $color-text-dark;
-            font-size: 0.82rem;
+        @media (max-width: 480px) {
+            font-size: 0.9rem;
         }
     }
 
-    // Background Leaf Embellishments
+    // Straight upright Leaf Decoration matching dashboard-preview__decor-leaf
     &__decor-leaf {
         position: absolute;
-        color: #469c3c;
-        opacity: 0.65;
-        z-index: 1;
+        bottom: 28px;
+        left: 28px;
+        z-index: 2;
+        pointer-events: none;
 
-        &--1 {
-            top: 60px;
-            left: 36px;
-        }
-
-        &--2 {
-            bottom: 40px;
-            left: 48px;
+        @media (max-width: 480px) {
+            bottom: 14px;
+            left: 16px;
+            width: 32px;
+            height: 32px;
         }
     }
 

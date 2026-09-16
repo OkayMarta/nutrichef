@@ -1,3 +1,4 @@
+import LeafIcon from "../../../../components/common/LeafIcon";
 import "./WhyNutriChef.scss";
 
 const WhyNutriChef = () => {
@@ -8,64 +9,45 @@ const WhyNutriChef = () => {
                 <div className="why-nutrichef__visual-card">
                     {/* Floating Tag: Calories */}
                     <div className="why-nutrichef__tag why-nutrichef__tag--calories">
-                        <span className="why-nutrichef__tag-icon">💧</span>
-                        <div className="why-nutrichef__tag-text">
-                            <span>Calories</span>
-                            <strong>320 kcal</strong>
-                        </div>
+                        <span className="why-nutrichef__tag-name">
+                            Calories
+                        </span>
+                        <strong className="why-nutrichef__tag-value">
+                            320 kcal
+                        </strong>
                     </div>
 
                     {/* Floating Tag: Protein */}
                     <div className="why-nutrichef__tag why-nutrichef__tag--protein">
-                        <span className="why-nutrichef__tag-icon">🥩</span>
-                        <div className="why-nutrichef__tag-text">
-                            <span>Protein</span>
-                            <strong>18 g</strong>
-                        </div>
+                        <span className="why-nutrichef__tag-name">Protein</span>
+                        <strong className="why-nutrichef__tag-value">
+                            18 g
+                        </strong>
                     </div>
 
                     {/* Floating Tag: Fats */}
                     <div className="why-nutrichef__tag why-nutrichef__tag--fats">
-                        <span className="why-nutrichef__tag-icon">🥑</span>
-                        <div className="why-nutrichef__tag-text">
-                            <span>Fats</span>
-                            <strong>12 g</strong>
-                        </div>
+                        <span className="why-nutrichef__tag-name">Fats</span>
+                        <strong className="why-nutrichef__tag-value">
+                            12 g
+                        </strong>
                     </div>
 
                     {/* Floating Tag: Carbs */}
                     <div className="why-nutrichef__tag why-nutrichef__tag--carbs">
-                        <span className="why-nutrichef__tag-icon">🌾</span>
-                        <div className="why-nutrichef__tag-text">
-                            <span>Carbs</span>
-                            <strong>34 g</strong>
-                        </div>
+                        <span className="why-nutrichef__tag-name">Carbs</span>
+                        <strong className="why-nutrichef__tag-value">
+                            34 g
+                        </strong>
                     </div>
 
-                    {/* Decorative outline leaves */}
-                    <svg
-                        className="why-nutrichef__decor-leaf why-nutrichef__decor-leaf--1"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                    >
-                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-                    </svg>
-                    <svg
-                        className="why-nutrichef__decor-leaf why-nutrichef__decor-leaf--2"
-                        width="28"
-                        height="28"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                    >
-                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
-                    </svg>
+                    {/* Decorative leaf icon */}
+                    <LeafIcon
+                        className="why-nutrichef__decor-leaf"
+                        width={42}
+                        height={42}
+                        color="#469c3c"
+                    />
 
                     {/* Central Stylized Nutrition Bowl */}
                     <div className="why-nutrichef__bowl-wrap">
