@@ -64,8 +64,8 @@ const DeleteAccountModal = ({ isOpen, onClose, onConfirm, isDeleting }) => {
                 </ul>
 
                 <p className="delete-account-modal__warning">
-                    ⚠️ <strong>This action is irreversible.</strong> Once
-                    deleted, your account data cannot be recovered.
+                    <strong>This action is irreversible.</strong> Once deleted,
+                    your account data cannot be recovered.
                 </p>
 
                 <div className="delete-account-modal__actions">

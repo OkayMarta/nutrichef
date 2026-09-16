@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Trash2 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { deleteAccount } from "../../api/userApi";
 import ProfileInfoCard from "./components/ProfileInfoCard/ProfileInfoCard";
 import GoalsForm from "./components/GoalsForm/GoalsForm";
-import DangerZoneCard from "./components/DangerZoneCard/DangerZoneCard";
 import DeleteAccountModal from "./components/DeleteAccountModal/DeleteAccountModal";
 import "./Settings.scss";
 
@@ -55,13 +55,19 @@ const Settings = () => {
                             user={user}
                             onProfileUpdate={updateUser}
                         />
+                        <button
+                            type="button"
+                            className="settings__delete-account-btn"
+                            onClick={() => setIsDeleteModalOpen(true)}
+                            aria-label="Delete account"
+                        >
+                            <Trash2 size={15} />
+                            <span>Delete account</span>
+                        </button>
                     </aside>
 
                     <section className="settings__main">
                         <GoalsForm user={user} onGoalsUpdate={updateUser} />
-                        <DangerZoneCard
-                            onDeleteClick={() => setIsDeleteModalOpen(true)}
-                        />
                     </section>
                 </div>
             </div>
