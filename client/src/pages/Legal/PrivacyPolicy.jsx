@@ -38,16 +38,9 @@ const PrivacyPolicy = () => {
 
                 {/* Google OAuth & Data Privacy Commitment Callout */}
                 <div className="legal-page__callout">
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            marginBottom: "8px",
-                        }}
-                    >
+                    <div className="legal-page__callout-header">
                         <ShieldCheck size={20} color="#469c3c" />
-                        <h3 style={{ margin: 0 }}>
+                        <h3>
                             Our Commitment to Your Privacy &amp; Google Data
                         </h3>
                     </div>
