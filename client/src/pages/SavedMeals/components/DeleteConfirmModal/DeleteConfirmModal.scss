@@ -37,8 +37,8 @@
     }
 
     &__icon {
-        font-size: 1.6rem;
-        line-height: 1;
+        color: $color-status-danger;
+        flex-shrink: 0;
     }
 
     &__title {

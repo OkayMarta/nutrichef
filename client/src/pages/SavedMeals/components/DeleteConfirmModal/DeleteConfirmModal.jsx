@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { deleteMeal } from "../../../../api/mealApi";
 import "./DeleteConfirmModal.scss";
@@ -51,7 +52,7 @@ const DeleteConfirmModal = ({ meal, onClose, onDeleted }) => {
         >
             <div className="delete-modal">
                 <div className="delete-modal__icon-wrap">
-                    <span className="delete-modal__icon">🗑️</span>
+                    <Trash2 size={26} className="delete-modal__icon" />
                 </div>
 
                 <h2 id="delete-modal-title" className="delete-modal__title">
