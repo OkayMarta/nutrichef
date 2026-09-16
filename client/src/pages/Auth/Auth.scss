@@ -2,48 +2,50 @@
 @use "../../styles/mixins" as *;
 
 .auth-page {
-    min-height: calc(100vh - 72px);
+    flex: 1;
     @include flex-center;
-    padding: 40px 20px;
+    padding: 24px 20px;
     background-color: $color-bg-light;
+    box-sizing: border-box;
 
     &__card {
         @include card-base;
         width: 100%;
         max-width: 440px;
-        padding: 36px 32px;
+        padding: 32px 28px;
         background-color: $color-bg-card;
         border: 1px solid $color-border;
         border-radius: $radius-lg;
         box-shadow: $shadow-card;
+        flex-shrink: 0;
 
         @media (max-width: 480px) {
-            padding: 28px 20px;
+            padding: 24px 16px;
         }
     }
 
     &__header {
         text-align: center;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
     }
 
     &__title {
-        font-size: 1.75rem;
+        font-size: 1.65rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
         letter-spacing: -0.02em;
     }
 
     &__subtitle {
-        font-size: 0.92rem;
+        font-size: 0.9rem;
         color: $color-text-muted;
     }
 
     &__form {
         display: flex;
         flex-direction: column;
-        gap: 18px;
+        gap: 15px;
     }
 
     &__group {
@@ -217,14 +219,14 @@
 
     &__submit-btn {
         width: 100%;
-        padding: 12px;
-        font-size: 0.98rem;
+        padding: 11px;
+        font-size: 0.95rem;
         font-weight: $font-weight-semibold;
-        margin-top: 6px;
+        margin-top: 4px;
     }
 
     &__terms-subtext {
-        margin-top: 12px;
+        margin-top: 10px;
         font-size: 0.78rem;
         color: $color-text-muted;
         text-align: center;
@@ -247,7 +249,7 @@
         display: flex;
         align-items: center;
         text-align: center;
-        margin: 22px 0 18px 0;
+        margin: 16px 0 12px 0;
         color: $color-text-muted;
         font-size: 0.82rem;
 
@@ -267,8 +269,8 @@
 
     &__footer {
         text-align: center;
-        margin-top: 24px;
-        font-size: 0.9rem;
+        margin-top: 18px;
+        font-size: 0.88rem;
         color: $color-text-muted;
 
         a {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axiosInstance from "../../api/axiosInstance";
@@ -9,56 +9,97 @@ const GOOGLE_CLIENT_ID =
     import.meta.env.VITE_GOOGLE_CLIENT_ID ||
     "611925401354-pgnjj33a1ms8btcfgg8j41c9kmf3av30.apps.googleusercontent.com";
 
+// Module-level singleton tracking to prevent duplicate initialize() calls
+let isGsiInitialized = false;
+let activeAuthCallback = null;
+
+const ensureGsiInitialized = () => {
+    if (window.google?.accounts?.id && !isGsiInitialized) {
+        window.google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: (response) => {
+                if (activeAuthCallback) {
+                    activeAuthCallback(response);
+                }
+            },
+        });
+        isGsiInitialized = true;
+    }
+};
+
 const GoogleAuthButton = ({ isRegister = false }) => {
     const buttonRef = useRef(null);
     const { login } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [gsiReady, setGsiReady] = useState(false);
+    const isMountedRef = useRef(true);
+
+    const handleCredentialResponse = useCallback(
+        async (response) => {
+            if (!response.credential) {
+                toast.error("Google authentication failed. No token received.");
+                return;
+            }
+            try {
+                setLoading(true);
+                const { data } = await axiosInstance.post("/api/auth/google", {
+                    token: response.credential,
+                });
+                login(data.token, data.user);
+                toast.success(
+                    isRegister
+                        ? "Welcome to NutriChef!"
+                        : "Successfully logged in with Google!",
+                );
+                navigate("/dashboard");
+            } catch (error) {
+                console.error("Google auth error:", error);
+                const msg =
+                    error.response?.data?.message ||
+                    "Google authentication failed";
+                toast.error(msg);
+            } finally {
+                if (isMountedRef.current) setLoading(false);
+            }
+        },
+        [isRegister, login, navigate],
+    );
+
+    const callbackRef = useRef(handleCredentialResponse);
+    useEffect(() => {
+        callbackRef.current = handleCredentialResponse;
+    });
+
+    useEffect(() => {
+        isMountedRef.current = true;
+        activeAuthCallback = (res) => callbackRef.current?.(res);
+        return () => {
+            isMountedRef.current = false;
+            activeAuthCallback = null;
+        };
+    }, []);
 
     useEffect(() => {
         let checkInterval;
-        let isMounted = true;
 
         const initGoogleSignIn = () => {
             if (window.google?.accounts?.id && buttonRef.current) {
                 try {
-                    window.google.accounts.id.initialize({
-                        client_id: GOOGLE_CLIENT_ID,
-                        callback: async (response) => {
-                            if (!response.credential) {
-                                toast.error(
-                                    "Google authentication failed. No token received.",
-                                );
-                                return;
-                            }
-                            try {
-                                setLoading(true);
-                                const { data } = await axiosInstance.post(
-                                    "/api/auth/google",
-                                    { token: response.credential },
-                                );
-                                login(data.token, data.user);
-                                toast.success(
-                                    isRegister
-                                        ? "Welcome to NutriChef!"
-                                        : "Successfully logged in with Google!",
-                                );
-                                navigate("/dashboard");
-                            } catch (error) {
-                                console.error("Google auth error:", error);
-                                const msg =
-                                    error.response?.data?.message ||
-                                    "Google authentication failed";
-                                toast.error(msg);
-                            } finally {
-                                if (isMounted) setLoading(false);
-                            }
-                        },
-                    });
+                    ensureGsiInitialized();
 
-                    // Clear previous children in case of re-render
+                    // Clear previous button elements before re-rendering
                     buttonRef.current.innerHTML = "";
+
+                    // Calculate valid button width in pixels (Google GSI requires 200..400 px, no percentages)
+                    const parentWidth =
+                        buttonRef.current.parentElement?.offsetWidth ||
+                        buttonRef.current.offsetWidth ||
+                        376;
+                    const buttonWidth = Math.min(
+                        Math.max(Math.round(parentWidth), 200),
+                        400,
+                    );
 
                     window.google.accounts.id.renderButton(buttonRef.current, {
                         theme: "outline",
@@ -66,17 +107,14 @@ const GoogleAuthButton = ({ isRegister = false }) => {
                         type: "standard",
                         shape: "rectangular",
                         text: isRegister ? "signup_with" : "signin_with",
-                        width: "100%",
+                        width: buttonWidth,
                         logo_alignment: "center",
                     });
 
-                    if (isMounted) setGsiReady(true);
+                    if (isMountedRef.current) setGsiReady(true);
                     return true;
                 } catch (e) {
-                    console.error(
-                        "Error initializing Google Identity Services:",
-                        e,
-                    );
+                    console.error("Error rendering Google Sign-In button:", e);
                 }
             }
             return false;
@@ -91,10 +129,9 @@ const GoogleAuthButton = ({ isRegister = false }) => {
         }
 
         return () => {
-            isMounted = false;
             if (checkInterval) clearInterval(checkInterval);
         };
-    }, [isRegister, login, navigate]);
+    }, [isRegister]);
 
     return (
         <div className="google-auth">
@@ -116,6 +153,7 @@ const GoogleAuthButton = ({ isRegister = false }) => {
                     disabled={loading}
                     onClick={() => {
                         if (window.google?.accounts?.id) {
+                            ensureGsiInitialized();
                             window.google.accounts.id.prompt();
                         } else {
                             toast.info(
