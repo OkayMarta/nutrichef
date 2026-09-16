@@ -7,6 +7,10 @@
     border-top: 1px solid $color-border;
     padding: 18px 0;
 
+    @media (max-width: 640px) {
+        padding: 20px 0 28px;
+    }
+
     &__container {
         @include flex-between;
         max-width: 1280px;
@@ -21,6 +25,11 @@
             gap: 16px;
             padding: 12px 20px;
         }
+
+        @media (max-width: 640px) {
+            gap: 12px;
+            padding: 8px 20px;
+        }
     }
 
     // --- Left: Brand Logo & Text ---
@@ -33,6 +42,10 @@
 
         &:hover {
             opacity: 0.9;
+        }
+
+        @media (max-width: 640px) {
+            display: none !important;
         }
     }
 
@@ -94,6 +107,7 @@
 
         @media (max-width: 640px) {
             gap: 20px;
+            justify-content: center;
         }
     }
 
@@ -103,6 +117,11 @@
         color: $color-text-secondary;
         text-decoration: none;
         transition: color $transition-fast;
+
+        @media (max-width: 640px) {
+            font-size: 0.84rem;
+            color: $color-text-muted;
+        }
 
         &:hover {
             color: $color-brand-dark;
@@ -117,6 +136,11 @@
         @media (max-width: 860px) {
             flex-wrap: wrap;
             justify-content: center;
+        }
+
+        @media (max-width: 640px) {
+            gap: 10px;
+            font-size: 0.78rem;
         }
     }
 
@@ -133,6 +157,10 @@
             color: $color-brand-dark;
             transform: scale(1.08);
         }
+
+        @media (max-width: 640px) {
+            display: none !important;
+        }
     }
 
     &__github-icon {
@@ -146,6 +174,10 @@
         transition: color $transition-fast;
         white-space: nowrap;
 
+        @media (max-width: 640px) {
+            font-size: 0.76rem;
+        }
+
         &:hover {
             color: $color-brand-dark;
             text-decoration: underline;
@@ -155,12 +187,14 @@
     &__divider {
         display: inline-block;
         width: 1px;
-        height: 16px;
+        height: 14px;
         background-color: $color-border;
         flex-shrink: 0;
 
-        @media (max-width: 480px) {
-            display: none;
+        @media (max-width: 640px) {
+            display: inline-block;
+            height: 11px;
+            opacity: 0.7;
         }
     }
 
@@ -169,8 +203,8 @@
         color: $color-text-muted;
         white-space: nowrap;
 
-        @media (max-width: 480px) {
-            white-space: normal;
+        @media (max-width: 640px) {
+            font-size: 0.76rem;
         }
     }
 }

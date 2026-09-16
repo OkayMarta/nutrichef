@@ -1,7 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { House, BookMarked, CirclePlus, Settings, LogOut } from "lucide-react";
+import {
+    House,
+    BookMarked,
+    CirclePlus,
+    Settings,
+    LogOut,
+    Menu,
+    X,
+} from "lucide-react";
 import { useAuth } from "../../../context/AuthContext";
 import {
     getUserDisplayName,
@@ -15,6 +23,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeSection, setActiveSection] = useState("home");
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const isManualScrollingRef = useRef(false);
     const scrollTimeoutRef = useRef(null);
 
@@ -71,6 +80,32 @@ const Navbar = () => {
             document.removeEventListener("keydown", handleEscape);
         };
     }, [isDropdownOpen]);
+
+    // Close mobile menu on browser back/forward navigation
+    useEffect(() => {
+        const handlePopState = () => setIsMobileMenuOpen(false);
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
+    }, []);
+
+    // Keyboard ESC listener and scroll lock for mobile menu
+    useEffect(() => {
+        if (!isMobileMenuOpen) return;
+
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") {
+                setIsMobileMenuOpen(false);
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+            document.body.style.overflow = "";
+        };
+    }, [isMobileMenuOpen]);
 
     // Scroll spy for landing page sections
     useEffect(() => {
@@ -193,14 +228,21 @@ const Navbar = () => {
         }
     };
 
+    const handleMobileSectionClick = (e, sectionId) => {
+        scrollToSection(e, sectionId);
+        setIsMobileMenuOpen(false);
+    };
+
     const handleLogout = () => {
         setIsDropdownOpen(false);
+        setIsMobileMenuOpen(false);
         logout();
         toast.info("You have been logged out.");
         navigate("/login");
     };
 
     const handleBrandClick = (e) => {
+        setIsMobileMenuOpen(false);
         if (user) {
             // Authenticated user navigates to /dashboard
             return;
@@ -333,7 +375,7 @@ const Navbar = () => {
                     </nav>
                 )}
 
-                {/* Actions Area */}
+                {/* Desktop Actions Area */}
                 <div className="navbar__actions">
                     {user ? (
                         <div
@@ -443,6 +485,182 @@ const Navbar = () => {
                         </div>
                     )}
                 </div>
+
+                {/* Mobile Burger Toggle Button */}
+                <button
+                    type="button"
+                    className="navbar__burger-btn"
+                    onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+                    aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                    aria-expanded={isMobileMenuOpen}
+                >
+                    {isMobileMenuOpen ? (
+                        <X size={24} strokeWidth={2.2} />
+                    ) : (
+                        <Menu size={24} strokeWidth={2.2} />
+                    )}
+                </button>
+            </div>
+
+            {/* Mobile Drawer Overlay Backdrop */}
+            {isMobileMenuOpen && (
+                <div
+                    className="navbar__mobile-backdrop"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    aria-hidden="true"
+                />
+            )}
+
+            {/* Mobile Drawer Menu */}
+            <div
+                className={`navbar__mobile-drawer ${
+                    isMobileMenuOpen ? "navbar__mobile-drawer--open" : ""
+                }`}
+            >
+                {user ? (
+                    <div className="navbar__mobile-nav">
+                        <div className="navbar__mobile-user">
+                            <span className="navbar__mobile-user-name">
+                                {getUserDisplayName(user)}
+                            </span>
+                            <span className="navbar__mobile-user-email">
+                                {user.email}
+                            </span>
+                        </div>
+
+                        <hr className="navbar__mobile-divider" />
+
+                        <NavLink
+                            to="/dashboard"
+                            className={({ isActive }) =>
+                                `navbar__mobile-link ${
+                                    isActive
+                                        ? "navbar__mobile-link--active"
+                                        : ""
+                                }`
+                            }
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            <House size={18} strokeWidth={2} />
+                            <span>Dashboard</span>
+                        </NavLink>
+                        <NavLink
+                            to="/meals"
+                            className={({ isActive }) =>
+                                `navbar__mobile-link ${
+                                    isActive
+                                        ? "navbar__mobile-link--active"
+                                        : ""
+                                }`
+                            }
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            <BookMarked size={18} strokeWidth={2} />
+                            <span>Saved Meals</span>
+                        </NavLink>
+                        <NavLink
+                            to="/calculator"
+                            className={({ isActive }) =>
+                                `navbar__mobile-link ${
+                                    isActive
+                                        ? "navbar__mobile-link--active"
+                                        : ""
+                                }`
+                            }
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            <CirclePlus size={18} strokeWidth={2} />
+                            <span>Create Meal</span>
+                        </NavLink>
+                        <NavLink
+                            to="/settings"
+                            className={({ isActive }) =>
+                                `navbar__mobile-link ${
+                                    isActive
+                                        ? "navbar__mobile-link--active"
+                                        : ""
+                                }`
+                            }
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            <Settings size={18} strokeWidth={2} />
+                            <span>Settings</span>
+                        </NavLink>
+
+                        <hr className="navbar__mobile-divider" />
+
+                        <button
+                            type="button"
+                            className="navbar__mobile-link navbar__mobile-link--danger"
+                            onClick={() => {
+                                setIsMobileMenuOpen(false);
+                                handleLogout();
+                            }}
+                        >
+                            <LogOut size={18} strokeWidth={2} />
+                            <span>Log out</span>
+                        </button>
+                    </div>
+                ) : (
+                    <div className="navbar__mobile-nav">
+                        <a
+                            href="/#home"
+                            onClick={(e) => handleMobileSectionClick(e, "home")}
+                            className={`navbar__mobile-link ${
+                                activeSection === "home"
+                                    ? "navbar__mobile-link--active"
+                                    : ""
+                            }`}
+                        >
+                            Home
+                        </a>
+                        <a
+                            href="/#how-it-works"
+                            onClick={(e) =>
+                                handleMobileSectionClick(e, "how-it-works")
+                            }
+                            className={`navbar__mobile-link ${
+                                activeSection === "how-it-works"
+                                    ? "navbar__mobile-link--active"
+                                    : ""
+                            }`}
+                        >
+                            How it works
+                        </a>
+                        <a
+                            href="/#features"
+                            onClick={(e) =>
+                                handleMobileSectionClick(e, "features")
+                            }
+                            className={`navbar__mobile-link ${
+                                activeSection === "features"
+                                    ? "navbar__mobile-link--active"
+                                    : ""
+                            }`}
+                        >
+                            Features
+                        </a>
+
+                        <hr className="navbar__mobile-divider" />
+
+                        <div className="navbar__mobile-actions">
+                            <Link
+                                to="/login"
+                                className="btn btn--secondary navbar__mobile-btn"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Log in
+                            </Link>
+                            <Link
+                                to="/register"
+                                className="btn btn--primary navbar__mobile-btn"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                Get started &rarr;
+                            </Link>
+                        </div>
+                    </div>
+                )}
             </div>
         </header>
     );

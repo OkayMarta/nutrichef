@@ -2,11 +2,21 @@
 @use "../../../../styles/mixins" as *;
 
 .how-it-works {
-    padding: 80px 0;
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    @media (max-width: 640px) {
+        padding-top: 48px;
+        padding-bottom: 60px;
+    }
 
     &__header {
         margin-bottom: 56px;
         max-width: 680px;
+
+        @media (max-width: 640px) {
+            margin-bottom: 32px;
+        }
     }
 
     &__tag {
@@ -17,6 +27,11 @@
         color: $color-brand-dark;
         text-transform: uppercase;
         margin-bottom: 12px;
+
+        @media (max-width: 640px) {
+            font-size: 0.78rem;
+            margin-bottom: 8px;
+        }
     }
 
     &__title {
@@ -26,12 +41,27 @@
         color: $color-text-dark;
         letter-spacing: -0.01em;
         margin-bottom: 14px;
+
+        @media (max-width: 640px) {
+            font-size: 1.55rem;
+            line-height: 1.22;
+            margin-bottom: 10px;
+
+            br {
+                display: none;
+            }
+        }
     }
 
     &__subtitle {
         font-size: 1.05rem;
         line-height: 1.6;
         color: $color-text-muted;
+
+        @media (max-width: 640px) {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
     }
 
     &__steps {
@@ -45,9 +75,9 @@
             gap: 32px 24px;
         }
 
-        @media (max-width: 560px) {
+        @media (max-width: 640px) {
             grid-template-columns: 1fr;
-            gap: 32px;
+            gap: 24px;
         }
     }
 
@@ -55,6 +85,13 @@
         display: flex;
         flex-direction: column;
         position: relative;
+
+        @media (max-width: 640px) {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 14px;
+            align-items: flex-start;
+        }
     }
 
     &__step-top {
@@ -62,6 +99,12 @@
         gap: 16px;
         margin-bottom: 20px;
         position: relative;
+
+        @media (max-width: 640px) {
+            margin-bottom: 0;
+            gap: 10px;
+            align-items: center;
+        }
     }
 
     &__badge {
@@ -74,6 +117,12 @@
         font-size: 0.9rem;
         @include flex-center;
         flex-shrink: 0;
+
+        @media (max-width: 640px) {
+            width: 30px;
+            height: 30px;
+            font-size: 0.85rem;
+        }
     }
 
     &__icon-wrap {
@@ -81,6 +130,16 @@
         height: 44px;
         @include flex-center;
         color: $color-text-dark;
+
+        @media (max-width: 640px) {
+            width: 34px;
+            height: 34px;
+
+            svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
     }
 
     &__arrow {
@@ -96,16 +155,32 @@
         }
     }
 
+    &__step-content {
+        display: flex;
+        flex-direction: column;
+    }
+
     &__step-title {
         font-size: 1.12rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
         margin-bottom: 8px;
+
+        @media (max-width: 640px) {
+            font-size: 1.02rem;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
     }
 
     &__step-desc {
         font-size: 0.92rem;
         line-height: 1.55;
         color: $color-text-muted;
+
+        @media (max-width: 640px) {
+            font-size: 0.88rem;
+            line-height: 1.45;
+        }
     }
 }

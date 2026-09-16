@@ -2,7 +2,13 @@
 @use "../../../../styles/mixins" as *;
 
 .why-nutrichef {
-    padding: 80px 0;
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    @media (max-width: 640px) {
+        padding-top: 40px;
+        padding-bottom: 60px;
+    }
 
     &__grid {
         display: grid;
@@ -12,7 +18,7 @@
 
         @media (max-width: 960px) {
             grid-template-columns: 1fr;
-            gap: 48px;
+            gap: 36px;
         }
     }
 
@@ -34,8 +40,9 @@
         overflow: visible;
 
         @media (max-width: 480px) {
-            padding: 32px 16px;
-            min-height: 340px;
+            padding: 24px 12px;
+            min-height: 310px;
+            border-radius: 22px;
         }
     }
 
@@ -182,12 +189,21 @@
         color: $color-text-dark;
         letter-spacing: -0.01em;
         margin-bottom: 32px;
+
+        @media (max-width: 640px) {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
     }
 
     &__list {
         display: flex;
         flex-direction: column;
         gap: 20px;
+
+        @media (max-width: 640px) {
+            gap: 14px;
+        }
     }
 
     &__item {
@@ -196,6 +212,11 @@
         font-size: 1.05rem;
         font-weight: $font-weight-medium;
         color: $color-text-dark;
+
+        @media (max-width: 640px) {
+            gap: 12px;
+            font-size: 0.94rem;
+        }
     }
 
     &__check-icon {
@@ -208,5 +229,11 @@
         flex-shrink: 0;
         font-size: 14px;
         font-weight: $font-weight-bold;
+
+        @media (max-width: 640px) {
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+        }
     }
 }

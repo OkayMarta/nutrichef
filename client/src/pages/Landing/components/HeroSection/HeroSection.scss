@@ -2,18 +2,40 @@
 @use "../../../../styles/mixins" as *;
 
 .hero-section {
-    padding: 48px 0 80px;
+    position: relative;
+    overflow: hidden;
+    padding-top: 48px;
+    padding-bottom: 80px;
+
+    @media (max-width: 768px) {
+        min-height: calc(100vh - 60px);
+        min-height: calc(100dvh - 60px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 48px;
+        padding-bottom: 64px;
+    }
 
     &__grid {
+        position: relative;
+        z-index: 1;
         display: grid;
         grid-template-columns: 1.1fr 1fr;
         gap: 48px;
         align-items: center;
 
-        @media (max-width: 960px) {
+        @media (max-width: 960px) and (min-width: 769px) {
             grid-template-columns: 1fr;
             gap: 40px;
             text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+            gap: 0;
+            text-align: left;
+            width: 100%;
         }
     }
 
@@ -21,11 +43,20 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        text-align: left;
 
-        @media (max-width: 960px) {
+        @media (max-width: 960px) and (min-width: 769px) {
             align-items: center;
+            text-align: center;
             max-width: 640px;
             margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            align-items: flex-start;
+            text-align: left;
+            max-width: 100%;
+            margin: 0;
         }
     }
 
@@ -36,6 +67,12 @@
         letter-spacing: -0.02em;
         color: $color-text-dark;
         margin-bottom: 20px;
+
+        @media (max-width: 768px) {
+            font-size: clamp(2.1rem, 7.8vw, 2.7rem);
+            line-height: 1.18;
+            margin-bottom: 20px;
+        }
     }
 
     &__subtitle {
@@ -44,27 +81,53 @@
         color: $color-text-muted;
         margin-bottom: 32px;
         max-width: 560px;
+
+        @media (max-width: 768px) {
+            font-size: 1.02rem;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 100%;
+        }
     }
 
     &__actions {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
         flex-wrap: wrap;
 
-        @media (max-width: 960px) {
+        @media (max-width: 960px) and (min-width: 769px) {
             justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            justify-content: flex-start;
+            gap: 14px;
         }
     }
 
     &__btn-cta {
         padding: 12px 28px;
         font-size: 1.05rem;
+        border-radius: $radius-pill;
+
+        @media (max-width: 480px) {
+            padding: 11px 24px;
+            font-size: 0.95rem;
+        }
     }
 
     &__btn-learn {
         padding: 12px 26px;
         font-size: 1.05rem;
+        border-radius: $radius-pill;
+        background-color: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+
+        @media (max-width: 480px) {
+            padding: 11px 24px;
+            font-size: 0.95rem;
+        }
     }
 
     &__visual {
@@ -72,5 +135,67 @@
         width: 100%;
         display: flex;
         justify-content: center;
+
+        @media (max-width: 768px) {
+            display: none !important;
+        }
+    }
+
+    // Ambient decorative leaves on the side for mobile
+    &__decor-leaf {
+        position: absolute;
+        pointer-events: none;
+        z-index: 0;
+        display: none;
+
+        @media (max-width: 768px) {
+            display: block;
+        }
+
+        &--top {
+            top: 14%;
+            right: 18px;
+            opacity: 0.22;
+            animation: leaf-float-1 6s ease-in-out infinite;
+
+            @media (max-width: 480px) {
+                top: 10%;
+                right: 12px;
+                opacity: 0.18;
+            }
+        }
+
+        &--bottom {
+            bottom: 12%;
+            right: 16px;
+            opacity: 0.2;
+            animation: leaf-float-2 7s ease-in-out infinite;
+
+            @media (max-width: 480px) {
+                bottom: 8%;
+                right: 8px;
+                opacity: 0.16;
+            }
+        }
+    }
+}
+
+@keyframes leaf-float-1 {
+    0%,
+    100% {
+        transform: translateY(0) rotate(-22deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(-16deg);
+    }
+}
+
+@keyframes leaf-float-2 {
+    0%,
+    100% {
+        transform: translateY(0) rotate(32deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(38deg);
     }
 }

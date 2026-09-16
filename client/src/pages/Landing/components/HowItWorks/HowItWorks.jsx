@@ -12,7 +12,7 @@ const HowItWorks = () => {
         },
         {
             num: 2,
-            title: "Enter dish totals",
+            title: "Enter dish details",
             desc: "In our calculator, enter the final cooked weight along with total calories and macros of all ingredients.",
             icon: <Calculator size={30} strokeWidth={1.8} />,
             hasArrow: true,
@@ -63,10 +63,14 @@ const HowItWorks = () => {
                                 </div>
                             )}
                         </div>
-                        <h3 className="how-it-works__step-title">
-                            {step.title}
-                        </h3>
-                        <p className="how-it-works__step-desc">{step.desc}</p>
+                        <div className="how-it-works__step-content">
+                            <h3 className="how-it-works__step-title">
+                                {step.title}
+                            </h3>
+                            <p className="how-it-works__step-desc">
+                                {step.desc}
+                            </p>
+                        </div>
                     </div>
                 ))}
             </div>
