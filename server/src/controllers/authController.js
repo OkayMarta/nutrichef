@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const { OAuth2Client } = require("google-auth-library");
 const prisma = require("../lib/prisma");
+const { sendPasswordResetEmail } = require("../services/emailService");
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -430,6 +431,187 @@ const uploadAvatar = async (req, res) => {
     }
 };
 
+/**
+ * POST /api/auth/forgot-password
+ * Initiates password reset by sending a reset link to the user's email.
+ */
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email || typeof email !== "string") {
+            return res.status(400).json({
+                message: "Please enter your email address",
+            });
+        }
+
+        const normalizedEmail = email.trim().toLowerCase();
+
+        if (!emailRegex.test(normalizedEmail)) {
+            return res.status(400).json({
+                message: "Please enter a valid email address",
+            });
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { email: normalizedEmail },
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "No account found with this email",
+            });
+        }
+
+        // Generate unhashed 32-byte crypto token
+        const rawToken = crypto.randomBytes(32).toString("hex");
+
+        // Hash token with SHA-256 for secure DB storage
+        const hashedToken = crypto
+            .createHash("sha256")
+            .update(rawToken)
+            .digest("hex");
+
+        // 1 hour expiry
+        const expires = new Date(Date.now() + 60 * 60 * 1000);
+
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                resetPasswordToken: hashedToken,
+                resetPasswordExpires: expires,
+            },
+        });
+
+        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+        const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
+
+        try {
+            await sendPasswordResetEmail({
+                to: user.email,
+                resetUrl,
+            });
+        } catch (mailError) {
+            console.error("Failed to send reset email:", mailError);
+            // Roll back token if email dispatch fails
+            await prisma.user.update({
+                where: { id: user.id },
+                data: {
+                    resetPasswordToken: null,
+                    resetPasswordExpires: null,
+                },
+            });
+            return res.status(500).json({
+                message:
+                    "Failed to send password reset email. Please try again later.",
+            });
+        }
+
+        return res.status(200).json({
+            message: "Password reset link has been sent to your email.",
+        });
+    } catch (error) {
+        console.error("Forgot password error:", error);
+        return res.status(500).json({
+            message: "An error occurred while processing your request",
+            error: error.message,
+        });
+    }
+};
+
+/**
+ * POST /api/auth/reset-password
+ * Resets user password using a valid, non-expired token.
+ */
+const resetPassword = async (req, res) => {
+    try {
+        const { token, password } = req.body;
+
+        if (!token || typeof token !== "string") {
+            return res.status(400).json({
+                message: "Reset token is required",
+            });
+        }
+
+        if (!password || typeof password !== "string") {
+            return res.status(400).json({
+                message: "New password is required",
+            });
+        }
+
+        if (password.length < 8) {
+            return res.status(400).json({
+                message: "Password must be at least 8 characters long",
+            });
+        }
+
+        if (!/\d/.test(password)) {
+            return res.status(400).json({
+                message: "Password must contain at least one number",
+            });
+        }
+
+        if (!(/[a-z]/.test(password) && /[A-Z]/.test(password))) {
+            return res.status(400).json({
+                message:
+                    "Password must contain both uppercase and lowercase letters",
+            });
+        }
+
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            return res.status(400).json({
+                message: "Password must contain at least one special character",
+            });
+        }
+
+        // Hash incoming token to match stored SHA-256 hash
+        const hashedToken = crypto
+            .createHash("sha256")
+            .update(token)
+            .digest("hex");
+
+        const user = await prisma.user.findFirst({
+            where: {
+                resetPasswordToken: hashedToken,
+                resetPasswordExpires: {
+                    gt: new Date(),
+                },
+            },
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                message:
+                    "Invalid or expired password reset link. Please request a new one.",
+            });
+        }
+
+        // Hash new password
+        const passwordHash = await bcrypt.hash(password, 10);
+
+        // Update password and clear reset token fields
+        await prisma.user.update({
+            where: { id: user.id },
+            data: {
+                passwordHash,
+                resetPasswordToken: null,
+                resetPasswordExpires: null,
+            },
+        });
+
+        return res.status(200).json({
+            message:
+                "Password successfully reset. You can now log in with your new password.",
+        });
+    } catch (error) {
+        console.error("Reset password error:", error);
+        return res.status(500).json({
+            message: "An error occurred while resetting password",
+            error: error.message,
+        });
+    }
+};
+
 module.exports = {
     register,
     login,
@@ -439,4 +621,6 @@ module.exports = {
     updateProfile,
     avatarUpload,
     uploadAvatar,
+    forgotPassword,
+    resetPassword,
 };

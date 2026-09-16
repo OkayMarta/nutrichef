@@ -5,6 +5,8 @@ import GuestRoute from "./GuestRoute";
 import Landing from "../pages/Landing/Landing";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
+import ForgotPassword from "../pages/Auth/ForgotPassword";
+import ResetPassword from "../pages/Auth/ResetPassword";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import CreateMeal from "../pages/CreateMeal/CreateMeal";
 import SavedMeals from "../pages/SavedMeals/SavedMeals";
@@ -25,6 +27,8 @@ const AppRoutes = () => {
                 <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
             </Route>
 
             {/* Protected Routes */}

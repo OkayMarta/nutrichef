@@ -568,4 +568,167 @@ describe("Authentication & Security Module Tests", () => {
             }
         });
     });
+
+    describe("Password Reset Module (POST /forgot-password & /reset-password)", () => {
+        const resetTestEmail = `pwd_reset_${Date.now()}@example.com`;
+        const initialPassword = "InitialPassword1!";
+        const newPassword = "NewSecretPassword123!";
+        let resetUserId;
+
+        before(async () => {
+            // Register a user for password reset tests
+            const res = await fetch(`${baseUrl}/api/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: resetTestEmail,
+                    password: initialPassword,
+                }),
+            });
+            const data = await res.json();
+            resetUserId = data.user.id;
+        });
+
+        after(async () => {
+            if (resetUserId) {
+                await prisma.user.deleteMany({
+                    where: { id: resetUserId },
+                });
+            }
+        });
+
+        test("should reject forgot-password if email is missing or invalid", async () => {
+            const res1 = await fetch(`${baseUrl}/api/auth/forgot-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({}),
+            });
+            assert.equal(res1.status, 400);
+
+            const res2 = await fetch(`${baseUrl}/api/auth/forgot-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: "invalid-email" }),
+            });
+            assert.equal(res2.status, 400);
+        });
+
+        test("should return 404 if email does not exist", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/forgot-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: "notfound_user_999@example.com",
+                }),
+            });
+            assert.equal(res.status, 404);
+            const data = await res.json();
+            assert.equal(data.message, "No account found with this email");
+        });
+
+        test("should generate reset token and return 200 for existing user", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/forgot-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: resetTestEmail }),
+            });
+            assert.equal(res.status, 200);
+
+            // Verify user in DB now has resetPasswordToken and resetPasswordExpires
+            const user = await prisma.user.findUnique({
+                where: { email: resetTestEmail.toLowerCase() },
+            });
+            assert.ok(user.resetPasswordToken);
+            assert.ok(user.resetPasswordExpires);
+            assert.ok(user.resetPasswordExpires > new Date());
+        });
+
+        test("should reject reset-password with invalid or non-existent token", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/reset-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    token: "non_existent_token_1234567890",
+                    password: newPassword,
+                }),
+            });
+            assert.equal(res.status, 400);
+            const data = await res.json();
+            assert.ok(data.message.includes("Invalid or expired"));
+        });
+
+        test("should reject reset-password if password does not meet criteria", async () => {
+            const res = await fetch(`${baseUrl}/api/auth/reset-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    token: "some_token",
+                    password: "short",
+                }),
+            });
+            assert.equal(res.status, 400);
+            const data = await res.json();
+            assert.ok(data.message.includes("at least 8 characters"));
+        });
+
+        test("should successfully reset password and allow login with new password", async () => {
+            // Set a known raw token directly for deterministic testing
+            const crypto = require("crypto");
+            const rawToken = "test_raw_reset_token_abcdef1234567890";
+            const hashedToken = crypto
+                .createHash("sha256")
+                .update(rawToken)
+                .digest("hex");
+            const expires = new Date(Date.now() + 3600 * 1000);
+
+            await prisma.user.update({
+                where: { id: resetUserId },
+                data: {
+                    resetPasswordToken: hashedToken,
+                    resetPasswordExpires: expires,
+                },
+            });
+
+            const resetRes = await fetch(`${baseUrl}/api/auth/reset-password`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    token: rawToken,
+                    password: newPassword,
+                }),
+            });
+            assert.equal(resetRes.status, 200);
+
+            // Verify reset fields are cleared in DB
+            const updatedUser = await prisma.user.findUnique({
+                where: { id: resetUserId },
+            });
+            assert.equal(updatedUser.resetPasswordToken, null);
+            assert.equal(updatedUser.resetPasswordExpires, null);
+
+            // Verify old password no longer works
+            const oldLoginRes = await fetch(`${baseUrl}/api/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: resetTestEmail,
+                    password: initialPassword,
+                }),
+            });
+            assert.equal(oldLoginRes.status, 401);
+
+            // Verify new password successfully logs in
+            const newLoginRes = await fetch(`${baseUrl}/api/auth/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email: resetTestEmail,
+                    password: newPassword,
+                }),
+            });
+            assert.equal(newLoginRes.status, 200);
+            const loginData = await newLoginRes.json();
+            assert.ok(loginData.token);
+        });
+    });
 });

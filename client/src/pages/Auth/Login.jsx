@@ -95,12 +95,20 @@ const Login = () => {
                     </div>
 
                     <div className="auth-page__group">
-                        <label
-                            className="auth-page__label"
-                            htmlFor="login-password"
-                        >
-                            Password
-                        </label>
+                        <div className="auth-page__label-row">
+                            <label
+                                className="auth-page__label"
+                                htmlFor="login-password"
+                            >
+                                Password
+                            </label>
+                            <Link
+                                to="/forgot-password"
+                                className="auth-page__forgot-link"
+                            >
+                                Forgot password?
+                            </Link>
+                        </div>
                         <div className="auth-page__password-wrapper">
                             <input
                                 id="login-password"
