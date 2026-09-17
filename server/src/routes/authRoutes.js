@@ -14,14 +14,16 @@ const {
 } = require("../controllers/authController");
 const authMiddleware = require("../middleware/authMiddleware");
 
+const { authLimiter, registerLimiter } = require("../middleware/rateLimiter");
+
 const router = express.Router();
 
 // Public routes
-router.post("/register", register);
-router.post("/login", login);
-router.post("/google", googleAuth);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password", resetPassword);
+router.post("/register", registerLimiter, register);
+router.post("/login", authLimiter, login);
+router.post("/google", authLimiter, googleAuth);
+router.post("/forgot-password", authLimiter, forgotPassword);
+router.post("/reset-password", authLimiter, resetPassword);
 
 // Protected routes
 router.get("/me", authMiddleware, getMe);

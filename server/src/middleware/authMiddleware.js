@@ -35,7 +35,7 @@ const authMiddleware = (req, res, next) => {
             });
         }
 
-        jwt.verify(token, secret, (err, decoded) => {
+        jwt.verify(token, secret, { algorithms: ["HS256"] }, (err, decoded) => {
             if (err) {
                 if (err.name === "TokenExpiredError") {
                     return res.status(401).json({
@@ -58,9 +58,12 @@ const authMiddleware = (req, res, next) => {
             next();
         });
     } catch (error) {
+        console.error("Internal server error during authentication:", error);
         return res.status(500).json({
             message: "Internal server error during authentication",
-            error: error.message,
+            ...(process.env.NODE_ENV !== "production" && {
+                error: error.message,
+            }),
         });
     }
 };

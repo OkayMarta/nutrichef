@@ -1,5 +1,16 @@
 const prisma = require("../lib/prisma");
 
+/**
+ * Safe error response helper: masks internal server error messages in production.
+ */
+const safeError = (res, status, message, error) => {
+    console.error(message, error);
+    return res.status(status).json({
+        message,
+        ...(process.env.NODE_ENV !== "production" && { error: error?.message }),
+    });
+};
+
 const isoDateRegex = /^\d{4}-\d{2}-\d{2}(T.*)?$/;
 
 /**
@@ -98,11 +109,12 @@ const getDashboardData = async (req, res) => {
             logs,
         });
     } catch (error) {
-        console.error("Get dashboard data error:", error);
-        return res.status(500).json({
-            message: "An error occurred while fetching dashboard summary",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while fetching dashboard summary",
+            error,
+        );
     }
 };
 

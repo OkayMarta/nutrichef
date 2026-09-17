@@ -1,3 +1,4 @@
+process.env.NODE_ENV = "test";
 require("dotenv").config();
 const { test, describe, before, after } = require("node:test");
 const assert = require("node:assert/strict");

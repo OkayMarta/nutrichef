@@ -1,5 +1,16 @@
 const prisma = require("../lib/prisma");
 
+/**
+ * Safe error response helper: masks internal server error messages in production.
+ */
+const safeError = (res, status, message, error) => {
+    console.error(message, error);
+    return res.status(status).json({
+        message,
+        ...(process.env.NODE_ENV !== "production" && { error: error?.message }),
+    });
+};
+
 const VALID_MEAL_TYPES = ["BREAKFAST", "LUNCH", "DINNER", "SNACK"];
 
 /**
@@ -94,11 +105,12 @@ const createDailyLog = async (req, res) => {
 
         return res.status(201).json(log);
     } catch (error) {
-        console.error("Create daily log error:", error);
-        return res.status(500).json({
-            message: "An error occurred while creating the daily log",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while creating the daily log",
+            error,
+        );
     }
 };
 
@@ -162,11 +174,12 @@ const getDailyLogs = async (req, res) => {
 
         return res.status(200).json(logs);
     } catch (error) {
-        console.error("Get daily logs error:", error);
-        return res.status(500).json({
-            message: "An error occurred while fetching daily logs",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while fetching daily logs",
+            error,
+        );
     }
 };
 
@@ -200,11 +213,12 @@ const getDailyLogById = async (req, res) => {
 
         return res.status(200).json(log);
     } catch (error) {
-        console.error("Get daily log by id error:", error);
-        return res.status(500).json({
-            message: "An error occurred while fetching the daily log",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while fetching the daily log",
+            error,
+        );
     }
 };
 
@@ -293,11 +307,12 @@ const updateDailyLog = async (req, res) => {
 
         return res.status(200).json(updatedLog);
     } catch (error) {
-        console.error("Update daily log error:", error);
-        return res.status(500).json({
-            message: "An error occurred while updating the daily log",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while updating the daily log",
+            error,
+        );
     }
 };
 
@@ -334,11 +349,12 @@ const deleteDailyLog = async (req, res) => {
             message: "Daily log deleted successfully",
         });
     } catch (error) {
-        console.error("Delete daily log error:", error);
-        return res.status(500).json({
-            message: "An error occurred while deleting the daily log",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while deleting the daily log",
+            error,
+        );
     }
 };
 

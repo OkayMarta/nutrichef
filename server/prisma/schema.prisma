@@ -60,6 +60,8 @@ model Meal {
 
   // Зв'язок з таблицею DailyLog
   dailyLogs       DailyLog[]
+
+  @@index([userId])
 }
 
 model DailyLog {
@@ -84,4 +86,8 @@ model DailyLog {
   // Зв'язок з таблицею Meal
   mealId           String
   meal             Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([userId])
+  @@index([mealId])
 }

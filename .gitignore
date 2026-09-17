@@ -6,6 +6,8 @@ client/node_modules/
 # Секретні ключі та змінні середовища
 .env
 .env.*
+!.env.example
+!server/.env.example
 server/.env
 
 # Збірка фронтенду (Vite)

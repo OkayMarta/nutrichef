@@ -1,6 +1,17 @@
 const prisma = require("../lib/prisma");
 
 /**
+ * Safe error response helper: masks internal server error messages in production.
+ */
+const safeError = (res, status, message, error) => {
+    console.error(message, error);
+    return res.status(status).json({
+        message,
+        ...(process.env.NODE_ENV !== "production" && { error: error?.message }),
+    });
+};
+
+/**
  * Helper to validate non-negative numeric macro values.
  */
 const isValidMacro = (value) => {
@@ -74,11 +85,12 @@ const createMeal = async (req, res) => {
 
         return res.status(201).json(meal);
     } catch (error) {
-        console.error("Create meal error:", error);
-        return res.status(500).json({
-            message: "An error occurred while creating the meal",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while creating the meal",
+            error,
+        );
     }
 };
 
@@ -110,11 +122,12 @@ const getMeals = async (req, res) => {
 
         return res.status(200).json(meals);
     } catch (error) {
-        console.error("Get meals error:", error);
-        return res.status(500).json({
-            message: "An error occurred while fetching meals",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while fetching meals",
+            error,
+        );
     }
 };
 
@@ -145,11 +158,12 @@ const getMealById = async (req, res) => {
 
         return res.status(200).json(meal);
     } catch (error) {
-        console.error("Get meal by id error:", error);
-        return res.status(500).json({
-            message: "An error occurred while fetching the meal",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while fetching the meal",
+            error,
+        );
     }
 };
 
@@ -252,11 +266,12 @@ const updateMeal = async (req, res) => {
 
         return res.status(200).json(updatedMeal);
     } catch (error) {
-        console.error("Update meal error:", error);
-        return res.status(500).json({
-            message: "An error occurred while updating the meal",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while updating the meal",
+            error,
+        );
     }
 };
 
@@ -293,11 +308,12 @@ const deleteMeal = async (req, res) => {
             message: "Meal deleted successfully",
         });
     } catch (error) {
-        console.error("Delete meal error:", error);
-        return res.status(500).json({
-            message: "An error occurred while deleting the meal",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while deleting the meal",
+            error,
+        );
     }
 };
 

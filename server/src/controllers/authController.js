@@ -11,6 +11,17 @@ const { sendPasswordResetEmail } = require("../services/emailService");
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 /**
+ * Safe error response helper: masks internal server error messages in production.
+ */
+const safeError = (res, status, message, error) => {
+    console.error(message, error);
+    return res.status(status).json({
+        message,
+        ...(process.env.NODE_ENV !== "production" && { error: error?.message }),
+    });
+};
+
+/**
  * Generate a signed JWT for a given user ID.
  */
 const generateToken = (userId) => {
@@ -19,17 +30,23 @@ const generateToken = (userId) => {
         throw new Error("JWT_SECRET is not configured");
     }
     return jwt.sign({ userId }, secret, {
+        algorithm: "HS256",
         expiresIn: process.env.JWT_EXPIRES_IN || "7d",
     });
 };
 
 /**
- * Strips passwordHash and returns public user fields.
+ * Strips passwordHash and reset tokens, returning only public user fields.
  */
 const sanitizeUser = (user) => {
     if (!user) return null;
-    const { passwordHash, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    const {
+        passwordHash,
+        resetPasswordToken,
+        resetPasswordExpires,
+        ...userWithoutSensitiveData
+    } = user;
+    return userWithoutSensitiveData;
 };
 
 /**
@@ -94,11 +111,12 @@ const register = async (req, res) => {
             user: sanitizeUser(newUser),
         });
     } catch (error) {
-        console.error("Registration error:", error);
-        return res.status(500).json({
-            message: "An error occurred during registration",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred during registration",
+            error,
+        );
     }
 };
 
@@ -153,11 +171,7 @@ const login = async (req, res) => {
             user: sanitizeUser(user),
         });
     } catch (error) {
-        console.error("Login error:", error);
-        return res.status(500).json({
-            message: "An error occurred during login",
-            error: error.message,
-        });
+        return safeError(res, 500, "An error occurred during login", error);
     }
 };
 
@@ -225,11 +239,12 @@ const googleAuth = async (req, res) => {
             user: sanitizeUser(user),
         });
     } catch (error) {
-        console.error("Google auth error:", error);
-        return res.status(500).json({
-            message: "An error occurred during Google authentication",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred during Google authentication",
+            error,
+        );
     }
 };
 
@@ -252,11 +267,12 @@ const getMe = async (req, res) => {
             user: sanitizeUser(user),
         });
     } catch (error) {
-        console.error("Get profile error:", error);
-        return res.status(500).json({
-            message: "An error occurred while fetching user profile",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while fetching user profile",
+            error,
+        );
     }
 };
 
@@ -306,11 +322,12 @@ const updateGoals = async (req, res) => {
             user: sanitizeUser(updatedUser),
         });
     } catch (error) {
-        console.error("Update goals error:", error);
-        return res.status(500).json({
-            message: "An error occurred while updating nutritional goals",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while updating nutritional goals",
+            error,
+        );
     }
 };
 
@@ -350,17 +367,88 @@ const updateProfile = async (req, res) => {
             message: "No valid fields to update",
         });
     } catch (error) {
-        console.error("Update profile error:", error);
-        return res.status(500).json({
-            message: "An error occurred while updating profile",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while updating profile",
+            error,
+        );
+    }
+};
+
+const ALLOWED_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
+const ALLOWED_MIME_EXTENSIONS = {
+    "image/jpeg": [".jpg", ".jpeg"],
+    "image/png": [".png"],
+    "image/gif": [".gif"],
+    "image/webp": [".webp"],
+};
+
+/**
+ * Validates image header magic bytes from the uploaded file on disk.
+ * Supports JPEG, PNG, GIF, and WebP (RIFF...WEBP).
+ */
+const isValidImageMagicBytes = async (filePath) => {
+    try {
+        const handle = await fs.promises.open(filePath, "r");
+        try {
+            const buffer = Buffer.alloc(12);
+            const { bytesRead } = await handle.read(buffer, 0, 12, 0);
+            if (bytesRead < 4) return false;
+
+            // JPEG: FF D8 FF
+            if (
+                buffer[0] === 0xff &&
+                buffer[1] === 0xd8 &&
+                buffer[2] === 0xff
+            ) {
+                return true;
+            }
+            // PNG: 89 50 4E 47
+            if (
+                buffer[0] === 0x89 &&
+                buffer[1] === 0x50 &&
+                buffer[2] === 0x4e &&
+                buffer[3] === 0x47
+            ) {
+                return true;
+            }
+            // GIF: 47 49 46 38 ('GIF8')
+            if (
+                buffer[0] === 0x47 &&
+                buffer[1] === 0x49 &&
+                buffer[2] === 0x46 &&
+                buffer[3] === 0x38
+            ) {
+                return true;
+            }
+            // WebP: 52 49 46 46 ('RIFF') ... 57 45 42 50 ('WEBP')
+            if (
+                bytesRead >= 12 &&
+                buffer[0] === 0x52 &&
+                buffer[1] === 0x49 &&
+                buffer[2] === 0x46 &&
+                buffer[3] === 0x46 &&
+                buffer[8] === 0x57 &&
+                buffer[9] === 0x45 &&
+                buffer[10] === 0x42 &&
+                buffer[11] === 0x50
+            ) {
+                return true;
+            }
+
+            return false;
+        } finally {
+            await handle.close();
+        }
+    } catch {
+        return false;
     }
 };
 
 /**
  * Multer configuration for avatar uploads.
- * Stores files in server/uploads/avatars/ with unique filenames.
+ * Stores files in server/uploads/avatars/ with unique sanitized filenames.
  */
 const avatarStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -371,7 +459,11 @@ const avatarStorage = multer.diskStorage({
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname).toLowerCase();
+        let ext = path.extname(file.originalname).toLowerCase();
+        if (!ALLOWED_EXTENSIONS.has(ext)) {
+            const validExts = ALLOWED_MIME_EXTENSIONS[file.mimetype];
+            ext = validExts ? validExts[0] : ".png";
+        }
         const uniqueName = `${req.userId}-${Date.now()}${ext}`;
         cb(null, uniqueName);
     },
@@ -381,18 +473,16 @@ const avatarUpload = multer({
     storage: avatarStorage,
     limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
     fileFilter: (req, file, cb) => {
-        const allowedMimes = [
-            "image/jpeg",
-            "image/png",
-            "image/gif",
-            "image/webp",
-        ];
-        if (allowedMimes.includes(file.mimetype)) {
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (
+            ALLOWED_MIME_EXTENSIONS[file.mimetype] &&
+            ALLOWED_EXTENSIONS.has(ext)
+        ) {
             cb(null, true);
         } else {
             cb(
                 new Error(
-                    "Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.",
+                    "Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed.",
                 ),
                 false,
             );
@@ -402,7 +492,7 @@ const avatarUpload = multer({
 
 /**
  * POST /api/auth/avatar (Protected route)
- * Uploads and sets user avatar image.
+ * Uploads and sets user avatar image with magic byte verification and old avatar cleanup.
  */
 const uploadAvatar = async (req, res) => {
     try {
@@ -410,6 +500,47 @@ const uploadAvatar = async (req, res) => {
             return res.status(400).json({
                 message: "No image file provided",
             });
+        }
+
+        // Verify image signature / magic bytes to prevent polyglot or disguised file execution
+        const isValid = await isValidImageMagicBytes(req.file.path);
+        if (!isValid) {
+            try {
+                await fs.promises.unlink(req.file.path);
+            } catch {
+                // Ignore cleanup error
+            }
+            return res.status(400).json({
+                message: "File contents do not match a valid image format.",
+            });
+        }
+
+        // Fetch existing avatar to clean up old file from disk
+        const existingUser = await prisma.user.findUnique({
+            where: { id: req.userId },
+            select: { avatarUrl: true },
+        });
+
+        if (
+            existingUser?.avatarUrl &&
+            existingUser.avatarUrl.startsWith("/uploads/avatars/")
+        ) {
+            const oldFileName = path.basename(existingUser.avatarUrl);
+            const oldFilePath = path.join(
+                __dirname,
+                "../../uploads/avatars",
+                oldFileName,
+            );
+            if (fs.existsSync(oldFilePath)) {
+                try {
+                    await fs.promises.unlink(oldFilePath);
+                } catch (unlinkErr) {
+                    console.warn(
+                        "Failed to delete old avatar file:",
+                        unlinkErr.message,
+                    );
+                }
+            }
         }
 
         const avatarUrl = `/uploads/avatars/${req.file.filename}`;
@@ -423,11 +554,12 @@ const uploadAvatar = async (req, res) => {
             user: sanitizeUser(updatedUser),
         });
     } catch (error) {
-        console.error("Upload avatar error:", error);
-        return res.status(500).json({
-            message: "An error occurred while uploading avatar",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while uploading avatar",
+            error,
+        );
     }
 };
 
@@ -457,9 +589,11 @@ const forgotPassword = async (req, res) => {
             where: { email: normalizedEmail },
         });
 
+        // Anti-user enumeration: Return identical 200 OK message even if email is not found
         if (!user) {
-            return res.status(404).json({
-                message: "No account found with this email",
+            return res.status(200).json({
+                message:
+                    "If an account with this email exists, a password reset link has been sent.",
             });
         }
 
@@ -508,14 +642,16 @@ const forgotPassword = async (req, res) => {
         }
 
         return res.status(200).json({
-            message: "Password reset link has been sent to your email.",
+            message:
+                "If an account with this email exists, a password reset link has been sent.",
         });
     } catch (error) {
-        console.error("Forgot password error:", error);
-        return res.status(500).json({
-            message: "An error occurred while processing your request",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while processing your request",
+            error,
+        );
     }
 };
 
@@ -604,11 +740,12 @@ const resetPassword = async (req, res) => {
                 "Password successfully reset. You can now log in with your new password.",
         });
     } catch (error) {
-        console.error("Reset password error:", error);
-        return res.status(500).json({
-            message: "An error occurred while resetting password",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while resetting password",
+            error,
+        );
     }
 };
 
@@ -671,11 +808,12 @@ const deleteAccount = async (req, res) => {
                 "Account and all associated data have been permanently deleted.",
         });
     } catch (error) {
-        console.error("Delete account error:", error);
-        return res.status(500).json({
-            message: "An error occurred while deleting account",
-            error: error.message,
-        });
+        return safeError(
+            res,
+            500,
+            "An error occurred while deleting account",
+            error,
+        );
     }
 };
 

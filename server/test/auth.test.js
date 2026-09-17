@@ -1,3 +1,4 @@
+process.env.NODE_ENV = "test";
 require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
@@ -613,7 +614,7 @@ describe("Authentication & Security Module Tests", () => {
             assert.equal(res2.status, 400);
         });
 
-        test("should return 404 if email does not exist", async () => {
+        test("should return 200 with universal message if email does not exist (anti-enumeration)", async () => {
             const res = await fetch(`${baseUrl}/api/auth/forgot-password`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -621,9 +622,11 @@ describe("Authentication & Security Module Tests", () => {
                     email: "notfound_user_999@example.com",
                 }),
             });
-            assert.equal(res.status, 404);
+            assert.equal(res.status, 200);
             const data = await res.json();
-            assert.equal(data.message, "No account found with this email");
+            assert.ok(
+                data.message.includes("password reset link has been sent"),
+            );
         });
 
         test("should generate reset token and return 200 for existing user", async () => {
