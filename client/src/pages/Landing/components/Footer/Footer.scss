@@ -5,10 +5,14 @@
     width: 100%;
     background-color: $color-bg-subtle;
     border-top: 1px solid $color-border;
-    padding: 18px 0;
+    padding: 20px 0;
 
-    @media (max-width: 640px) {
-        padding: 20px 0 28px;
+    @media (min-width: 681px) and (max-width: 1024px) {
+        padding: 22px 0;
+    }
+
+    @media (max-width: 680px) {
+        padding: 16px 0 20px;
     }
 
     &__container {
@@ -18,27 +22,34 @@
         padding: 0 32px;
         gap: 24px;
 
-        @media (min-width: 601px) and (max-width: 1024px) {
-            padding: 16px 40px;
-        }
-
-        @media (max-width: 860px) {
-            flex-direction: column;
+        // Tablet (681px - 1024px): 2-row layout requested by user
+        // Left: Logo, NutriChef, and "Calculate. Track. Eat Better."
+        // Right Row 1: Navigation (Home, How it works, Features)
+        // Right Row 2: GitHub, Privacy Policy, Terms of Service, Copyright
+        @media (min-width: 681px) and (max-width: 1024px) {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto auto;
+            grid-template-areas:
+                "brand nav"
+                "brand right";
             align-items: center;
-            text-align: center;
-            gap: 16px;
+            row-gap: 12px;
+            column-gap: 28px;
+            padding: 0 40px;
         }
 
-        @media (max-width: 640px) {
-            gap: 12px;
-            padding: 8px 20px;
+        @media (max-width: 680px) {
+            flex-wrap: wrap;
+            padding: 12px 20px 16px;
+            gap: 14px 0;
         }
     }
 
     // --- Left: Brand Logo & Text ---
     &__brand {
         @include flex-align;
-        gap: 10px;
+        gap: 12px;
         text-decoration: none;
         color: $color-text-dark;
         transition: opacity $transition-fast;
@@ -47,22 +58,34 @@
             opacity: 0.9;
         }
 
-        @media (max-width: 640px) {
-            display: none !important;
+        @media (min-width: 681px) and (max-width: 1024px) {
+            grid-area: brand;
+            align-self: center;
+        }
+
+        @media (max-width: 680px) {
+            order: 1;
+            gap: 8px;
         }
     }
 
     &__logo-icon {
-        width: 36px;
-        height: 36px;
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
         background-color: $color-brand-light;
         color: $color-brand-dark;
         @include flex-center;
-        font-size: 18px;
+        font-size: 19px;
         flex-shrink: 0;
         overflow: hidden;
         position: relative;
+
+        @media (max-width: 680px) {
+            width: 30px;
+            height: 30px;
+            font-size: 15px;
+        }
     }
 
     &__logo-img {
@@ -82,35 +105,47 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-
-        @media (max-width: 860px) {
-            align-items: center;
-        }
     }
 
     &__title {
-        font-size: 1.15rem;
+        font-size: 1.18rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
         line-height: 1.2;
         letter-spacing: -0.01em;
+
+        @media (max-width: 680px) {
+            font-size: 1.05rem;
+        }
     }
 
     &__tagline {
         font-size: 0.76rem;
         color: $color-text-muted;
         line-height: 1.2;
-        margin-top: 1px;
+        margin-top: 2px;
+        white-space: nowrap;
+
+        @media (max-width: 680px) {
+            display: none;
+        }
     }
 
-    // --- Center: Nav Links ---
+    // --- Center/Right Row 1: Nav Links ---
     &__nav {
         @include flex-align;
-        gap: 32px;
+        gap: 28px;
 
-        @media (max-width: 640px) {
-            gap: 20px;
-            justify-content: center;
+        @media (min-width: 681px) and (max-width: 1024px) {
+            grid-area: nav;
+            justify-content: flex-end;
+            gap: 24px;
+        }
+
+        @media (max-width: 680px) {
+            order: 2;
+            gap: 14px;
+            justify-content: flex-end;
         }
     }
 
@@ -121,9 +156,8 @@
         text-decoration: none;
         transition: color $transition-fast;
 
-        @media (max-width: 640px) {
+        @media (max-width: 680px) {
             font-size: 0.84rem;
-            color: $color-text-muted;
         }
 
         &:hover {
@@ -131,18 +165,25 @@
         }
     }
 
-    // --- Right: GitHub & Copyright ---
+    // --- Right/Right Row 2: GitHub & Legal & Copyright ---
     &__right {
         @include flex-align;
-        gap: 14px;
+        gap: 12px;
 
-        @media (max-width: 860px) {
-            flex-wrap: wrap;
-            justify-content: center;
+        @media (min-width: 681px) and (max-width: 1024px) {
+            grid-area: right;
+            justify-content: flex-end;
+            gap: 12px;
         }
 
-        @media (max-width: 640px) {
-            gap: 10px;
+        @media (max-width: 680px) {
+            order: 3;
+            width: 100%;
+            justify-content: flex-start;
+            border-top: 1px solid rgba($color-border, 0.7);
+            padding-top: 12px;
+            margin-top: 4px;
+            gap: 8px;
             font-size: 0.78rem;
         }
     }
@@ -161,7 +202,13 @@
             transform: scale(1.08);
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 680px) {
+            display: none !important;
+        }
+    }
+
+    &__github-link + &__divider {
+        @media (max-width: 680px) {
             display: none !important;
         }
     }
@@ -177,7 +224,7 @@
         transition: color $transition-fast;
         white-space: nowrap;
 
-        @media (max-width: 640px) {
+        @media (max-width: 680px) {
             font-size: 0.76rem;
         }
 
@@ -194,10 +241,15 @@
         background-color: $color-border;
         flex-shrink: 0;
 
-        @media (max-width: 640px) {
-            display: inline-block;
+        @media (max-width: 680px) {
             height: 11px;
             opacity: 0.7;
+        }
+
+        &:last-of-type {
+            @media (max-width: 680px) {
+                display: none !important;
+            }
         }
     }
 
@@ -206,8 +258,9 @@
         color: $color-text-muted;
         white-space: nowrap;
 
-        @media (max-width: 640px) {
+        @media (max-width: 680px) {
             font-size: 0.76rem;
+            margin-left: auto;
         }
     }
 }
