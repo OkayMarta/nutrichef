@@ -138,6 +138,26 @@ describe("Meals (Calculator) API Module Tests", () => {
             assert.ok(data.message.includes("caloriesPer100g"));
         });
 
+        test("should reject creation when name exceeds 60 characters", async () => {
+            const res = await fetch(`${baseUrl}/api/meals`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user1Token}`,
+                },
+                body: JSON.stringify({
+                    name: "A".repeat(61),
+                    caloriesPer100g: 200,
+                    proteinPer100g: 20,
+                    fatPer100g: 10,
+                    carbsPer100g: 5,
+                }),
+            });
+            assert.equal(res.status, 400);
+            const data = await res.json();
+            assert.ok(data.message.includes("cannot exceed 60 characters"));
+        });
+
         test("should successfully create a meal for user1 and return 201 Created", async () => {
             const payload = {
                 name: "Chicken Rice Bowl",
@@ -391,6 +411,23 @@ describe("Meals (Calculator) API Module Tests", () => {
                 },
             );
             assert.equal(res.status, 400);
+        });
+
+        test("should return 400 when updated name exceeds 60 characters", async () => {
+            const res = await fetch(
+                `${baseUrl}/api/meals/${updateMealTarget.id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user1Token}`,
+                    },
+                    body: JSON.stringify({ name: "B".repeat(61) }),
+                },
+            );
+            assert.equal(res.status, 400);
+            const data = await res.json();
+            assert.ok(data.message.includes("cannot exceed 60 characters"));
         });
 
         test("should update meal successfully and return 200 OK", async () => {

@@ -132,10 +132,24 @@
         border-radius: $radius-xs;
     }
 
+    &__hint-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
     &__hint {
         font-size: 0.74rem;
         color: $color-text-muted;
         line-height: 1.25;
+    }
+
+    &__char-count {
+        font-size: 0.74rem;
+        color: $color-text-subtle;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
     }
 
     &__error-msg {

@@ -30,6 +30,12 @@ const createMeal = async (req, res) => {
             });
         }
 
+        if (name.trim().length > 60) {
+            return res.status(400).json({
+                message: "Meal name cannot exceed 60 characters",
+            });
+        }
+
         // Validate macros
         if (!isValidMacro(caloriesPer100g)) {
             return res.status(400).json({
@@ -185,6 +191,11 @@ const updateMeal = async (req, res) => {
             if (typeof name !== "string" || !name.trim()) {
                 return res.status(400).json({
                     message: "Meal name must be a non-empty string",
+                });
+            }
+            if (name.trim().length > 60) {
+                return res.status(400).json({
+                    message: "Meal name cannot exceed 60 characters",
                 });
             }
             updateData.name = name.trim();

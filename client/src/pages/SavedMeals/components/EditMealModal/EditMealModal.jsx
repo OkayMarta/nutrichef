@@ -49,6 +49,8 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
         const errs = {};
         if (!formData.name || !formData.name.trim()) {
             errs.name = "Dish name is required";
+        } else if (formData.name.trim().length > 60) {
+            errs.name = "Dish name cannot exceed 60 characters";
         }
 
         const cals = Number(formData.caloriesPer100g);
@@ -180,6 +182,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                             onChange={(e) =>
                                 handleChange("name", e.target.value)
                             }
+                            maxLength={60}
                             required
                         />
                         {errors.name && (

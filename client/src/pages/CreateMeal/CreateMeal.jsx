@@ -54,6 +54,8 @@ const CreateMeal = () => {
 
         if (!data.name || !data.name.trim()) {
             errs.name = "Dish name is required";
+        } else if (data.name.trim().length > 60) {
+            errs.name = "Dish name cannot exceed 60 characters";
         }
 
         const weight = parseFloat(data.totalWeight);

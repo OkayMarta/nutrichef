@@ -122,10 +122,10 @@
 
     /* Mobile responsive overrides */
     @media (max-width: 767px) {
-        padding: 16px;
+        padding: 18px 16px;
 
         &__title {
-            font-size: 1rem;
+            font-size: 1.05rem;
         }
 
         &__date-pill {
@@ -134,52 +134,67 @@
 
         &__header {
             margin-bottom: 16px;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
+        }
+
+        &__skeleton-stack {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px 16px;
         }
 
         &__metrics {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px 16px;
         }
 
         &__metric {
             gap: 6px;
+            min-width: 0;
         }
 
         &__metric-header {
+            display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            align-items: flex-start;
+            text-align: left;
             gap: 2px;
-            font-size: 0.78rem;
         }
 
         .metric-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
+            font-weight: $font-weight-semibold;
+            color: $color-text-secondary;
             order: -1;
         }
 
         .metric-value-wrapper {
-            flex-direction: column;
-            gap: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
         }
 
         .metric-value {
-            font-size: 0.75rem;
+            font-size: 0.84rem;
+            white-space: nowrap;
+            color: $color-text-muted;
 
             strong {
-                font-size: 0.82rem;
+                font-size: 0.92rem;
+                color: $color-text-dark;
             }
         }
 
         &__progress-track {
             height: 6px;
+            width: 100%;
         }
 
         &__badge-exceeded {
-            font-size: 0.62rem;
-            padding: 1px 4px;
+            font-size: 0.65rem;
+            padding: 1px 5px;
         }
     }
 }

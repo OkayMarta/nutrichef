@@ -53,6 +53,7 @@ const MealForm = ({
                             onChange={handleChange}
                             onBlur={handleBlur}
                             autoComplete="off"
+                            maxLength={60}
                             required
                         />
                         {touched.name && errors.name && (
@@ -60,10 +61,15 @@ const MealForm = ({
                                 {errors.name}
                             </span>
                         )}
-                        <span className="meal-form__hint">
-                            A clear name to easily find this dish in your recipe
-                            book
-                        </span>
+                        <div className="meal-form__hint-row">
+                            <span className="meal-form__hint">
+                                A clear name to easily find this dish in your
+                                recipe book
+                            </span>
+                            <span className="meal-form__char-count">
+                                {formData.name ? formData.name.length : 0}/60
+                            </span>
+                        </div>
                     </div>
 
                     {/* Total Cooked Weight */}

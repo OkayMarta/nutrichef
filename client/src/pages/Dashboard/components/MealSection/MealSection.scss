@@ -188,10 +188,15 @@
     }
 
     &__log-item {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 12px 16px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+            "main actions"
+            "macros macros";
+        row-gap: 10px;
+        column-gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
         border-radius: $radius-md;
         background-color: $color-bg-subtle;
         border: 1px solid $color-border-subtle;
@@ -201,24 +206,45 @@
             background-color: #eaf1e5;
         }
 
-        @include respond-to("sm") {
+        @include respond-to("md") {
+            display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
+            gap: 16px;
+            padding: 12px 16px;
         }
     }
 
     &__log-main {
+        grid-area: main;
         display: flex;
         flex-direction: column;
         gap: 2px;
         line-height: 1.25;
+        min-width: 0;
+
+        @include respond-to("md") {
+            order: 1;
+            flex: 1;
+        }
     }
 
     &__log-name {
-        font-size: 1.05rem;
+        font-size: 1.02rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-break: break-word;
+
+        @include respond-to("md") {
+            font-size: 1.05rem;
+        }
     }
 
     &__log-weight {
@@ -226,29 +252,16 @@
         color: $color-text-muted;
     }
 
-    &__log-meta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-
-        @include respond-to("sm") {
-            justify-content: flex-end;
-        }
-    }
-
-    &__log-macros {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
     &__log-actions {
+        grid-area: actions;
         display: flex;
         align-items: center;
         gap: 4px;
         flex-shrink: 0;
+
+        @include respond-to("md") {
+            order: 3;
+        }
     }
 
     &__action-btn,
@@ -281,6 +294,23 @@
         }
     }
 
+    &__log-macros {
+        grid-area: macros;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        width: 100%;
+
+        @include respond-to("md") {
+            order: 2;
+            display: flex;
+            align-items: center;
+            width: auto;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+    }
+
     /* Skeleton Loading State */
     &__skeleton-stack {
         display: flex;
@@ -309,15 +339,16 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 6px 12px;
+    padding: 5px 4px;
     border-radius: $radius-sm;
-    min-width: 58px;
-    line-height: 1.25;
+    min-width: 0;
+    width: 100%;
+    line-height: 1.2;
     background-color: rgba(202, 228, 180, 0.25);
     border: 1px solid rgba(116, 189, 87, 0.3);
 
     &__val {
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         font-weight: $font-weight-bold;
         color: $color-brand-dark;
         letter-spacing: -0.01em;
@@ -325,10 +356,25 @@
     }
 
     &__lbl {
-        font-size: 0.72rem;
+        font-size: 0.68rem;
         font-weight: $font-weight-medium;
         color: $color-text-secondary;
         margin-top: 2px;
+    }
+
+    @include respond-to("md") {
+        width: auto;
+        min-width: 58px;
+        padding: 6px 12px;
+        line-height: 1.25;
+
+        &__val {
+            font-size: 0.85rem;
+        }
+
+        &__lbl {
+            font-size: 0.72rem;
+        }
     }
 }
 
@@ -362,16 +408,17 @@
         }
     }
 
-    .macro-chip {
-        padding: 4px 8px;
-        min-width: 50px;
+    @media (max-width: 380px) {
+        .macro-chip {
+            padding: 4px 2px;
 
-        &__val {
-            font-size: 0.78rem;
-        }
+            &__val {
+                font-size: 0.72rem;
+            }
 
-        &__lbl {
-            font-size: 0.66rem;
+            &__lbl {
+                font-size: 0.62rem;
+            }
         }
     }
 }
