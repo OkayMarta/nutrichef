@@ -4,8 +4,16 @@
 .goals-form {
     @include card-base;
 
+    @media (min-width: 681px) and (max-width: 1024px) {
+        padding: 22px 20px;
+    }
+
     &__header {
         margin-bottom: 24px;
+
+        @media (max-width: 767px) {
+            margin-bottom: 16px;
+        }
     }
 
     &__title {
@@ -13,54 +21,89 @@
         font-weight: $font-weight-semibold;
         color: $color-text-dark;
         margin: 0 0 4px;
+
+        @media (max-width: 767px) {
+            font-size: 1.1rem;
+        }
     }
 
     &__description {
         font-size: 0.88rem;
         color: $color-text-muted;
         margin: 0;
+
+        @media (max-width: 767px) {
+            font-size: 0.84rem;
+        }
     }
 
     // --- Fields Grid (2 x 2) ---
     &__fields {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-        margin-bottom: 28px;
+        gap: 16px 14px;
+        margin-bottom: 26px;
+
+        @media (max-width: 1024px) {
+            gap: 14px 10px;
+            margin-bottom: 22px;
+        }
     }
 
     &__field {
-        // Clean field without color accents
+        min-width: 0;
     }
 
     &__label {
         display: block;
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         font-weight: $font-weight-medium;
         color: $color-text-muted;
         margin-bottom: 6px;
         text-transform: uppercase;
         letter-spacing: 0.04em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        @media (max-width: 767px) {
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+        }
     }
 
     &__input-wrapper {
         display: flex;
         align-items: center;
         gap: 8px;
+        min-width: 0;
+        width: 100%;
+
+        @media (max-width: 1024px) {
+            gap: 6px;
+        }
     }
 
     &__input {
         flex: 1;
-        padding: 10px 12px;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 9px 12px;
         border: 1px solid $color-border;
         border-radius: $radius-sm;
-        font-size: 1rem;
+        font-size: 0.98rem;
         font-weight: $font-weight-semibold;
         color: $color-text-dark;
         background-color: $color-bg-card;
         transition: border-color $transition-fast;
         outline: none;
         font-family: $font-family-base;
+
+        @media (max-width: 1024px) {
+            padding: 8px 10px;
+            font-size: 0.95rem;
+        }
 
         &:focus {
             border-color: $color-brand-medium;
@@ -91,10 +134,16 @@
     }
 
     &__unit {
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         font-weight: $font-weight-medium;
         color: $color-text-subtle;
-        min-width: 32px;
+        flex-shrink: 0;
+        min-width: 26px;
+
+        @media (max-width: 767px) {
+            font-size: 0.8rem;
+            min-width: 24px;
+        }
     }
 
     &__error {
@@ -107,12 +156,15 @@
     // --- Actions ---
     &__actions {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
         gap: 12px;
+        flex-wrap: wrap;
 
-        @include respond-to("sm") {
-            flex-direction: row;
-            justify-content: space-between;
+        @media (max-width: 600px) {
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
         }
     }
 
@@ -121,14 +173,17 @@
         @include flex-align;
         justify-content: center;
         gap: 8px;
-        padding: 12px 20px;
+        height: 38px;
+        padding: 0 16px;
         border: 1px dashed $color-border-dashed;
         border-radius: $radius-pill;
-        font-size: 0.88rem;
+        font-size: 0.85rem;
         font-weight: $font-weight-medium;
         color: $color-text-secondary;
         background-color: $color-bg-card-muted;
         transition: all $transition-fast;
+        white-space: nowrap;
+        width: auto;
 
         &:hover:not(:disabled) {
             border-color: $color-brand-medium;
@@ -140,6 +195,12 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        @media (max-width: 600px) {
+            width: 100%;
+            height: 42px;
+            font-size: 0.88rem;
+        }
     }
 
     &__save-btn {
@@ -147,21 +208,31 @@
         @include flex-align;
         justify-content: center;
         gap: 8px;
-        padding: 12px 28px;
+        height: 38px;
+        padding: 0 20px;
         border-radius: $radius-pill;
-        font-size: 0.9rem;
+        font-size: 0.86rem;
         font-weight: $font-weight-semibold;
         color: $color-white;
         background-color: $color-brand-dark;
         transition: all $transition-fast;
+        white-space: nowrap;
+        width: auto;
 
         &:hover:not(:disabled) {
             background-color: $color-brand-hover;
+            box-shadow: 0 4px 12px rgba(70, 156, 60, 0.2);
         }
 
         &:disabled {
             opacity: 0.7;
             cursor: not-allowed;
+        }
+
+        @media (max-width: 600px) {
+            width: 100%;
+            height: 42px;
+            font-size: 0.88rem;
         }
     }
 
@@ -183,68 +254,6 @@
 @media (max-width: 767px) {
     .goals-form {
         padding: 20px 16px;
-
-        &__header {
-            margin-bottom: 16px;
-        }
-
-        &__title {
-            font-size: 1.1rem;
-        }
-
-        &__description {
-            font-size: 0.84rem;
-        }
-
-        &__fields {
-            gap: 14px 10px;
-            margin-bottom: 22px;
-        }
-
-        &__field {
-            min-width: 0;
-        }
-
-        &__label {
-            font-size: 0.75rem;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        &__input-wrapper {
-            min-width: 0;
-            gap: 6px;
-        }
-
-        &__input {
-            min-width: 0;
-            width: 100%;
-            padding: 10px 10px;
-            font-size: 0.95rem;
-        }
-
-        &__unit {
-            font-size: 0.8rem;
-            min-width: 24px;
-        }
-
-        &__actions {
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
-
-        &__calc-btn,
-        &__save-btn {
-            width: 100%;
-            height: 48px;
-            border-radius: $radius-pill;
-            font-size: 0.92rem;
-            font-weight: $font-weight-semibold;
-            justify-content: center;
-        }
     }
 }
 
@@ -261,7 +270,7 @@
         }
 
         &__input {
-            padding: 8px 6px;
+            padding: 7px 6px;
             font-size: 0.9rem;
         }
 

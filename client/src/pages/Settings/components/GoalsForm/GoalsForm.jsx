@@ -166,7 +166,7 @@ const GoalsForm = ({ user, onGoalsUpdate }) => {
                         onClick={() => setIsCalcOpen(true)}
                         disabled={loading}
                     >
-                        <Calculator size={18} strokeWidth={2} />
+                        <Calculator size={16} strokeWidth={2} />
                         <span>Calculate Recommended Goals</span>
                     </button>
 
@@ -177,12 +177,12 @@ const GoalsForm = ({ user, onGoalsUpdate }) => {
                     >
                         {loading ? (
                             <Loader2
-                                size={18}
+                                size={16}
                                 strokeWidth={2}
                                 className="goals-form__spinner"
                             />
                         ) : (
-                            <Save size={18} strokeWidth={2} />
+                            <Save size={16} strokeWidth={2} />
                         )}
                         <span>{loading ? "Saving..." : "Save Changes"}</span>
                     </button>
