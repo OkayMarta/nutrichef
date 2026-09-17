@@ -1,5 +1,6 @@
 # NutriChef
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-nutrichef--ten.vercel.app-469c3c?style=flat&logo=vercel&logoColor=white)](https://nutrichef-ten.vercel.app/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-Express_5-339933?style=flat&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
@@ -10,6 +11,8 @@
 [![License](https://img.shields.io/badge/License-ISC-blue?style=flat)](LICENSE)
 
 NutriChef is a full-stack nutrition tracking web application engineered to eliminate guesswork in home-cooked meal management. It provides precise calculations of calories, proteins, fats, and carbohydrates based on raw ingredients and cooked portion weights, paired with a daily diary, customizable nutritional goals, and an automated macronutrient calculator.
+
+**Live Preview**: [https://nutrichef-ten.vercel.app/](https://nutrichef-ten.vercel.app/)
 
 ---
 
@@ -190,7 +193,7 @@ nutrichef/
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/nutrichef.git
+    git clone https://github.com/OkayMarta/nutrichef.git
     cd nutrichef
     ```
 

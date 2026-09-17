@@ -88,7 +88,7 @@ const Footer = () => {
                 {/* Right Area: GitHub | Privacy Policy | Terms of Service | Copyright */}
                 <div className="landing-footer__right">
                     <a
-                        href="https://github.com"
+                        href="https://github.com/OkayMarta/nutrichef"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="landing-footer__github-link"

@@ -115,11 +115,11 @@ const PrivacyPolicy = () => {
                             <strong>Service:</strong> Refers to the NutriChef
                             web application accessible at{" "}
                             <a
-                                href="https://nutrichef.vercel.app"
+                                href="https://nutrichef-ten.vercel.app"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                https://nutrichef.vercel.app
+                                https://nutrichef-ten.vercel.app
                             </a>
                             .
                         </li>
