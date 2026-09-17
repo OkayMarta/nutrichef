@@ -5,6 +5,11 @@
     padding-top: 80px;
     padding-bottom: 80px;
 
+    @media (min-width: 769px) and (max-width: 1024px) {
+        padding-top: 72px;
+        padding-bottom: 72px;
+    }
+
     @media (max-width: 640px) {
         padding-top: 48px;
         padding-bottom: 60px;
@@ -13,6 +18,10 @@
     &__header {
         margin-bottom: 56px;
         max-width: 680px;
+
+        @media (max-width: 1024px) {
+            margin-bottom: 44px;
+        }
 
         @media (max-width: 640px) {
             margin-bottom: 32px;
@@ -70,9 +79,9 @@
         gap: 20px;
         position: relative;
 
-        @media (max-width: 960px) {
+        @media (max-width: 1024px) {
             grid-template-columns: repeat(2, 1fr);
-            gap: 32px 24px;
+            gap: 36px 32px;
         }
 
         @media (max-width: 640px) {
@@ -150,7 +159,7 @@
         color: #c4d8ba;
         font-size: 18px;
 
-        @media (max-width: 960px) {
+        @media (max-width: 1024px) {
             display: none;
         }
     }

@@ -5,6 +5,11 @@
     padding-top: 80px;
     padding-bottom: 80px;
 
+    @media (min-width: 769px) and (max-width: 1024px) {
+        padding-top: 72px;
+        padding-bottom: 72px;
+    }
+
     @media (max-width: 640px) {
         padding-top: 40px;
         padding-bottom: 60px;
@@ -16,9 +21,9 @@
         gap: 60px;
         align-items: center;
 
-        @media (max-width: 960px) {
+        @media (max-width: 1024px) {
             grid-template-columns: 1fr;
-            gap: 36px;
+            gap: 44px;
         }
     }
 
@@ -39,10 +44,17 @@
         min-height: 400px;
         overflow: visible;
 
+        @media (max-width: 1024px) {
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
         @media (max-width: 480px) {
             padding: 24px 12px;
             min-height: 310px;
             border-radius: 22px;
+            max-width: 100%;
         }
     }
 
@@ -170,6 +182,12 @@
     &__content {
         display: flex;
         flex-direction: column;
+
+        @media (max-width: 1024px) {
+            max-width: 620px;
+            width: 100%;
+            margin: 0 auto;
+        }
     }
 
     &__tag-label {
