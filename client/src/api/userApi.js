@@ -21,11 +21,7 @@ export const updateProfile = (payload) => {
  * Uploads an avatar image for the authenticated user.
  */
 export const uploadAvatar = (formData) => {
-    return axiosInstance.post("/api/auth/avatar", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
+    return axiosInstance.post("/api/auth/avatar", formData);
 };
 
 /**

@@ -45,5 +45,8 @@ export const getUserAvatarUrl = (user) => {
     }
 
     const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-    return `${baseURL}${user.avatarUrl}`;
+    const normalizedPath = user.avatarUrl.startsWith("/")
+        ? user.avatarUrl
+        : `/${user.avatarUrl}`;
+    return `${baseURL}${normalizedPath}`;
 };

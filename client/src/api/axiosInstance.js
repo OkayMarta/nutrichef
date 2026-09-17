@@ -4,6 +4,7 @@ const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const axiosInstance = axios.create({
     baseURL,
+    timeout: 15000,
     headers: {
         "Content-Type": "application/json",
     },
@@ -48,9 +49,20 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            localStorage.removeItem("nutrichef_token");
-            if (typeof window !== "undefined") {
-                window.dispatchEvent(new CustomEvent("nutrichef:unauthorized"));
+            // Exclude routine auth submission endpoints (login / register) from triggering global session cleanup
+            const requestUrl =
+                typeof error.config?.url === "string" ? error.config.url : "";
+            const isAuthSubmission =
+                requestUrl.includes("/api/auth/login") ||
+                requestUrl.includes("/api/auth/register");
+
+            if (!isAuthSubmission) {
+                localStorage.removeItem("nutrichef_token");
+                if (typeof window !== "undefined") {
+                    window.dispatchEvent(
+                        new CustomEvent("nutrichef:unauthorized"),
+                    );
+                }
             }
         }
         return Promise.reject(error);
