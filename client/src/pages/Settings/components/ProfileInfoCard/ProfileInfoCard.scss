@@ -228,3 +228,35 @@
         transform: rotate(360deg);
     }
 }
+
+/* Mobile responsive overrides */
+@media (max-width: 767px) {
+    .profile-info-card {
+        padding: 22px 16px;
+        gap: 12px;
+
+        &__avatar {
+            width: 72px;
+            height: 72px;
+            font-size: 1.6rem;
+        }
+
+        &__avatar-btn {
+            width: 26px;
+            height: 26px;
+        }
+
+        &__name {
+            font-size: 1.1rem;
+        }
+
+        &__email {
+            font-size: 0.84rem;
+        }
+
+        &__member-since {
+            font-size: 0.78rem;
+            padding: 3px 10px;
+        }
+    }
+}

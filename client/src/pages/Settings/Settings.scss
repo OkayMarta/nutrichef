@@ -49,17 +49,17 @@
     &__delete-account-btn {
         @include button-reset;
         width: 100%;
-        height: 38px;
+        height: 42px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
         padding: 0 16px;
-        border-radius: $radius-sm;
+        border-radius: $radius-pill;
         border: 1px solid rgba(239, 68, 68, 0.25);
         background-color: transparent;
         color: $color-status-danger;
-        font-size: 0.86rem;
+        font-size: 0.88rem;
         font-weight: $font-weight-medium;
         transition: all $transition-fast;
 
@@ -76,5 +76,55 @@
 
     &__main {
         width: 100%;
+    }
+}
+
+/* Mobile responsive overrides */
+@media (max-width: 767px) {
+    .settings {
+        padding: 16px 16px 32px;
+
+        &__header {
+            margin-bottom: 18px;
+        }
+
+        &__title {
+            font-size: 1.4rem;
+        }
+
+        &__subtitle {
+            font-size: 0.86rem;
+        }
+
+        &__layout {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        &__sidebar {
+            display: contents;
+        }
+
+        .profile-info-card {
+            order: 1;
+        }
+
+        &__main {
+            order: 2;
+        }
+
+        &__delete-account-btn {
+            order: 3;
+            height: 46px;
+            font-size: 0.92rem;
+            margin-top: 4px;
+        }
+    }
+}
+
+@media (max-width: 380px) {
+    .settings {
+        padding: 14px 12px 28px;
     }
 }
