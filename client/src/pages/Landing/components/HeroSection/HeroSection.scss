@@ -26,8 +26,8 @@
         position: relative;
         z-index: 1;
         display: grid;
-        grid-template-columns: 1.1fr 1fr;
-        gap: 48px;
+        grid-template-columns: 1fr 1.15fr;
+        gap: 40px;
         align-items: center;
 
         @media (max-width: 1024px) {
@@ -131,6 +131,53 @@
         @media (max-width: 1024px) {
             display: none !important;
         }
+    }
+
+    &__image-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 620px;
+        margin: 0 auto;
+    }
+
+    &__image-backdrop {
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        bottom: -20px;
+        left: 20px;
+        background: radial-gradient(
+            circle at 60% 40%,
+            rgba(202, 228, 180, 0.45) 0%,
+            rgba(232, 245, 226, 0.35) 60%,
+            transparent 80%
+        );
+        border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    &__image {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow:
+            0 20px 45px rgba(27, 38, 20, 0.09),
+            0 4px 12px rgba(0, 0, 0, 0.04);
+        object-fit: cover;
+    }
+
+    &__image-leaf {
+        position: absolute;
+        bottom: -16px;
+        right: -16px;
+        z-index: 3;
+        pointer-events: none;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.08));
     }
 
     // Ambient decorative leaves on the side for mobile & tablet

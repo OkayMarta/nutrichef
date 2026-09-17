@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import DashboardPreview from "../DashboardPreview/DashboardPreview";
 import LeafIcon from "../../../../components/common/LeafIcon";
+import heroDashboardImg from "../../../../assets/dashboard-preview.png";
 import "./HeroSection.scss";
 
 const HeroSection = () => {
@@ -58,7 +58,21 @@ const HeroSection = () => {
                 </div>
 
                 <div className="hero-section__visual">
-                    <DashboardPreview />
+                    <div className="hero-section__image-wrapper">
+                        <div className="hero-section__image-backdrop" />
+                        <img
+                            src={heroDashboardImg}
+                            alt="NutriChef Dashboard Preview"
+                            className="hero-section__image"
+                            loading="eager"
+                        />
+                        <LeafIcon
+                            className="hero-section__image-leaf"
+                            width={48}
+                            height={48}
+                            color="#469c3c"
+                        />
+                    </div>
                 </div>
             </div>
         </section>
