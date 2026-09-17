@@ -24,7 +24,7 @@ const MealForm = ({
     return (
         <form className="meal-form" onSubmit={onSubmit} noValidate>
             {/* Section 1: Basic Information */}
-            <div className="meal-form__section">
+            <div className="meal-form__section meal-form__section--details">
                 <div className="meal-form__section-header">
                     <span className="meal-form__section-icon">
                         <Utensils size={18} strokeWidth={2.2} />
@@ -115,7 +115,7 @@ const MealForm = ({
             </div>
 
             {/* Section 2: Total Macros */}
-            <div className="meal-form__section">
+            <div className="meal-form__section meal-form__section--nutrition">
                 <div className="meal-form__section-header">
                     <span className="meal-form__section-icon">
                         <Activity size={18} strokeWidth={2.2} />

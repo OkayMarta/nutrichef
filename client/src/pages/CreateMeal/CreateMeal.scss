@@ -37,14 +37,19 @@
         align-items: start;
 
         @media (max-width: 960px) {
-            grid-template-columns: 1fr;
-            gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
     }
 
     &__form-col {
         display: flex;
         flex-direction: column;
+
+        @media (max-width: 960px) {
+            display: contents;
+        }
     }
 
     &__preview-col {
@@ -52,7 +57,7 @@
         flex-direction: column;
 
         @media (max-width: 960px) {
-            order: -1;
+            order: 3;
         }
     }
 
@@ -60,5 +65,9 @@
         position: sticky;
         top: 88px;
         z-index: 10;
+
+        @media (max-width: 960px) {
+            position: static;
+        }
     }
 }

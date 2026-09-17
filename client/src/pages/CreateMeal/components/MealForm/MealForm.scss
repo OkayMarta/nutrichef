@@ -6,6 +6,22 @@
     flex-direction: column;
     gap: 14px;
 
+    @media (max-width: 960px) {
+        display: contents;
+
+        .meal-form__section--details {
+            order: 1;
+        }
+
+        .meal-form__section--nutrition {
+            order: 2;
+        }
+
+        .meal-form__actions {
+            order: 4;
+        }
+    }
+
     &__section {
         @include card-base;
         padding: 16px 20px;
