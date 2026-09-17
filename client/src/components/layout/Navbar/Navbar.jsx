@@ -520,12 +520,51 @@ const Navbar = () => {
                 {user ? (
                     <div className="navbar__mobile-nav">
                         <div className="navbar__mobile-user">
-                            <span className="navbar__mobile-user-name">
-                                {getUserDisplayName(user)}
-                            </span>
-                            <span className="navbar__mobile-user-email">
-                                {user.email}
-                            </span>
+                            <div className="navbar__mobile-user-info">
+                                <span className="navbar__mobile-user-name">
+                                    {getUserDisplayName(user)}
+                                </span>
+                                <span className="navbar__mobile-user-email">
+                                    {user.email}
+                                </span>
+                            </div>
+
+                            <button
+                                type="button"
+                                className="navbar__avatar-btn navbar__avatar-btn--mobile"
+                                onClick={() => {
+                                    setIsMobileMenuOpen(false);
+                                    navigate("/settings");
+                                }}
+                                title={user.email}
+                                aria-label="User settings"
+                            >
+                                {getUserAvatarUrl(user) ? (
+                                    <img
+                                        src={getUserAvatarUrl(user)}
+                                        alt={getUserDisplayName(user)}
+                                        className="navbar__avatar-img"
+                                        onError={(e) => {
+                                            e.currentTarget.style.display =
+                                                "none";
+                                            const fallback =
+                                                e.currentTarget.parentElement?.querySelector(
+                                                    ".navbar__avatar-fallback",
+                                                );
+                                            if (fallback)
+                                                fallback.style.display = "flex";
+                                        }}
+                                    />
+                                ) : (
+                                    getUserInitials(user)
+                                )}
+                                <span
+                                    className="navbar__avatar-fallback"
+                                    style={{ display: "none" }}
+                                >
+                                    {getUserInitials(user)}
+                                </span>
+                            </button>
                         </div>
 
                         <hr className="navbar__mobile-divider" />

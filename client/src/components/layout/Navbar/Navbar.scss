@@ -253,7 +253,7 @@
         transition: box-shadow $transition-fast;
         border: 2px solid transparent;
         overflow: hidden;
-        position: relative;
+        flex-shrink: 0;
 
         &:hover {
             box-shadow: 0 0 0 3px rgba($color-brand-medium, 0.3);
@@ -262,6 +262,17 @@
         &[aria-expanded="true"] {
             border-color: $color-brand-medium;
             box-shadow: 0 0 0 3px rgba($color-brand-medium, 0.2);
+        }
+
+        &--mobile {
+            width: 40px;
+            height: 40px;
+            border: 2px solid $color-border;
+
+            &:hover {
+                border-color: $color-brand-medium;
+                box-shadow: 0 0 0 3px rgba($color-brand-medium, 0.2);
+            }
         }
     }
 
@@ -441,21 +452,41 @@
     }
 
     &__mobile-user {
-        padding: 4px 10px 10px;
+        padding: 4px 8px 12px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+
+        @media (min-width: 601px) {
+            padding: 4px 10px 14px;
+        }
+    }
+
+    &__mobile-user-info {
         display: flex;
         flex-direction: column;
         gap: 2px;
+        min-width: 0;
+        flex: 1;
     }
 
     &__mobile-user-name {
         font-size: 0.95rem;
         font-weight: $font-weight-bold;
         color: $color-text-dark;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &__mobile-user-email {
         font-size: 0.8rem;
         color: $color-text-muted;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &__mobile-link {
