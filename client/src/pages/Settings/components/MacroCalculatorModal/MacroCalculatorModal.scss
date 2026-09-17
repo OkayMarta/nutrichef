@@ -289,7 +289,7 @@
         @include button-reset;
         padding: 10px 20px;
         border: 1px solid $color-border;
-        border-radius: $radius-sm;
+        border-radius: $radius-pill;
         font-size: 0.88rem;
         font-weight: $font-weight-medium;
         color: $color-text-secondary;
@@ -305,7 +305,7 @@
     &__apply-btn {
         @include button-reset;
         padding: 10px 24px;
-        border-radius: $radius-sm;
+        border-radius: $radius-pill;
         font-size: 0.88rem;
         font-weight: $font-weight-semibold;
         color: $color-white;
