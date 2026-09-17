@@ -310,22 +310,110 @@
 /* Mobile responsive overrides */
 @media (max-width: 767px) {
     .edit-log-backdrop {
-        padding: 0;
-        align-items: flex-end;
+        padding: 16px;
+        align-items: center;
     }
 
     .edit-log-modal {
-        max-width: 100%;
-        border-radius: 20px 20px 0 0;
-        padding: 20px;
+        width: 100%;
+        max-width: 480px;
+        border-radius: $radius-lg;
+        padding: 22px 18px;
+        box-sizing: border-box;
+        overflow-x: hidden;
+
+        &__title {
+            font-size: 1.2rem;
+        }
+
+        &__dish-info {
+            padding: 10px 12px;
+        }
+
+        &__dish-name {
+            word-break: break-word;
+        }
+
+        &__preview {
+            padding: 12px;
+        }
 
         &__preview-grid {
             gap: 6px;
         }
 
+        &__preview-item {
+            padding: 6px 3px;
+
+            .preview-val {
+                font-size: 0.92rem;
+                white-space: nowrap;
+            }
+
+            .preview-lbl {
+                font-size: 0.68rem;
+            }
+        }
+
+        &__quick-chips {
+            flex-wrap: nowrap;
+            gap: 6px;
+        }
+
         &__chip {
-            padding: 4px 10px;
+            padding: 4px 8px;
             font-size: 0.75rem;
+            flex-shrink: 0;
+            white-space: nowrap;
+
+            &:nth-of-type(n + 6) {
+                display: none;
+            }
+        }
+
+        &__actions {
+            flex-direction: column-reverse;
+            gap: 12px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        &__btn {
+            width: 100%;
+            height: 50px;
+            min-height: 50px;
+            font-size: 1rem;
+            border-radius: $radius-pill;
+            font-weight: $font-weight-semibold;
+        }
+    }
+}
+
+@media (max-width: 380px) {
+    .edit-log-backdrop {
+        padding: 12px;
+    }
+
+    .edit-log-modal {
+        padding: 18px 14px;
+
+        &__btn {
+            height: 48px;
+            min-height: 48px;
+            font-size: 0.96rem;
+        }
+
+        &__quick-chips {
+            gap: 4px;
+        }
+
+        &__chip {
+            padding: 3px 6px;
+            font-size: 0.72rem;
+        }
+
+        &__preview-grid {
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 }

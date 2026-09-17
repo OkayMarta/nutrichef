@@ -61,6 +61,12 @@
         align-items: center;
         justify-content: center;
         gap: 12px;
+
+        .btn {
+            flex: 1;
+            height: 42px;
+            justify-content: center;
+        }
     }
 
     &__delete-btn {
@@ -91,5 +97,66 @@
 @keyframes delete-spin {
     to {
         transform: rotate(360deg);
+    }
+}
+
+/* Mobile responsive overrides */
+@media (max-width: 767px) {
+    .delete-modal-backdrop {
+        padding: 16px;
+    }
+
+    .delete-modal {
+        padding: 24px 18px;
+
+        &__icon-wrap {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 14px;
+        }
+
+        &__title {
+            font-size: 1.18rem;
+            margin-bottom: 8px;
+        }
+
+        &__desc {
+            font-size: 0.88rem;
+            margin-bottom: 20px;
+        }
+
+        &__actions {
+            flex-direction: column-reverse;
+            gap: 12px;
+            width: 100%;
+
+            .btn {
+                width: 100%;
+                height: 50px;
+                min-height: 50px;
+                font-size: 1rem;
+                border-radius: $radius-pill;
+                justify-content: center;
+                font-weight: $font-weight-semibold;
+            }
+        }
+    }
+}
+
+@media (max-width: 380px) {
+    .delete-modal-backdrop {
+        padding: 12px;
+    }
+
+    .delete-modal {
+        padding: 22px 16px;
+
+        &__actions {
+            .btn {
+                height: 48px;
+                min-height: 48px;
+                font-size: 0.96rem;
+            }
+        }
     }
 }

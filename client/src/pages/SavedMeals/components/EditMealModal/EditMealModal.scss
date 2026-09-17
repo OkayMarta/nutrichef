@@ -12,6 +12,14 @@
     background-color: rgba(27, 38, 20, 0.55);
     backdrop-filter: blur(4px);
     animation: modal-fade-in 0.2s ease;
+
+    @media (max-width: 767px) {
+        padding: 16px;
+    }
+
+    @media (max-width: 380px) {
+        padding: 12px;
+    }
 }
 
 .edit-modal {
@@ -20,11 +28,17 @@
     max-width: 520px;
     max-height: 90vh;
     overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
     background-color: $color-bg-card;
     border-radius: $radius-lg;
     padding: 28px;
     box-shadow: $shadow-lg;
     animation: modal-scale-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+    @media (max-width: 520px) {
+        padding: 20px 16px;
+    }
 
     &__header {
         display: flex;
@@ -58,6 +72,7 @@
         font-weight: $font-weight-bold;
         color: $color-text-dark;
         margin: 0;
+        word-break: break-word;
     }
 
     &__close-btn {
@@ -92,12 +107,33 @@
 
     &__macros-grid {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
-        margin-bottom: 18px;
+        margin-bottom: 16px;
+        width: 100%;
+        box-sizing: border-box;
 
-        @include respond-to("sm") {
-            grid-template-columns: repeat(2, 1fr);
+        .edit-modal__group {
+            margin-bottom: 0;
+            min-width: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 480px) {
+            gap: 10px;
+
+            .edit-modal__label {
+                font-size: 0.8rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .edit-modal__input {
+                height: 40px;
+                padding: 0 10px;
+                font-size: 0.88rem;
+            }
         }
     }
 
@@ -106,6 +142,9 @@
         flex-direction: column;
         gap: 6px;
         margin-bottom: 14px;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     &__label {
@@ -119,8 +158,11 @@
     }
 
     &__input {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
         height: 44px;
-        padding: 0 14px;
+        padding: 0 12px;
         background-color: $color-bg-light;
         border: 1px solid $color-border;
         border-radius: $radius-sm;
@@ -150,18 +192,48 @@
     }
 
     &__ratio-preview {
-        padding: 10px 12px;
+        padding: 10px 14px;
         background-color: $color-bg-subtle;
+        border: 1px solid $color-border-subtle;
         border-radius: $radius-sm;
-        margin-bottom: 22px;
+        margin-bottom: 20px;
     }
 
     &__ratio-header {
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px 10px;
+        font-size: 0.78rem;
+    }
+
+    &__ratio-title {
+        font-weight: $font-weight-semibold;
+        color: $color-text-secondary;
+    }
+
+    &__ratio-legend {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
         font-size: 0.76rem;
-        font-weight: $font-weight-medium;
         color: $color-text-muted;
+    }
+
+    &__ratio-item {
+        white-space: nowrap;
+
+        strong {
+            color: $color-text-dark;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &__ratio-dot {
+        color: $color-text-subtle;
+        font-weight: bold;
     }
 
     &__actions {
@@ -172,6 +244,30 @@
         margin-top: 24px;
         padding-top: 16px;
         border-top: 1px solid $color-border-subtle;
+
+        @media (max-width: 767px) {
+            flex-direction: column-reverse;
+            gap: 12px;
+            width: 100%;
+
+            .btn {
+                width: 100%;
+                height: 50px;
+                min-height: 50px;
+                font-size: 1rem;
+                border-radius: $radius-pill;
+                justify-content: center;
+                font-weight: $font-weight-semibold;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .btn {
+                height: 48px;
+                min-height: 48px;
+                font-size: 0.96rem;
+            }
+        }
     }
 
     &__submit-btn {

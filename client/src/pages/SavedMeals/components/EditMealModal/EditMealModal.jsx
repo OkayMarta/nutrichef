@@ -329,12 +329,28 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                     {macroStats.hasData && (
                         <div className="edit-modal__ratio-preview">
                             <div className="edit-modal__ratio-header">
-                                <span>Ratio:</span>
-                                <span>
-                                    Protein {macroStats.pPct}% &bull; Fat{" "}
-                                    {macroStats.fPct}% &bull; Carbs{" "}
-                                    {macroStats.cPct}%
+                                <span className="edit-modal__ratio-title">
+                                    Ratio:
                                 </span>
+                                <div className="edit-modal__ratio-legend">
+                                    <span className="edit-modal__ratio-item">
+                                        Protein{" "}
+                                        <strong>{macroStats.pPct}%</strong>
+                                    </span>
+                                    <span className="edit-modal__ratio-dot">
+                                        &bull;
+                                    </span>
+                                    <span className="edit-modal__ratio-item">
+                                        Fat <strong>{macroStats.fPct}%</strong>
+                                    </span>
+                                    <span className="edit-modal__ratio-dot">
+                                        &bull;
+                                    </span>
+                                    <span className="edit-modal__ratio-item">
+                                        Carbs{" "}
+                                        <strong>{macroStats.cPct}%</strong>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     )}
