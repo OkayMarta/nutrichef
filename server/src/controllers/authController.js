@@ -199,10 +199,24 @@ const googleAuth = async (req, res) => {
             });
             payload = ticket.getPayload();
         } catch (verifyError) {
-            return res.status(401).json({
-                message: "Invalid or expired Google token",
-                error: verifyError.message,
-            });
+            // Check if token is an OAuth2 access token
+            try {
+                const userInfoRes = await fetch(
+                    "https://www.googleapis.com/oauth2/v3/userinfo",
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                    },
+                );
+                if (!userInfoRes.ok) {
+                    throw new Error("Invalid access token");
+                }
+                payload = await userInfoRes.json();
+            } catch {
+                return res.status(401).json({
+                    message: "Invalid or expired Google token",
+                    error: verifyError.message,
+                });
+            }
         }
 
         if (!payload || !payload.email) {

@@ -9,60 +9,40 @@
     justify-content: center;
     align-items: center;
 
-    &__button-container {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        width: 100% !important;
-        min-height: 44px;
-        text-align: center !important;
-
-        &--loading {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-            height: 0;
-            overflow: hidden;
-        }
-
-        // Deep-target all Google dynamic wrappers (e.g. .S9gUrf-YoZ4jf)
-        > div,
-        div {
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            margin: 0 auto !important;
-            max-width: 100% !important;
-            text-align: center !important;
-        }
-
-        // Force iframe to be centered block element with auto horizontal margins
-        iframe {
-            display: block !important;
-            margin: 0 auto !important;
-            max-width: 100% !important;
-        }
-    }
-
-    &__fallback-btn {
+    &__btn {
         @include flex-center;
         gap: 12px;
         width: 100%;
-        padding: 10px 16px;
+        height: 44px;
+        padding: 0 16px;
         background-color: #ffffff;
         border: 1px solid $color-border;
         border-radius: $radius-sm;
-        font-size: 0.92rem;
+        font-size: 0.95rem;
         font-weight: $font-weight-medium;
         color: $color-text-dark;
         cursor: pointer;
+        box-sizing: border-box;
         transition:
             background-color $transition-fast,
-            border-color $transition-fast;
+            border-color $transition-fast,
+            box-shadow $transition-fast;
 
-        &:hover {
+        &:hover:not(:disabled) {
             background-color: #f8faf6;
             border-color: #c9d8bd;
+            box-shadow: 0 1px 4px rgba(27, 38, 20, 0.08);
+        }
+
+        &:focus-visible {
+            outline: none;
+            border-color: $color-brand-medium;
+            box-shadow: 0 0 0 3px rgba(116, 189, 87, 0.2);
+        }
+
+        &:active:not(:disabled) {
+            background-color: #edf3e8;
+            transform: translateY(1px);
         }
 
         &:disabled {
