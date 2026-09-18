@@ -207,14 +207,28 @@ const googleAuth = async (req, res) => {
                         headers: { Authorization: `Bearer ${token}` },
                     },
                 );
-                if (!userInfoRes.ok) {
-                    throw new Error("Invalid access token");
+                if (userInfoRes.ok) {
+                    payload = await userInfoRes.json();
+                } else {
+                    const tokenInfoRes = await fetch(
+                        `https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(token)}`,
+                    );
+                    if (tokenInfoRes.ok) {
+                        payload = await tokenInfoRes.json();
+                    } else {
+                        throw new Error(
+                            `Google token verification failed (userinfo status: ${userInfoRes.status}, tokeninfo status: ${tokenInfoRes.status})`,
+                        );
+                    }
                 }
-                payload = await userInfoRes.json();
-            } catch {
+            } catch (fallbackError) {
+                console.error("Google auth token verification failed:", {
+                    verifyError: verifyError.message,
+                    fallbackError: fallbackError.message,
+                });
                 return res.status(401).json({
                     message: "Invalid or expired Google token",
-                    error: verifyError.message,
+                    error: fallbackError.message || verifyError.message,
                 });
             }
         }
@@ -242,6 +256,8 @@ const googleAuth = async (req, res) => {
                 data: {
                     email: normalizedEmail,
                     passwordHash,
+                    name: payload.name || null,
+                    avatarUrl: payload.picture || null,
                 },
             });
         }

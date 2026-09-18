@@ -54,7 +54,8 @@ axiosInstance.interceptors.response.use(
                 typeof error.config?.url === "string" ? error.config.url : "";
             const isAuthSubmission =
                 requestUrl.includes("/api/auth/login") ||
-                requestUrl.includes("/api/auth/register");
+                requestUrl.includes("/api/auth/register") ||
+                requestUrl.includes("/api/auth/google");
 
             if (!isAuthSubmission) {
                 localStorage.removeItem("nutrichef_token");
