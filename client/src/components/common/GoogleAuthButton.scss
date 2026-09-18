@@ -5,17 +5,42 @@
     width: 100%;
     margin-top: 6px;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     &__button-container {
-        width: 100%;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
         min-height: 44px;
+        text-align: center !important;
 
-        > div {
-            width: 100% !important;
+        &--loading {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            height: 0;
+            overflow: hidden;
         }
 
-        iframe {
+        // Deep-target all Google dynamic wrappers (e.g. .S9gUrf-YoZ4jf)
+        > div,
+        div {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
             margin: 0 auto !important;
+            max-width: 100% !important;
+            text-align: center !important;
+        }
+
+        // Force iframe to be centered block element with auto horizontal margins
+        iframe {
+            display: block !important;
+            margin: 0 auto !important;
+            max-width: 100% !important;
         }
     }
 

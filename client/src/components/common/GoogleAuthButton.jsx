@@ -93,8 +93,8 @@ const GoogleAuthButton = ({ isRegister = false }) => {
 
                     // Calculate valid button width in pixels (Google GSI requires 200..400 px, no percentages)
                     const parentWidth =
-                        buttonRef.current.parentElement?.offsetWidth ||
                         buttonRef.current.offsetWidth ||
+                        buttonRef.current.parentElement?.offsetWidth ||
                         376;
                     const buttonWidth = Math.min(
                         Math.max(Math.round(parentWidth), 200),
@@ -108,7 +108,7 @@ const GoogleAuthButton = ({ isRegister = false }) => {
                         shape: "rectangular",
                         text: isRegister ? "signup_with" : "signin_with",
                         width: buttonWidth,
-                        logo_alignment: "center",
+                        logo_alignment: "left",
                     });
 
                     if (isMountedRef.current) setGsiReady(true);
@@ -128,8 +128,17 @@ const GoogleAuthButton = ({ isRegister = false }) => {
             }, 300);
         }
 
+        const handleResize = () => {
+            if (window.google?.accounts?.id && buttonRef.current) {
+                initGoogleSignIn();
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+
         return () => {
             if (checkInterval) clearInterval(checkInterval);
+            window.removeEventListener("resize", handleResize);
         };
     }, [isRegister]);
 
@@ -137,12 +146,7 @@ const GoogleAuthButton = ({ isRegister = false }) => {
         <div className="google-auth">
             <div
                 ref={buttonRef}
-                className="google-auth__button-container"
-                style={{
-                    display: gsiReady ? "flex" : "none",
-                    justifyContent: "center",
-                    width: "100%",
-                }}
+                className={`google-auth__button-container ${!gsiReady ? "google-auth__button-container--loading" : ""}`}
             />
 
             {/* Fallback button shown if GSI is loading or unavailable */}
