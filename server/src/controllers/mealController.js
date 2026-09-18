@@ -12,12 +12,18 @@ const safeError = (res, status, message, error) => {
 };
 
 /**
- * Helper to validate non-negative numeric macro values.
+ * Helper to validate non-negative numeric macro values within realistic upper bounds.
  */
-const isValidMacro = (value) => {
+const isValidMacro = (value, max = 100) => {
     if (value === undefined || value === null) return false;
     const num = Number(value);
-    return typeof num === "number" && !isNaN(num) && isFinite(num) && num >= 0;
+    return (
+        typeof num === "number" &&
+        !isNaN(num) &&
+        isFinite(num) &&
+        num >= 0 &&
+        num <= max
+    );
 };
 
 /**
@@ -48,27 +54,40 @@ const createMeal = async (req, res) => {
         }
 
         // Validate macros
-        if (!isValidMacro(caloriesPer100g)) {
+        if (!isValidMacro(caloriesPer100g, 1000)) {
             return res.status(400).json({
-                message: "caloriesPer100g must be a valid non-negative number",
+                message:
+                    "caloriesPer100g must be a valid non-negative number up to 1000",
             });
         }
 
-        if (!isValidMacro(proteinPer100g)) {
+        if (!isValidMacro(proteinPer100g, 100)) {
             return res.status(400).json({
-                message: "proteinPer100g must be a valid non-negative number",
+                message:
+                    "proteinPer100g must be a valid non-negative number up to 100",
             });
         }
 
-        if (!isValidMacro(fatPer100g)) {
+        if (!isValidMacro(fatPer100g, 100)) {
             return res.status(400).json({
-                message: "fatPer100g must be a valid non-negative number",
+                message:
+                    "fatPer100g must be a valid non-negative number up to 100",
             });
         }
 
-        if (!isValidMacro(carbsPer100g)) {
+        if (!isValidMacro(carbsPer100g, 100)) {
             return res.status(400).json({
-                message: "carbsPer100g must be a valid non-negative number",
+                message:
+                    "carbsPer100g must be a valid non-negative number up to 100",
+            });
+        }
+
+        const macroSum =
+            Number(proteinPer100g) + Number(fatPer100g) + Number(carbsPer100g);
+        if (macroSum > 105) {
+            return res.status(400).json({
+                message:
+                    "Total macronutrients (protein + fat + carbs) cannot exceed 100g per 100g",
             });
         }
 
@@ -216,41 +235,61 @@ const updateMeal = async (req, res) => {
         }
 
         if (caloriesPer100g !== undefined) {
-            if (!isValidMacro(caloriesPer100g)) {
+            if (!isValidMacro(caloriesPer100g, 1000)) {
                 return res.status(400).json({
                     message:
-                        "caloriesPer100g must be a valid non-negative number",
+                        "caloriesPer100g must be a valid non-negative number up to 1000",
                 });
             }
             updateData.caloriesPer100g = Number(caloriesPer100g);
         }
 
         if (proteinPer100g !== undefined) {
-            if (!isValidMacro(proteinPer100g)) {
+            if (!isValidMacro(proteinPer100g, 100)) {
                 return res.status(400).json({
                     message:
-                        "proteinPer100g must be a valid non-negative number",
+                        "proteinPer100g must be a valid non-negative number up to 100",
                 });
             }
             updateData.proteinPer100g = Number(proteinPer100g);
         }
 
         if (fatPer100g !== undefined) {
-            if (!isValidMacro(fatPer100g)) {
+            if (!isValidMacro(fatPer100g, 100)) {
                 return res.status(400).json({
-                    message: "fatPer100g must be a valid non-negative number",
+                    message:
+                        "fatPer100g must be a valid non-negative number up to 100",
                 });
             }
             updateData.fatPer100g = Number(fatPer100g);
         }
 
         if (carbsPer100g !== undefined) {
-            if (!isValidMacro(carbsPer100g)) {
+            if (!isValidMacro(carbsPer100g, 100)) {
                 return res.status(400).json({
-                    message: "carbsPer100g must be a valid non-negative number",
+                    message:
+                        "carbsPer100g must be a valid non-negative number up to 100",
                 });
             }
             updateData.carbsPer100g = Number(carbsPer100g);
+        }
+
+        const effectiveProtein =
+            proteinPer100g !== undefined
+                ? Number(proteinPer100g)
+                : meal.proteinPer100g;
+        const effectiveFat =
+            fatPer100g !== undefined ? Number(fatPer100g) : meal.fatPer100g;
+        const effectiveCarbs =
+            carbsPer100g !== undefined
+                ? Number(carbsPer100g)
+                : meal.carbsPer100g;
+
+        if (effectiveProtein + effectiveFat + effectiveCarbs > 105) {
+            return res.status(400).json({
+                message:
+                    "Total macronutrients (protein + fat + carbs) cannot exceed 100g per 100g",
+            });
         }
 
         if (Object.keys(updateData).length === 0) {

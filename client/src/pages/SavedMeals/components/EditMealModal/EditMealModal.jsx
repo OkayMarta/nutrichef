@@ -3,6 +3,10 @@ import { toast } from "react-toastify";
 import { Pencil } from "lucide-react";
 import { updateMeal } from "../../../../api/mealApi";
 import { calculateCalorieDistribution } from "../../../../utils/nutrition";
+import {
+    blockInvalidNumberKeys,
+    sanitizeNonNegativeNumber,
+} from "../../../../utils/inputSanitizers";
 import "./EditMealModal.scss";
 
 const EditMealModal = ({ meal, onClose, onUpdate }) => {
@@ -54,23 +58,51 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
         }
 
         const cals = Number(formData.caloriesPer100g);
-        if (formData.caloriesPer100g !== "" && (isNaN(cals) || cals < 0)) {
-            errs.caloriesPer100g = "Calories must be 0 or greater";
+        if (formData.caloriesPer100g !== "") {
+            if (isNaN(cals) || cals < 0) {
+                errs.caloriesPer100g = "Calories must be 0 or greater";
+            } else if (cals > 1000) {
+                errs.caloriesPer100g =
+                    "Calories cannot exceed 1000 kcal per 100 g";
+            }
         }
 
         const protein = Number(formData.proteinPer100g);
-        if (formData.proteinPer100g !== "" && (isNaN(protein) || protein < 0)) {
-            errs.proteinPer100g = "Protein must be 0 or greater";
+        if (formData.proteinPer100g !== "") {
+            if (isNaN(protein) || protein < 0) {
+                errs.proteinPer100g = "Protein must be 0 or greater";
+            } else if (protein > 100) {
+                errs.proteinPer100g = "Protein cannot exceed 100 g per 100 g";
+            }
         }
 
         const fat = Number(formData.fatPer100g);
-        if (formData.fatPer100g !== "" && (isNaN(fat) || fat < 0)) {
-            errs.fatPer100g = "Fat must be 0 or greater";
+        if (formData.fatPer100g !== "") {
+            if (isNaN(fat) || fat < 0) {
+                errs.fatPer100g = "Fat must be 0 or greater";
+            } else if (fat > 100) {
+                errs.fatPer100g = "Fat cannot exceed 100 g per 100 g";
+            }
         }
 
         const carbs = Number(formData.carbsPer100g);
-        if (formData.carbsPer100g !== "" && (isNaN(carbs) || carbs < 0)) {
-            errs.carbsPer100g = "Carbs must be 0 or greater";
+        if (formData.carbsPer100g !== "") {
+            if (isNaN(carbs) || carbs < 0) {
+                errs.carbsPer100g = "Carbs must be 0 or greater";
+            } else if (carbs > 100) {
+                errs.carbsPer100g = "Carbs cannot exceed 100 g per 100 g";
+            }
+        }
+
+        // Combined macronutrients check (max 100g per 100g serving + 5% buffer)
+        if (!errs.proteinPer100g && !errs.fatPer100g && !errs.carbsPer100g) {
+            const pVal = isNaN(protein) ? 0 : protein;
+            const fVal = isNaN(fat) ? 0 : fat;
+            const cVal = isNaN(carbs) ? 0 : carbs;
+            if (pVal + fVal + cVal > 105) {
+                errs.carbsPer100g =
+                    "Sum of macros (P + F + C) cannot exceed 100 g per 100 g";
+            }
         }
 
         setErrors(errs);
@@ -78,9 +110,20 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
     };
 
     const handleChange = (field, value) => {
+        let cleanValue = value;
+        if (field === "caloriesPer100g") {
+            cleanValue = sanitizeNonNegativeNumber(value, 1000, 1);
+        } else if (
+            field === "proteinPer100g" ||
+            field === "fatPer100g" ||
+            field === "carbsPer100g"
+        ) {
+            cleanValue = sanitizeNonNegativeNumber(value, 100, 2);
+        }
+
         setFormData((prev) => ({
             ...prev,
-            [field]: value,
+            [field]: cleanValue,
         }));
         if (errors[field]) {
             setErrors((prev) => ({
@@ -211,6 +254,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                                 type="number"
                                 step="any"
                                 min="0"
+                                max="1000"
                                 className={`edit-modal__input ${
                                     errors.caloriesPer100g
                                         ? "edit-modal__input--error"
@@ -223,6 +267,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                                         e.target.value,
                                     )
                                 }
+                                onKeyDown={blockInvalidNumberKeys}
                             />
                             {errors.caloriesPer100g && (
                                 <span className="edit-modal__error-msg">
@@ -244,6 +289,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                                 type="number"
                                 step="any"
                                 min="0"
+                                max="100"
                                 className={`edit-modal__input ${
                                     errors.proteinPer100g
                                         ? "edit-modal__input--error"
@@ -256,6 +302,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                                         e.target.value,
                                     )
                                 }
+                                onKeyDown={blockInvalidNumberKeys}
                             />
                             {errors.proteinPer100g && (
                                 <span className="edit-modal__error-msg">
@@ -277,6 +324,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                                 type="number"
                                 step="any"
                                 min="0"
+                                max="100"
                                 className={`edit-modal__input ${
                                     errors.fatPer100g
                                         ? "edit-modal__input--error"
@@ -286,6 +334,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                                 onChange={(e) =>
                                     handleChange("fatPer100g", e.target.value)
                                 }
+                                onKeyDown={blockInvalidNumberKeys}
                             />
                             {errors.fatPer100g && (
                                 <span className="edit-modal__error-msg">
@@ -307,6 +356,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                                 type="number"
                                 step="any"
                                 min="0"
+                                max="100"
                                 className={`edit-modal__input ${
                                     errors.carbsPer100g
                                         ? "edit-modal__input--error"
@@ -316,6 +366,7 @@ const EditMealModal = ({ meal, onClose, onUpdate }) => {
                                 onChange={(e) =>
                                     handleChange("carbsPer100g", e.target.value)
                                 }
+                                onKeyDown={blockInvalidNumberKeys}
                             />
                             {errors.carbsPer100g && (
                                 <span className="edit-modal__error-msg">

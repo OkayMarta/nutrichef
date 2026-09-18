@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { updateDailyLog } from "../../../../api/dailyLogApi";
+import {
+    blockInvalidNumberKeys,
+    sanitizePositiveInteger,
+} from "../../../../utils/inputSanitizers";
 import "./EditLogModal.scss";
 
 const QUICK_PORTIONS = [50, 100, 150, 200, 250, 300, 400];
@@ -50,6 +54,11 @@ const EditLogModal = ({ log, onClose, onLogUpdated }) => {
 
         if (numericGrams <= 0) {
             setError("Portion weight must be greater than 0 grams.");
+            return;
+        }
+
+        if (numericGrams > 5000) {
+            setError("Portion weight cannot exceed 5,000 grams.");
             return;
         }
 
@@ -132,9 +141,14 @@ const EditLogModal = ({ log, onClose, onLogUpdated }) => {
                                 }`}
                                 value={consumedGrams}
                                 onChange={(e) => {
-                                    setConsumedGrams(e.target.value);
+                                    const clean = sanitizePositiveInteger(
+                                        e.target.value,
+                                        5000,
+                                    );
+                                    setConsumedGrams(clean);
                                     if (error) setError("");
                                 }}
+                                onKeyDown={blockInvalidNumberKeys}
                                 autoFocus
                             />
                             <span className="edit-log-modal__unit">g</span>

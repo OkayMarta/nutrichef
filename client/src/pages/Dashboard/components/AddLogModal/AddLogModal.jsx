@@ -10,6 +10,10 @@ import {
 } from "lucide-react";
 import { getMeals } from "../../../../api/mealApi";
 import { createDailyLog } from "../../../../api/dailyLogApi";
+import {
+    blockInvalidNumberKeys,
+    sanitizePositiveInteger,
+} from "../../../../utils/inputSanitizers";
 import "./AddLogModal.scss";
 
 const MEAL_OPTIONS = [
@@ -119,6 +123,8 @@ const AddLogModal = ({
         const grams = parseFloat(consumedGrams);
         if (isNaN(grams) || grams <= 0) {
             errs.grams = "Portion weight must be greater than 0 grams";
+        } else if (grams > 5000) {
+            errs.grams = "Portion weight cannot exceed 5,000 grams";
         }
         setErrors(errs);
         return Object.keys(errs).length === 0;
@@ -365,8 +371,9 @@ const AddLogModal = ({
                                 <input
                                     id="portion-weight"
                                     type="number"
-                                    step="any"
+                                    step="1"
                                     min="1"
+                                    max="5000"
                                     className={`add-log-modal__input ${
                                         errors.grams
                                             ? "add-log-modal__input--error"
@@ -375,7 +382,11 @@ const AddLogModal = ({
                                     placeholder="e.g., 250"
                                     value={consumedGrams}
                                     onChange={(e) => {
-                                        setConsumedGrams(e.target.value);
+                                        const clean = sanitizePositiveInteger(
+                                            e.target.value,
+                                            5000,
+                                        );
+                                        setConsumedGrams(clean);
                                         if (errors.grams) {
                                             setErrors((prev) => ({
                                                 ...prev,
@@ -383,6 +394,7 @@ const AddLogModal = ({
                                             }));
                                         }
                                     }}
+                                    onKeyDown={blockInvalidNumberKeys}
                                     required
                                 />
                                 <span className="add-log-modal__unit">g</span>

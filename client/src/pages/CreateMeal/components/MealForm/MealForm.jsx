@@ -1,4 +1,8 @@
 import { Utensils, Activity, BookmarkPlus } from "lucide-react";
+import {
+    blockInvalidNumberKeys,
+    sanitizeNonNegativeNumber,
+} from "../../../../utils/inputSanitizers";
 import "./MealForm.scss";
 
 const MealForm = ({
@@ -13,7 +17,19 @@ const MealForm = ({
 }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
-        onChange(name, value);
+        let cleanValue = value;
+        if (name === "totalWeight") {
+            cleanValue = sanitizeNonNegativeNumber(value, 50000, 2);
+        } else if (name === "totalCalories") {
+            cleanValue = sanitizeNonNegativeNumber(value, 500000, 1);
+        } else if (
+            name === "totalProtein" ||
+            name === "totalFat" ||
+            name === "totalCarbs"
+        ) {
+            cleanValue = sanitizeNonNegativeNumber(value, 50000, 2);
+        }
+        onChange(name, cleanValue);
     };
 
     const handleBlur = (e) => {
@@ -88,6 +104,7 @@ const MealForm = ({
                                 type="number"
                                 step="any"
                                 min="1"
+                                max="50000"
                                 className={`meal-form__input ${
                                     touched.totalWeight && errors.totalWeight
                                         ? "meal-form__input--error"
@@ -97,6 +114,7 @@ const MealForm = ({
                                 value={formData.totalWeight}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                onKeyDown={blockInvalidNumberKeys}
                                 required
                             />
                             <span className="meal-form__unit">g</span>
@@ -142,6 +160,7 @@ const MealForm = ({
                                 type="number"
                                 step="any"
                                 min="0"
+                                max="500000"
                                 className={`meal-form__input ${
                                     touched.totalCalories &&
                                     errors.totalCalories
@@ -152,6 +171,7 @@ const MealForm = ({
                                 value={formData.totalCalories}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                onKeyDown={blockInvalidNumberKeys}
                                 required
                             />
                             <span className="meal-form__unit">kcal</span>
@@ -179,6 +199,7 @@ const MealForm = ({
                                 type="number"
                                 step="any"
                                 min="0"
+                                max="50000"
                                 className={`meal-form__input ${
                                     touched.totalProtein && errors.totalProtein
                                         ? "meal-form__input--error"
@@ -188,6 +209,7 @@ const MealForm = ({
                                 value={formData.totalProtein}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                onKeyDown={blockInvalidNumberKeys}
                                 required
                             />
                             <span className="meal-form__unit">g</span>
@@ -212,6 +234,7 @@ const MealForm = ({
                                 type="number"
                                 step="any"
                                 min="0"
+                                max="50000"
                                 className={`meal-form__input ${
                                     touched.totalFat && errors.totalFat
                                         ? "meal-form__input--error"
@@ -221,6 +244,7 @@ const MealForm = ({
                                 value={formData.totalFat}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                onKeyDown={blockInvalidNumberKeys}
                                 required
                             />
                             <span className="meal-form__unit">g</span>
@@ -248,6 +272,7 @@ const MealForm = ({
                                 type="number"
                                 step="any"
                                 min="0"
+                                max="50000"
                                 className={`meal-form__input ${
                                     touched.totalCarbs && errors.totalCarbs
                                         ? "meal-form__input--error"
@@ -257,6 +282,7 @@ const MealForm = ({
                                 value={formData.totalCarbs}
                                 onChange={handleChange}
                                 onBlur={handleBlur}
+                                onKeyDown={blockInvalidNumberKeys}
                                 required
                             />
                             <span className="meal-form__unit">g</span>

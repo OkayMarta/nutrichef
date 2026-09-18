@@ -59,36 +59,70 @@ const CreateMeal = () => {
         }
 
         const weight = parseFloat(data.totalWeight);
-        if (
-            data.totalWeight === "" ||
-            data.totalWeight === null ||
-            data.totalWeight === undefined ||
-            isNaN(weight) ||
-            weight <= 0
-        ) {
+        const hasValidWeightVal =
+            data.totalWeight !== "" &&
+            data.totalWeight !== null &&
+            data.totalWeight !== undefined &&
+            !isNaN(weight) &&
+            weight > 0;
+
+        if (!hasValidWeightVal) {
             errs.totalWeight = "Cooked weight must be greater than 0 g";
+        } else if (weight > 50000) {
+            errs.totalWeight = "Cooked weight cannot exceed 50,000 g";
         }
 
         // For macros, an empty field defaults to 0 (valid). Negative values trigger an error.
         const cals = data.totalCalories === "" ? 0 : Number(data.totalCalories);
         if (isNaN(cals) || cals < 0) {
             errs.totalCalories = "Total calories must be 0 or greater";
+        } else if (cals > 500000) {
+            errs.totalCalories = "Total calories cannot exceed 500,000 kcal";
+        } else if (hasValidWeightVal && cals > weight * 9.5) {
+            errs.totalCalories =
+                "Calories exceed theoretical maximum for dish weight";
         }
 
         const protein =
             data.totalProtein === "" ? 0 : Number(data.totalProtein);
         if (isNaN(protein) || protein < 0) {
             errs.totalProtein = "Total protein must be 0 or greater";
+        } else if (protein > 50000) {
+            errs.totalProtein = "Total protein cannot exceed 50,000 g";
+        } else if (hasValidWeightVal && protein > weight) {
+            errs.totalProtein = "Protein cannot exceed total dish weight";
         }
 
         const fat = data.totalFat === "" ? 0 : Number(data.totalFat);
         if (isNaN(fat) || fat < 0) {
             errs.totalFat = "Total fat must be 0 or greater";
+        } else if (fat > 50000) {
+            errs.totalFat = "Total fat cannot exceed 50,000 g";
+        } else if (hasValidWeightVal && fat > weight) {
+            errs.totalFat = "Fat cannot exceed total dish weight";
         }
 
         const carbs = data.totalCarbs === "" ? 0 : Number(data.totalCarbs);
         if (isNaN(carbs) || carbs < 0) {
             errs.totalCarbs = "Total carbs must be 0 or greater";
+        } else if (carbs > 50000) {
+            errs.totalCarbs = "Total carbs cannot exceed 50,000 g";
+        } else if (hasValidWeightVal && carbs > weight) {
+            errs.totalCarbs = "Carbs cannot exceed total dish weight";
+        }
+
+        // Combined macronutrients check against total dish weight
+        if (
+            hasValidWeightVal &&
+            !errs.totalProtein &&
+            !errs.totalFat &&
+            !errs.totalCarbs
+        ) {
+            const macroSum = protein + fat + carbs;
+            if (macroSum > weight * 1.05) {
+                errs.totalCarbs =
+                    "Total macronutrients (P + F + C) cannot exceed dish weight";
+            }
         }
 
         return errs;

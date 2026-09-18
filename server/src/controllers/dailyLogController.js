@@ -64,11 +64,12 @@ const createDailyLog = async (req, res) => {
             consumedGrams === null ||
             isNaN(Number(consumedGrams)) ||
             !isFinite(Number(consumedGrams)) ||
-            Number(consumedGrams) <= 0
+            Number(consumedGrams) <= 0 ||
+            Number(consumedGrams) > 10000
         ) {
             return res.status(400).json({
                 message:
-                    "consumedGrams is required and must be a positive finite number (> 0)",
+                    "consumedGrams is required and must be a positive finite number (> 0 and <= 10000)",
             });
         }
 
@@ -275,11 +276,12 @@ const updateDailyLog = async (req, res) => {
             if (
                 isNaN(Number(consumedGrams)) ||
                 !isFinite(Number(consumedGrams)) ||
-                Number(consumedGrams) <= 0
+                Number(consumedGrams) <= 0 ||
+                Number(consumedGrams) > 10000
             ) {
                 return res.status(400).json({
                     message:
-                        "consumedGrams must be a positive finite number (> 0)",
+                        "consumedGrams must be a positive finite number (> 0 and <= 10000)",
                 });
             }
 
