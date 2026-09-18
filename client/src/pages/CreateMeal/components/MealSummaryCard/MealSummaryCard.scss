@@ -13,6 +13,8 @@
     gap: 14px;
     position: relative;
     overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
 
     // Organic soft top accent
     &::before {
@@ -80,14 +82,14 @@
         margin: 0;
     }
 
-    // 4 Macro Badges Grid
+    // 4 Macro Badges Grid (always 2x2)
     &__grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
 
         @media (max-width: 480px) {
-            grid-template-columns: 1fr;
+            gap: 6px;
         }
     }
 
@@ -99,6 +101,10 @@
         gap: 4px;
         background-color: rgba(202, 228, 180, 0.25);
         border: 1px solid rgba(116, 189, 87, 0.3);
+
+        @media (max-width: 480px) {
+            padding: 8px 10px;
+        }
 
         .meal-summary-card__macro-val {
             color: $color-brand-dark;
@@ -127,6 +133,10 @@
         font-weight: $font-weight-bold;
         letter-spacing: -0.02em;
         line-height: 1;
+
+        @media (max-width: 480px) {
+            font-size: 1.15rem;
+        }
     }
 
     &__macro-unit {

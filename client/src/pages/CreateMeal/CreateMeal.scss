@@ -27,6 +27,8 @@
         gap: 16px;
         margin-top: auto;
         margin-bottom: auto;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     // --- 2-Column Responsive Layout ---
@@ -39,7 +41,11 @@
         @media (max-width: 960px) {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            align-items: center;
+            width: 100%;
+            max-width: 560px;
+            margin: 0 auto;
+            gap: 16px;
         }
     }
 
@@ -58,6 +64,7 @@
 
         @media (max-width: 960px) {
             order: 3;
+            width: 100%;
         }
     }
 
@@ -68,6 +75,7 @@
 
         @media (max-width: 960px) {
             position: static;
+            width: 100%;
         }
     }
 }
